@@ -1,0 +1,20 @@
+{
+  "name": "vue-admin",
+  "version": "0.0.0",
+  "author": "周凯",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build --mode development"
+  },
+  "dependencies": {
+    "ant-design-vue": "^2.0.0-rc.2",
+    "vue": "^3.0.3",
+    "vue-router": "^4.0.0-rc.5",
+    "@ant-design-vue/use": "^0.0.1-alpha.7"
+  },
+  "devDependencies": {
+    "@vue/compiler-sfc": "^3.0.2",
+    "less": "^3.12.2",
+    "vite": "^1.0.0-rc.8"
+  }
+}
