@@ -7,10 +7,11 @@
     "build": "vite build --mode development"
   },
   "dependencies": {
+    "@ant-design-vue/use": "^0.0.1-alpha.7",
+    "@ant-design/icons-vue": "^5.1.7",
     "ant-design-vue": "^2.0.0-rc.2",
     "vue": "^3.0.3",
-    "vue-router": "^4.0.0-rc.5",
-    "@ant-design-vue/use": "^0.0.1-alpha.7"
+    "vue-router": "^4.0.0-rc.5"
   },
   "devDependencies": {
     "@vue/compiler-sfc": "^3.0.2",

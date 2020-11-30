@@ -23,7 +23,7 @@
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="yarn" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="settings.editor.selected.configurable" value="vcc.settings.component" />
     <property name="ts.external.directory.path" value="C:\Program Files\JetBrains\WebStorm 2020.2.3\plugins\JavaScriptLanguage\jsLanguageServicesImpl\external" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
@@ -45,7 +45,7 @@
       <workItem from="1606717161309" duration="1248000" />
       <workItem from="1606718425019" duration="2434000" />
       <workItem from="1606725578557" duration="2367000" />
-      <workItem from="1606728402580" duration="2859000" />
+      <workItem from="1606728402580" duration="3562000" />
     </task>
     <servers />
   </component>
@@ -65,9 +65,9 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="615" y="296" key="EditFileWatcherDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1606719635637" />
-    <state x="461" y="164" key="SettingsEditor" timestamp="1606726100505">
+    <state x="461" y="164" key="SettingsEditor" timestamp="1606731866606">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="461" y="164" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1606726100505" />
+    <state x="461" y="164" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1606731866606" />
   </component>
 </project>

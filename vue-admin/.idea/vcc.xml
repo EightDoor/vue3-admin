@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VuexSettings" ACTION_FILE="templates/vuex/actions.js" INDEX_FILE_KEY="templates/vuex/index.js" GETTERS_FILE_KEY="templates/vuex/getters.js" MUTATIONS_FILE_KEY="templates/vuex/mutations.js" MUTATION_TYPES_FILE_KEY="templates/vuex/mutation-types.js" STATE_FILE_KEY="templates/vuex/state.js" TYPES_FILE_KEY="templates/vuex/types.d.ts" />
+</project>
