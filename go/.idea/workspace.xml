@@ -20,11 +20,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9d58ba51-c9f9-4202-88a5-123eb053f216" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/cn.start6/go.mod" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/cn.start6/go.sum" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/cn.start6/main.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/middleware/jwt.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cn.start6/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cn.start6/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cn.start6/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,8 +79,8 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/cn.start6" />
       <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/src/cn.start6" />
     </key>
   </component>
   <component name="RunManager">
