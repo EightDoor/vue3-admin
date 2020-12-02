@@ -19,7 +19,14 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9d58ba51-c9f9-4202-88a5-123eb053f216" name="Default Changelist" comment="" />
+    <list default="true" id="9d58ba51-c9f9-4202-88a5-123eb053f216" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/middleware/jwt.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cn.start6/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cn.start6/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cn.start6/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -32,17 +39,23 @@
       </list>
     </option>
   </component>
-  <component name="GOROOT" path="C:\Go" />
+  <component name="GOROOT" path="/usr/local/Cellar/go/1.15.2/libexec" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
+  <component name="GoDepProject">
+    <integration-enabled>true</integration-enabled>
+  </component>
   <component name="ProjectId" id="1l3EfJW4ZD0HdRwhU8xDLdFxNkE" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="DefaultGoTemplateProperty" value="Go File" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
@@ -51,8 +64,24 @@
     <property name="configurable.Project.GOPATH.is.expanded" value="true" />
     <property name="go.import.settings.migrated" value="true" />
     <property name="go.sdk.automatically.set" value="true" />
+    <property name="go.tried.to.enable.integration.dep.integrator" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="settings.editor.selected.configurable" value="goland.project.structure" />
+  </component>
+  <component name="ReadonlyStatusHandler">
+    <option name="SHOW_DIALOG" value="false" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/src/cn.start6" />
+    </key>
   </component>
   <component name="RunManager">
     <configuration name="go build main.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
@@ -83,16 +112,29 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="520" y="371" key="#Dep" timestamp="1606833366690">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="520" y="371" key="#Dep/0.0.1440.900@0.0.1440.900" timestamp="1606833366690" />
     <state x="752" y="178" key="#GOPATH" timestamp="1606817505490">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="752" y="178" key="#GOPATH/0.0.1920.1040@0.0.1920.1040" timestamp="1606817505490" />
+    <state x="516" y="384" key="#GOROOT" timestamp="1606830596715">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="516" y="384" key="#GOROOT/0.0.1440.900@0.0.1440.900" timestamp="1606830596715" />
     <state x="740" y="274" key="FileChooserDialogImpl" timestamp="1606817501994">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="740" y="274" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1606817501994" />
+<<<<<<< HEAD
     <state width="1877" height="282" key="GridCell.Tab.0.bottom" timestamp="1606818251761">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -111,7 +153,16 @@
     <state width="1877" height="282" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1606818251760" />
     <state x="461" y="164" key="SettingsEditor" timestamp="1606817518511">
       <screen x="0" y="0" width="1920" height="1040" />
+=======
+    <state x="346" y="142" key="SettingsEditor" timestamp="1606833023539">
+      <screen x="0" y="0" width="1440" height="900" />
+>>>>>>> 6a5ca9ef48210517137fa0c308f8d1ead75a5b43
     </state>
+    <state x="346" y="142" key="SettingsEditor/0.0.1440.900@0.0.1440.900" timestamp="1606833023539" />
     <state x="461" y="164" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1606817518511" />
+    <state x="450" y="291" key="vcs.readOnlyHandler.ReadOnlyStatusDialog" timestamp="1606832519633">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="450" y="291" key="vcs.readOnlyHandler.ReadOnlyStatusDialog/0.0.1440.900@0.0.1440.900" timestamp="1606832519633" />
   </component>
 </project>
