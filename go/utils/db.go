@@ -1,0 +1,7 @@
+package utils
+
+
+var (
+	DB *
+)
+
