@@ -9,6 +9,7 @@ import (
 	"log"
 	"net/http"
 	"time"
+	"zhoukai/src/configure"
 )
 
 var (
@@ -25,7 +26,7 @@ func JWTAuth() gin.HandlerFunc {
 		token := c.Request.Header.Get("token")
 		if token == "" {
 			c.JSON(http.StatusOK, gin.H{
-				"status": -1,
+				"status": configure.RequestError,
 				"msg":    "请求未携带token，无权限访问",
 				"data":   nil,
 			})
@@ -43,7 +44,7 @@ func JWTAuth() gin.HandlerFunc {
 			// token过期
 			if err == TokenExpired {
 				c.JSON(http.StatusOK, gin.H{
-					"status": -1,
+					"status": configure.RequestError,
 					"msg":    "token授权已过期，请重新申请授权",
 					"data":   nil,
 				})
@@ -52,7 +53,7 @@ func JWTAuth() gin.HandlerFunc {
 			}
 			// 其他错误
 			c.JSON(http.StatusOK, gin.H{
-				"status": -1,
+				"status": configure.RequestError,
 				"msg":    err.Error(),
 				"data":   nil,
 			})

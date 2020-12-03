@@ -4,8 +4,8 @@ import (
 	"log"
 	"net/http"
 	"time"
-	md "zhoukai/middleware"
-	"zhoukai/model"
+	md "zhoukai/src/middleware"
+	"zhoukai/src/model"
 
 	jwtgo "github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"

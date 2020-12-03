@@ -1,8 +1,9 @@
 package model
 
 import (
-"fmt"
-"time"
+	"fmt"
+	"time"
+	"zhoukai/src/configure"
 )
 
 // 构造用户表
@@ -25,7 +26,7 @@ type LoginReq struct {
 // 初始化表结构以及定义
 
 func InitModel() {
-	DB.AutoMigrate(&User{})
+	configure.AutoMigrate(&User{})
 }
 
 // 插入数据
@@ -34,7 +35,7 @@ func (user *User) Insert() error {
 	//你可以自己在sql中指定表名。这里是示例，本例中这个函数可以去除。
 	// 需要注意的是Create函数的参数必须是指针
 	// return DB.Table("user").Create(user).Error
-	return DB.Model(&User{}).Create(&user).Error
+	return configure.DB.Create(&user).Error
 }
 
 
