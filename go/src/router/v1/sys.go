@@ -1,9 +1,12 @@
 package routerV1
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+	ControllerSys "zhoukai/src/controller/sys"
+)
 
 func LoadSys(e *gin.RouterGroup)  {
 	{
-		e.GET("/test")
+		e.GET("/user", ControllerSys.UserList)
 	}
 }
