@@ -11,6 +11,7 @@ require (
 	github.com/go-playground/validator/v10 v10.4.1
 	github.com/go-xorm/cmd/xorm v0.0.0-20190426080617-f87981e709a1 // indirect
 	github.com/go-xorm/xorm v0.7.9 // indirect
+	github.com/golang/protobuf v1.3.3
 	github.com/imdario/mergo v0.3.11 // indirect
 	github.com/pelletier/go-toml v1.8.1 // indirect
 	golang.org/x/sys v0.0.0-20201204225414-ed752295db88 // indirect

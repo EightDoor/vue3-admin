@@ -1,14 +1,13 @@
 package controller
 import (
 	_ "fmt"
+	jwtgo "github.com/dgrijalva/jwt-go"
+	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
 	"time"
 	md "zhoukai/src/middleware"
 	"zhoukai/src/model"
-
-	jwtgo "github.com/dgrijalva/jwt-go"
-	"github.com/gin-gonic/gin"
 )
 
 // 用户注册信息

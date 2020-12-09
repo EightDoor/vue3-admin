@@ -19,7 +19,7 @@ var (
 )
 
 func ParserConfig()  {
-	cfg, err := ini.Load("../conf/config.ini")
+	cfg, err := ini.Load("conf/config.ini")
 	if err != nil {
 		fmt.Printf("Fail to read file: %v", err)
 		os.Exit(1)

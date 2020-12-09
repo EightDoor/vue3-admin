@@ -12,7 +12,7 @@ const (
 )
 
 const (
-	RequestError			   Code = -1
+	RequestError               Code = -1
 	RequestSuccess             Code = 0
 	RequestOtherError          Code = 4000
 	RequestKeyNotFound         Code = 4001
