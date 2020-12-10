@@ -4,7 +4,7 @@
 - swagger
 - log
 - 数据库
-- 热重载 https://github.com/oxequa/realize
+- 热重载 air
 - 参数校验 https://github.com/go-playground/validator
 - orm gorm.io/gorm
 - 日志框架 zap

@@ -10,11 +10,15 @@ import (
 
 func UserQuery(dates []ModelSys.SysUser, c *gin.Context)([]ModelSys.SysUser, *gorm.DB)  {
 	offset, pageSize, _ := utils.PageIngService(c)
-	result := configure.DB.Order("id desc").Offset(offset).Limit(pageSize).Find(&dates)
+	result := configure.DB.Offset(offset).Limit(pageSize).Find(&dates)
 	return dates, result
 }
 func UserSinge(data ModelSys.SysUser)(ModelSys.SysUser, *gorm.DB)  {
 	result := configure.DB.First(&data, data.Id)
+	return data, result
+}
+func UserCreate(data ModelSys.SysUser, c *gin.Context)(ModelSys.SysUser, *gorm.DB)  {
+	result := configure.DB.Create(&data)
 	return data, result
 }
 
