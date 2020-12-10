@@ -20,46 +20,46 @@
   </a-menu>
 </template>
 <script lang="ts">
-import { defineComponent, reactive, onMounted, computed } from "vue";
-import SubMenu from "./menu-item.vue";
-import { MenuItem, MenusInfo } from "@/types/alyout/menu";
-import { useRouter } from "vue-router";
-import { useStore } from "vuex";
+import { defineComponent, reactive, onMounted, computed } from 'vue'
+import SubMenu from './menu-item.vue'
+import { MenuItem, MenusInfo } from '@/types/alyout/menu'
+import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 
 export default defineComponent({
-  name: "common-menu",
+  name: 'common-menu',
   setup() {
-    const router = useRouter();
-    const store = useStore();
+    const router = useRouter()
+    const store = useStore()
     const menusInfo = reactive<MenusInfo>({
       selectedKeys: [],
       collapsed: false,
-      list: []
-    });
+      list: [],
+    })
     onMounted(() => {
-      menusInfo.list = [];
-    });
+      menusInfo.list = []
+    })
 
     // methods
     function jumpTo(item: MenuItem) {
       if (item.path) {
         router.push({
-          path: item.path
-        });
+          path: item.path,
+        })
       }
     }
     return {
       menusInfo,
       getMenus: computed(() => store.state.menu.list),
       //methods
-      jumpTo
-    };
+      jumpTo,
+    }
   },
   components: {
-    SubMenu
-  }
-});
+    SubMenu,
+  },
+})
 </script>
 <style scoped lang="less">
-@import "./menu.less";
+@import './menu.less';
 </style>

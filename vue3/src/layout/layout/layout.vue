@@ -17,29 +17,29 @@
   </a-layout>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent } from 'vue'
 
-import CommonFooter from "@/layout/footer/footer.vue";
-import CommonMenu from "@/layout/menu/menu.vue";
-import CommonHeader from "@/layout/header/header.vue";
-import Breadcrumb from "@/layout/breadcrumb/breadcrumb.vue";
+import CommonFooter from '@/layout/footer/footer.vue'
+import CommonMenu from '@/layout/menu/menu.vue'
+import CommonHeader from '@/layout/header/header.vue'
+import Breadcrumb from '@/layout/breadcrumb/breadcrumb.vue'
 
 export default defineComponent({
-  name: "layout",
+  name: 'layout',
   setup() {
-    const selectedKeys: string[] = ["4"];
+    const selectedKeys: string[] = ['4']
     return {
-      selectedKeys
-    };
+      selectedKeys,
+    }
   },
   components: {
     CommonMenu,
     CommonFooter,
     CommonHeader,
-    Breadcrumb
-  }
-});
+    Breadcrumb,
+  },
+})
 </script>
 <style lang="less" scoped>
-@import "layout.less";
+@import 'layout.less';
 </style>

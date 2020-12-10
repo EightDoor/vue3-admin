@@ -21,32 +21,32 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from "vue";
-import { useRouter } from "vue-router";
-import { MenuItem } from "@/types/alyout/menu";
+import { defineComponent, reactive } from 'vue'
+import { useRouter } from 'vue-router'
+import { MenuItem } from '@/types/alyout/menu'
 export default defineComponent({
-  name: "sub-menu",
+  name: 'sub-menu',
   props: {
     menuInfo: {
       type: Object,
-      default: () => ({})
-    }
+      default: () => ({}),
+    },
   },
-  setup: function() {
-    const router = useRouter();
+  setup: function () {
+    const router = useRouter()
     // methods
     function jumpTo(item: MenuItem) {
       if (item.path) {
         router.push({
-          path: item.path
-        });
+          path: item.path,
+        })
       }
     }
 
     return {
       //methods
-      jumpTo
-    };
-  }
-});
+      jumpTo,
+    }
+  },
+})
 </script>

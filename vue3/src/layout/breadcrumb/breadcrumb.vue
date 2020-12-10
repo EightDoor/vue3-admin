@@ -7,14 +7,14 @@
   </a-breadcrumb>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent } from 'vue'
 export default defineComponent({
-  name: "breadcrumb",
+  name: 'breadcrumb',
   setup() {
-    return {};
-  }
-});
+    return {}
+  },
+})
 </script>
 <style lang="less" scoped>
-@import "./breadcrumb.less";
+@import './breadcrumb.less';
 </style>
