@@ -22,75 +22,75 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, reactive, toRaw } from "vue";
-import { useForm } from "@ant-design-vue/use";
-import { message } from "ant-design-vue";
-import { useRouter } from "vue-router";
-import { SET_MENUS } from "@/store/mutation-types";
-import { useStore } from "vuex";
+import { defineComponent, reactive, toRaw } from 'vue'
+import { useForm } from '@ant-design-vue/use'
+import { message } from 'ant-design-vue'
+import { useRouter } from 'vue-router'
+import { SET_MENUS } from '@/store/mutation-types'
+import { useStore } from 'vuex'
 
 interface Login {
-  name: string;
-  password: string;
+  name: string
+  password: string
 }
 export default defineComponent({
-  name: "login",
+  name: 'login',
   setup() {
-    const router = useRouter();
-    const store = useStore();
-    const submitData = reactive({ loading: false });
-    const wrapperCol = { span: 14 };
-    const labelCol = { span: 4 };
+    const router = useRouter()
+    const store = useStore()
+    const submitData = reactive({ loading: false })
+    const wrapperCol = { span: 14 }
+    const labelCol = { span: 4 }
     const modelRef = reactive<Login>({
-      name: "",
-      password: ""
-    });
+      name: '',
+      password: '',
+    })
     const rulesRef = reactive({
       name: [
         {
           required: true,
-          message: "请输入姓名"
-        }
+          message: '请输入姓名',
+        },
       ],
       password: [
         {
           required: true,
-          message: "请输入密码"
-        }
-      ]
-    });
+          message: '请输入密码',
+        },
+      ],
+    })
 
-    const { validateInfos, validate } = useForm(modelRef, rulesRef);
+    const { validateInfos, validate } = useForm(modelRef, rulesRef)
 
     const onSubmit = (e: { preventDefault: () => void }) => {
-      e.preventDefault();
+      e.preventDefault()
       validate()
         .then(() => {
-          submitData.loading = true;
+          submitData.loading = true
           setTimeout(() => {
             // 获取菜单值直接存储
-            store.dispatch(`${SET_MENUS}`);
-            submitData.loading = false;
-            message.success("登录成功!");
-            router.push("/");
-          }, 2000);
-          console.log(toRaw(modelRef));
+            store.dispatch(`${SET_MENUS}`)
+            submitData.loading = false
+            message.success('登录成功!')
+            router.push('/')
+          }, 2000)
+          console.log(toRaw(modelRef))
         })
-        .catch(err => {
-          console.log("error", err);
-        });
-    };
+        .catch((err) => {
+          console.log('error', err)
+        })
+    }
     return {
       modelRef,
       wrapperCol,
       labelCol,
       validateInfos,
       submitData,
-      onSubmit
-    };
-  }
-});
+      onSubmit,
+    }
+  },
+})
 </script>
 <style lang="less" scoped>
-@import "login.less";
+@import 'login.less';
 </style>

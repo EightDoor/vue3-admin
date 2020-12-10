@@ -1,28 +1,28 @@
-import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
-import { canUserAccess } from "../authority";
+import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
+import { canUserAccess } from '../authority'
 
-import Layout from "@/layout/layout/layout.vue";
-import Login from "@/views/login/login.vue";
+import Layout from '@/layout/layout/layout.vue'
+import Login from '@/views/login/login.vue'
 
-import Home from '@/views/home/home.vue';
-import Test from '@/views/Test.vue';
-import Demo from '@/views/Demo.vue';
+import Home from '@/views/home/home.vue'
+import Test from '@/views/Test.vue'
+import Demo from '@/views/Demo.vue'
 
 const routes: RouteRecordRaw[] = [
   {
-    path: "/",
-    name: "layout",
+    path: '/',
+    name: 'layout',
     component: Layout,
     redirect: '/home',
     children: [
       {
         name: 'home',
         path: 'home',
-        component:Home,
+        component: Home,
         meta: {
           title: '首页',
-          icon: '23'
-        }
+          icon: '23',
+        },
       },
       {
         name: 'test',
@@ -30,7 +30,7 @@ const routes: RouteRecordRaw[] = [
         component: Test,
         meta: {
           title: '测试',
-          icon: '23'
+          icon: '23',
         },
         children: [
           {
@@ -39,27 +39,27 @@ const routes: RouteRecordRaw[] = [
             component: Demo,
             meta: {
               title: 'demo',
-              icon: '23'
-            }
-          }
-        ]
-      }
+              icon: '23',
+            },
+          },
+        ],
+      },
     ],
   },
   {
-    path: "/login",
-    name: "login",
-    component: Login
-  }
-];
+    path: '/login',
+    name: 'login',
+    component: Login,
+  },
+]
 const app = createRouter({
   history: createWebHashHistory(),
-  routes
-});
+  routes,
+})
 
 // 全局路由前置钩子
 app.beforeEach(async () => {
-  await canUserAccess();
-});
+  await canUserAccess()
+})
 
-export default app;
+export default app

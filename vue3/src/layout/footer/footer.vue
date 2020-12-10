@@ -6,14 +6,14 @@
   >
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent } from 'vue'
 export default defineComponent({
-  name: "common-footer",
+  name: 'common-footer',
   setup() {
-    return {};
-  }
-});
+    return {}
+  },
+})
 </script>
 <style scoped lang="less">
-@import "footer.less";
+@import 'footer.less';
 </style>

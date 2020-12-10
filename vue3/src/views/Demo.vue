@@ -1,6 +1,4 @@
-<template>
-  demo
-</template>
+<template>demo</template>
 <script>
-export default {};
+export default {}
 </script>
