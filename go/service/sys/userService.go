@@ -17,7 +17,7 @@ func UserSinge(data ModelSys.SysUser)(ModelSys.SysUser, *gorm.DB)  {
 	result := configure.DB.First(&data, data.Id)
 	return data, result
 }
-func UserCreate(data ModelSys.SysUser, c *gin.Context)(ModelSys.SysUser, *gorm.DB)  {
+func UserCreate(data ModelSys.SysUser)(ModelSys.SysUser, *gorm.DB)  {
 	result := configure.DB.Create(&data)
 	return data, result
 }

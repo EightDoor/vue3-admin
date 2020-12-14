@@ -55,16 +55,16 @@ type SysRoleMenu struct {
 
 type SysUser struct {
 	Id         int       `xorm:"not null pk autoincr INT(11)"`
-	PassWord   string    `xorm:"comment('用户登录密码') VARCHAR(200)" binding:"reqired"`
-	Account    string    `xorm:"not null comment('用户登录账号') VARCHAR(32)" binding:"reqired"`
-	NickName   string    `xorm:"comment('用户显示昵称') VARCHAR(32)" binding:"reqired"`
-	Email      string    `xorm:"not null comment('邮箱地址') VARCHAR(200)" binding:"reqired,email"`
-	Status     int       `xorm:"not null default 1 comment('所属状态是否有效  1是有效 0是失效') TINYINT(4)" binding:"required,int"`
-	Avatar     string    `xorm:"not null comment('头像地址') VARCHAR(200)"`
-	DeptId     int       `xorm:"not null unique INT(11)"`
-	CreateDate time.Time `xorm:"not null default 'CURRENT_TIMESTAMP(6)' comment('创建时间') TIMESTAMP(6)"`
-	UpdateDate time.Time `xorm:"not null default 'CURRENT_TIMESTAMP(6)' comment('更新时间') TIMESTAMP(6)"`
-	PhoneNum   string    `xorm:"comment('用户手机号码') VARCHAR(20)"`
+	PassWord   string    `json:"pass_word" xorm:"comment('用户登录密码') VARCHAR(200)" validate:"required"`
+	Account    string    `json:"account" xorm:"not null comment('用户登录账号') VARCHAR(32)" validate:"required"`
+	NickName   string    `json:"nick_name" xorm:"comment('用户显示昵称') VARCHAR(32)" validate:"required"`
+	Email      string    `json:"email" xorm:"not null comment('邮箱地址') VARCHAR(200)"`
+	Status     int       `json:"status" xorm:"not null default 1 comment('所属状态是否有效  1是有效 0是失效') TINYINT(4)"`
+	Avatar     string    `json:"avatar" xorm:"not null comment('头像地址') VARCHAR(200)"`
+	DeptId     int       `json:"dept_id" xorm:"not null unique INT(11)"`
+	CreateDate time.Time `json:"create_date" json:"create_date" xorm:"not null default 'CURRENT_TIMESTAMP(6)' comment('创建时间') TIMESTAMP(6)"`
+	UpdateDate time.Time `json:"update_date" xorm:"not null default 'CURRENT_TIMESTAMP(6)' comment('更新时间') TIMESTAMP(6)"`
+	PhoneNum   string    `json:"phone_num" xorm:"comment('用户手机号码') VARCHAR(20)"`
 }
 
 type SysUserRole struct {

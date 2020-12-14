@@ -4,9 +4,8 @@
 - swagger
 - log
 - 数据库
-- 热重载 air
-- 参数校验 https://github.com/go-playground/validator
+- 热重载 https://github.com/cosmtrek/air
 - orm gorm.io/gorm
 - 日志框架 zap
 ## 运行
-- `air -c .air.conf -d`
+- `air -c air.toml -d`

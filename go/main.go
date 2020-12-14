@@ -31,7 +31,7 @@ func main() {
 	// 路由白名单
 	routerInit.WhiteRouter(router)
 
-	// 生成环境设置为release
+	// 生产环境设置为release
 	gin.SetMode(gin.DebugMode)
 	// 监听8081端口
 	router.Run(":8081")

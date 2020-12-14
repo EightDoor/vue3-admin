@@ -26,6 +26,6 @@ type Response struct {
 	Data ResponseData `json:"data"`
 }
 type Verification struct {
-	Message error `json:"message"`
+	Message interface{} `json:"message"`
 	Code configure.Code `json:"code"`
 }

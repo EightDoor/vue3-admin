@@ -23,7 +23,10 @@ func UserSinge(c *gin.Context)  {
 }
 func UserCreate(c *gin.Context)  {
 	var sysUser ModelSys.SysUser
-	utils.Verify(&sysUser, c)
-	data, result := ServiceSys.UserCreate(sysUser, c)
-	utils.R(data, result, c)
+	err := utils.Verify(&sysUser, c)
+	if err {
+		data, result := ServiceSys.UserCreate(sysUser)
+		utils.R(data, result, c)
+	}
+
 }
