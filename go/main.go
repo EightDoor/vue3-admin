@@ -3,10 +3,13 @@ package main
 import (
 	ginzap "github.com/gin-contrib/zap"
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 	"go.uber.org/zap"
 	_ "gorm.io/gorm/utils"
 	"time"
 	"zhoukai/configure"
+	"zhoukai/docs"
 	"zhoukai/middleware"
 	routerInit "zhoukai/router"
 )
@@ -18,6 +21,19 @@ func init()  {
 	configure.InitMySqlCon()
 }
 
+
+// @title vue3-go-admin 后台管理接口文档
+// @version 1.0
+// @description 后台管理
+
+// @contact.name 周凯
+// @contact.url http://www.start6.cn
+// @contact.email zhou851708184@163.com
+
+// @license.name Apache 2.0
+// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
+
+// @host http://localhost:8081/swagger/index.html
 func main() {
 	// 初始化Gin实例
 	router := gin.New()
@@ -30,7 +46,14 @@ func main() {
 	routerInit.InitRouter(router)
 	// 路由白名单
 	routerInit.WhiteRouter(router)
-
+	// 加载swagger
+	docs.SwaggerInfo.Title = "vue3-go-admin后台接口文档"
+	docs.SwaggerInfo.Description = "后台管理"
+	docs.SwaggerInfo.Version = "1.0"
+	docs.SwaggerInfo.Host = "localhost:8081"
+	//docs.SwaggerInfo.BasePath = "/api/v1"
+	docs.SwaggerInfo.Schemes = []string{"http", "https"}
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	// 生产环境设置为release
 	gin.SetMode(gin.DebugMode)
 	// 监听8081端口

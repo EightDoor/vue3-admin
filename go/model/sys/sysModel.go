@@ -53,9 +53,10 @@ type SysRoleMenu struct {
 	MenuId int `xorm:"not null index INT(11)"`
 }
 
+// @用户
 type SysUser struct {
 	Id         int       `xorm:"not null pk autoincr INT(11)"`
-	PassWord   string    `json:"pass_word" xorm:"comment('用户登录密码') VARCHAR(200)" validate:"required"`
+	PassWord   string    `json:"pass_word" xorm:"comment('用户登录密码') VARCHAR(200)" validate:"required" swaggertype:"primitive,string"`
 	Account    string    `json:"account" xorm:"not null comment('用户登录账号') VARCHAR(32)" validate:"required"`
 	NickName   string    `json:"nick_name" xorm:"comment('用户显示昵称') VARCHAR(32)" validate:"required"`
 	Email      string    `json:"email" xorm:"not null comment('邮箱地址') VARCHAR(200)"`

@@ -1,0 +1,34 @@
+host: http://localhost:8081/swagger/index.html
+info:
+  contact:
+    email: zhou851708184@163.com
+    name: 周凯
+    url: http://www.start6.cn
+  description: 后台管理
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: vue3-go-admin 后台管理接口文档
+  version: "1.0"
+paths:
+  /api/v1/user:
+    get:
+      description: 获取用户列表
+      parameters:
+      - description: page
+        in: query
+        name: page
+        type: string
+      - description: size
+        in: query
+        name: size
+        type: string
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: Add a new pet to the store
+      tags:
+      - 用户
+swagger: "2.0"
