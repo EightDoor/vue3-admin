@@ -28,7 +28,75 @@ paths:
           description: ok
           schema:
             type: string
-      summary: Add a new pet to the store
+      tags:
+      - 用户
+    post:
+      description: 创建用户
+      parameters:
+      - description: 用户登录账号
+        in: body
+        name: Account
+        required: true
+        schema:
+          type: string
+      - description: 密码
+        in: body
+        name: PassWord
+        required: true
+        schema:
+          type: string
+      - description: 用户显示昵称
+        in: body
+        name: NickName
+        required: true
+        schema:
+          type: string
+      - description: 头像地址
+        in: body
+        name: Avatar
+        schema:
+          type: string
+      - description: 部门id
+        in: body
+        name: DeptId
+        schema:
+          type: string
+      - description: 邮箱
+        in: body
+        name: Email
+        schema:
+          type: string
+      - description: 所属状态是否有效  1是有效 0是失效
+        in: body
+        name: Status
+        schema:
+          type: integer
+      - description: 用户手机号码
+        in: body
+        name: PhoneNum
+        schema:
+          type: string
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      tags:
+      - 用户
+  /api/v1/user/{id}:
+    get:
+      description: 获取单条用户信息
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
       tags:
       - 用户
 swagger: "2.0"
