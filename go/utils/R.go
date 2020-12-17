@@ -48,31 +48,31 @@ func R(database interface{},result *gorm.DB, c *gin.Context) {
 	}
 }
 // 参数校验返回
-func Verify(data interface{}, c *gin.Context) bool {
-	validate := validator.New()
-	// 自定义校验返回的参数格式
-	InitTrans("zh", validate)
-
-	err := validate.Struct(data)
+func Verify(data interface{}, c *gin.Context) error {
+	//validate := validator.New()
+	//// 自定义校验返回的参数格式
+	//InitTrans("zh", validate)
+	//err := validate.Struct(data)
+	err := c.ShouldBind(data)
 	if err != nil {
-		var errValue interface{}
-		// 获取validator.ValidationErrors类型的errors
-		errs, ok := err.(validator.ValidationErrors)
-
-		if !ok {
-			errValue = err.Error()
-			// 非validator.ValidationErrors类型错误直接返回
-		}else {
-			errValue = removeTopStruct(errs.Translate(trans))
-		}
+		//var errValue interface{}
+		//// 获取validator.ValidationErrors类型的errors
+		//errs, ok := err.(validator.ValidationErrors)
+		//
+		//if !ok {
+		//	errValue = err.Error()
+		//	// 非validator.ValidationErrors类型错误直接返回
+		//}else {
+		//	errValue = removeTopStruct(errs.Translate(trans))
+		//}
 		response := model.Verification{
-			Message: errValue,
+			Message: err,
 			Code: configure.RequestKeyNotFound,
 		}
-		c.JSON(http.StatusBadRequest, response)
-		return false
+		c.JSON(http.StatusOK, response)
+		return err
 	}else {
-		return true
+		return nil
 	}
 }
 

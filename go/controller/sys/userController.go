@@ -2,8 +2,8 @@ package ControllerSys
 
 import (
 	"github.com/gin-gonic/gin"
-	"strconv"
 	"zhoukai/model/sys"
+	"zhoukai/service"
 	ServiceSys "zhoukai/service/sys"
 	"zhoukai/utils"
 )
@@ -25,7 +25,7 @@ func UserList(c *gin.Context)  {
 // @Success 200 {string} string	"ok"
 // @Router /api/v1/user/{id} [get]
 func UserSinge(c *gin.Context)  {
-	id, _ := strconv.Atoi(c.Param("id"))
+	id := c.Param("id")
 	data := ModelSys.SysUser{
 		Id: id,
 	}
@@ -46,8 +46,8 @@ func UserSinge(c *gin.Context)  {
 // @Router /api/v1/user [post]
 func UserCreate(c *gin.Context)  {
 	var sysUser ModelSys.SysUser
-	err := utils.Verify(&sysUser, c)
-	if err {
+	data := utils.Verify(&sysUser, c)
+	if data == nil {
 		data, result := ServiceSys.UserCreate(sysUser)
 		utils.R(data, result, c)
 	}

@@ -7,6 +7,8 @@
 - 热重载 https://github.com/cosmtrek/air
 - orm gorm.io/gorm
 - 日志框架 zap
+- uuid go get github.com/satori/go.uuid
+- gorm 数据库生成model https://github.com/xxjwxc/gormt
 ## 运行
 - `air -c air.toml -d`
 - 下载包的可执行文件查看GOPATH路径 windows目前是在C:\GO\bin\bin\

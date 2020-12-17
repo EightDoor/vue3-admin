@@ -22,7 +22,6 @@ func InitMySqlCon() (err error) {
 			SingularTable: true,
 		},
 	})
-
 	if err != nil {
 		return err
 	}
