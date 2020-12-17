@@ -10,11 +10,16 @@ require (
 	github.com/go-playground/locales v0.13.0
 	github.com/go-playground/universal-translator v0.17.0
 	github.com/go-playground/validator/v10 v10.4.1
+	github.com/gookit/color v1.3.5 // indirect
+	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/natefinch/lumberjack v2.0.0+incompatible
+	github.com/spf13/cobra v1.1.1 // indirect
 	github.com/swaggo/files v0.0.0-20190704085106-630677cd5c14
 	github.com/swaggo/gin-swagger v1.3.0
 	github.com/swaggo/swag v1.7.0
+	go.uber.org/multierr v1.6.0 // indirect
 	go.uber.org/zap v1.16.0
+	gopkg.in/go-playground/validator.v9 v9.31.0 // indirect
 	gopkg.in/ini.v1 v1.62.0
 	gorm.io/driver/mysql v1.0.3
 	gorm.io/gorm v1.20.8

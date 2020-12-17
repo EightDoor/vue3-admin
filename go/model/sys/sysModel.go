@@ -2,8 +2,8 @@ package ModelSys
 
 import (
 	_ "github.com/go-playground/validator/v10"
+	"gorm.io/gorm"
 	"time"
-	"zhoukai/service"
 )
 
 type SysDept struct {
@@ -56,7 +56,7 @@ type SysRoleMenu struct {
 
 // 用户
 type SysUser struct {
-	service.CommonCreate
+	gorm.Model
 	PassWord   string    `json:"pass_word" xorm:"comment('用户登录密码') VARCHAR(200)" validate:"required"`
 	Account    string    `json:"account" xorm:"not null comment('用户登录账号') VARCHAR(32)" validate:"required"`
 	NickName   string    `json:"nick_name" xorm:"comment('用户显示昵称') VARCHAR(32)" validate:"required"`

@@ -1,6 +1,7 @@
 package model
 
 import (
+	"time"
 	"zhoukai/configure"
 )
 
@@ -28,4 +29,16 @@ type Response struct {
 type Verification struct {
 	Message interface{} `json:"message"`
 	Code configure.Code `json:"code"`
+}
+
+// 公共创建
+type CommonCreate struct {
+	ID	string `json:"id"`
+	CommonTime
+}
+type CommonTime struct {
+	// 默认所有字段的零值, 比如 0, '', false 或者其它 零值，都不会保存到数据库内，使用指针可以避免这种情况。
+	CreatedAt *time.Time `json:"create_time" gorm: "create_at"`
+	UpdatedAt *time.Time `json:"update_time" gorm: "update_at"`
+	DeletedAt *time.Time `gorm:"index"`
 }

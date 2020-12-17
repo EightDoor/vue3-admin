@@ -3,7 +3,6 @@ package ControllerSys
 import (
 	"github.com/gin-gonic/gin"
 	"zhoukai/model/sys"
-	"zhoukai/service"
 	ServiceSys "zhoukai/service/sys"
 	"zhoukai/utils"
 )
@@ -26,10 +25,7 @@ func UserList(c *gin.Context)  {
 // @Router /api/v1/user/{id} [get]
 func UserSinge(c *gin.Context)  {
 	id := c.Param("id")
-	data := ModelSys.SysUser{
-		Id: id,
-	}
-	singData, result := ServiceSys.UserSinge(data)
+	singData, result := ServiceSys.UserSinge(id)
 	utils.R(singData, result, c)
 }
 // @Tags 用户
