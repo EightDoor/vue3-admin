@@ -11,3 +11,8 @@ func DepartList(list []ModelSys.SysDept, c *gin.Context) ([]ModelSys.SysDept, *g
 	result := db.DB.Scopes(UtilsDB.Paginate(c)).Find(&list)
 	return list, result
 }
+func DepartCreate(data ModelSys.SysDept)(ModelSys.SysDept, *gorm.DB)  {
+	data.ID = UtilsDB.CreateUUId()
+	result := db.DB.Create(data)
+	return data, result
+}

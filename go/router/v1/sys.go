@@ -15,5 +15,6 @@ func LoadSys(e *gin.RouterGroup)  {
 		e.DELETE("/user/:id", ControllerSys.UserDel)
 		// 部门
 		e.GET("/depart", ControllerSys.DepartList)
+		e.POST("/depart",ControllerSys.DepartCreate)
 	}
 }
