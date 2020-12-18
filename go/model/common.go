@@ -1,7 +1,6 @@
 package model
 
 import (
-	"time"
 	"zhoukai/configure"
 )
 
@@ -38,7 +37,7 @@ type CommonCreate struct {
 }
 type CommonTime struct {
 	// 默认所有字段的零值, 比如 0, '', false 或者其它 零值，都不会保存到数据库内，使用指针可以避免这种情况。
-	CreatedAt *time.Time `json:"create_time" gorm: "create_at"`
-	UpdatedAt *time.Time `json:"update_time" gorm: "update_at"`
-	DeletedAt *time.Time `gorm:"index"`
+	CreatedAt int64 `json:"created_at" gorm: "create_at autoCreateTime"`
+	UpdatedAt int64 `json:"updated_at" gorm: "update_at autoCreateTime"`
+	DeletedAt int64 `json:"deleted_at" gorm:"index autoCreateTime"`
 }

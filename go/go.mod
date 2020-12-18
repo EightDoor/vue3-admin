@@ -13,6 +13,7 @@ require (
 	github.com/gookit/color v1.3.5 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/natefinch/lumberjack v2.0.0+incompatible
+	github.com/satori/go.uuid v1.2.0
 	github.com/spf13/cobra v1.1.1 // indirect
 	github.com/swaggo/files v0.0.0-20190704085106-630677cd5c14
 	github.com/swaggo/gin-swagger v1.3.0

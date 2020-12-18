@@ -7,14 +7,15 @@ import (
 	"github.com/go-playground/locales/zh"
 	ut "github.com/go-playground/universal-translator"
 	"github.com/go-playground/validator/v10"
+	enTranslations "github.com/go-playground/validator/v10/translations/en"
+	zhTranslations "github.com/go-playground/validator/v10/translations/zh"
 	"gorm.io/gorm"
 	"net/http"
 	"reflect"
 	"strings"
 	"zhoukai/configure"
 	"zhoukai/model"
-	enTranslations "github.com/go-playground/validator/v10/translations/en"
-	zhTranslations "github.com/go-playground/validator/v10/translations/zh"
+	"zhoukai/utils/db"
 )
 
 type Paging struct {
@@ -28,7 +29,7 @@ func R(database interface{},result *gorm.DB, c *gin.Context) {
 	err := result.Error
 	// 总数
 	//dates, _ := result.Rows()
-	_, pageSize, page := PageIngService(c)
+	pageSize, page := UtilsDB.PageIngService(c)
 	responseData := model.ResponseData{
 		Page:     page,
 		PageSize: pageSize,
