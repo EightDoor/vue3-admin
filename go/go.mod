@@ -12,16 +12,22 @@ require (
 	github.com/go-playground/validator/v10 v10.4.1
 	github.com/gookit/color v1.3.5 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
+	github.com/mattn/go-sqlite3 v2.0.3+incompatible // indirect
 	github.com/natefinch/lumberjack v2.0.0+incompatible
+	github.com/nicksnyder/go-i18n/v2 v2.1.1 // indirect
+	github.com/nsf/termbox-go v0.0.0-20201124104050-ed494de23a00 // indirect
 	github.com/satori/go.uuid v1.2.0
 	github.com/spf13/cobra v1.1.1 // indirect
 	github.com/swaggo/files v0.0.0-20190704085106-630677cd5c14
 	github.com/swaggo/gin-swagger v1.3.0
 	github.com/swaggo/swag v1.7.0
+	github.com/xxjwxc/gormt v0.0.0-20201215060855-17dab2b01c1d // indirect
+	github.com/xxjwxc/public v0.0.0-20201218052000-c0a7944cd347 // indirect
 	go.uber.org/multierr v1.6.0 // indirect
 	go.uber.org/zap v1.16.0
 	gopkg.in/go-playground/validator.v9 v9.31.0 // indirect
 	gopkg.in/ini.v1 v1.62.0
+	gopkg.in/yaml.v3 v3.0.0-20200615113413-eeeca48fe776 // indirect
 	gorm.io/driver/mysql v1.0.3
 	gorm.io/gorm v1.20.8
 )

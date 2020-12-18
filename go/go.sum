@@ -622,6 +622,8 @@ github.com/xxjwxc/public v0.0.0-20200928160257-3db1045537d1 h1:dwdQOwu3wGgoXso9X
 github.com/xxjwxc/public v0.0.0-20200928160257-3db1045537d1/go.mod h1:E8+hfDT+dh3uoJ40kWqTcvnpDv1DJIMTFySzPZd8rTs=
 github.com/xxjwxc/public v0.0.0-20201217100214-bec3d3ae50d0 h1:73276tlVQkV3WM/WTAYmGD8sFfxB5gOyBWprLBk0Qjo=
 github.com/xxjwxc/public v0.0.0-20201217100214-bec3d3ae50d0/go.mod h1:E8+hfDT+dh3uoJ40kWqTcvnpDv1DJIMTFySzPZd8rTs=
+github.com/xxjwxc/public v0.0.0-20201218052000-c0a7944cd347 h1:H6XtsVx5qKY2hvqWAjSoQ9XS7ikJwlPQ3nNsvyWHsHo=
+github.com/xxjwxc/public v0.0.0-20201218052000-c0a7944cd347/go.mod h1:E8+hfDT+dh3uoJ40kWqTcvnpDv1DJIMTFySzPZd8rTs=
 github.com/yuin/goldmark v1.2.1/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/ziutek/mymysql v0.0.0-20171217234033-ff6cc86d3d93/go.mod h1:LMSpPZ6DbqWFxNCHW77HeMg9I646SAhApZ/wKdgO/C0=
 github.com/ziutek/mymysql v1.5.4 h1:GB0qdRGsTwQSBVYuVShFBKaXSnSnYYC2d9knnE1LHFs=

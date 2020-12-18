@@ -6,12 +6,12 @@ import (
 	"zhoukai/model"
 )
 
+// 部门
 type SysDept struct {
-	DeptId   int    `xorm:"not null pk autoincr INT(11)"`
-	ParentId int    `xorm:"not null INT(11)"`
-	Name     string `xorm:"not null comment('部门名称') VARCHAR(50)"`
-	DelFlag  int    `xorm:"not null default 1 TINYINT(4)"`
-	OrderNum int    `xorm:"not null comment('排序') INT(11)"`
+	ID   string    `json:"id" xorm:"not null pk autoincr INT(11)"`
+	ParentId string    `json:"parent_id" xorm:"not null INT(11)"`
+	Name     string `json:"name" xorm:"not null comment('部门名称') VARCHAR(50)"`
+	OrderNum int16    `json:"order_num" xorm:"not null comment('排序') INT(11)"`
 }
 
 type SysMenu struct {
@@ -57,7 +57,7 @@ type SysRoleMenu struct {
 // 用户
 type SysUser struct {
 	model.CommonCreate
-	PassWord   string    `json:"pass_word" xorm:"comment('用户登录密码') VARCHAR(200)" validate:"required"`
+	PassWord   string    `json:"pass_word" xorm:"comment('用户登录密码') VARCHAR(200)"`
 	Account    string    `json:"account" xorm:"not null comment('用户登录账号') VARCHAR(32)" validate:"required"`
 	NickName   string    `json:"nick_name" xorm:"comment('用户显示昵称') VARCHAR(32)" validate:"required"`
 	Email      string    `json:"email" xorm:"not null comment('邮箱地址') VARCHAR(200)"`

@@ -9,6 +9,7 @@ import (
 	_ "gorm.io/gorm/utils"
 	"time"
 	"zhoukai/configure"
+	"zhoukai/db"
 	"zhoukai/docs"
 	"zhoukai/middleware"
 	routerInit "zhoukai/router"
@@ -18,7 +19,7 @@ func init()  {
 	// 初始化日志库
 	middleware.SetLogs(zap.DebugLevel, configure.LOGFORMAT_CONSOLE, "./log/zap.log")
 	// 初始化数据库
-	configure.InitMySqlCon()
+	db.InitMySqlCon()
 }
 
 

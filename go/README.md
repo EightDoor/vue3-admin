@@ -9,6 +9,7 @@
 - 日志框架 zap
 - uuid https://github.com/satori/go.uuid
 - gorm 数据库生成model https://github.com/xxjwxc/gormt
+- 密码使用md5加密
 ## 运行
 - `air -c air.toml -d`
 - 下载包的可执行文件查看GOPATH路径 windows目前是在C:\GO\bin\bin\

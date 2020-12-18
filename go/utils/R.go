@@ -27,22 +27,37 @@ var trans ut.Translator
 // 公共请求返回
 func R(database interface{},result *gorm.DB, c *gin.Context) {
 	err := result.Error
+	rowsAffected := result.RowsAffected
 	// 总数
 	//dates, _ := result.Rows()
 	pageSize, page := UtilsDB.PageIngService(c)
-	responseData := model.ResponseData{
-		Page:     page,
-		PageSize: pageSize,
-		List:     database,
+
+	// 反射获取类型
+	typeOfA := reflect.TypeOf(database)
+	var responseData interface{}
+	responseData = model.ResponseDataSing{
+		List: database,
 	}
+	 typeOfB := typeOfA.Kind() == reflect.Slice
+	if typeOfB {
+		responseData = model.ResponseData{
+			List: database,
+			PageSize: pageSize,
+			Page: page,
+		}
+	}
+
 	response := model.Response{
 		Code:    configure.RequestOtherError,
 		Message: err,
 		Data:    responseData,
 	}
 	if err != nil {
-		c.JSON(http.StatusInternalServerError,response)
-	}else {
+		c.JSON(http.StatusOK,response)
+	}else if rowsAffected == 0 && !typeOfB {
+		response.Message = "操作影响行数为 -> 0"
+		c.JSON(http.StatusOK,response)
+	} else {
 		response.Code = configure.RequestSuccess
 		response.Message = "success"
 		c.JSON(http.StatusOK, response)

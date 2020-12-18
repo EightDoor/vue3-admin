@@ -6,7 +6,6 @@ import (
 	"gorm.io/gorm"
 	"strconv"
 	"strings"
-	"zhoukai/model"
 )
 
 func PageIngService(c *gin.Context)( pageSize int, page int)   {
@@ -41,12 +40,17 @@ func Paginate(c *gin.Context) func(db *gorm.DB) *gorm.DB  {
 }
 
 // 创建添加uuid
-func CreateUUId() func(db *gorm.DB) *gorm.DB  {
-	return func(db *gorm.DB) *gorm.DB {
-		var commonCreate model.CommonCreate
-		u2 := uuid.NewV4()
-		commonCreate.ID = strings.ReplaceAll(u2.String(), "-", "")
-		db.Where("id = ?", 23)
-		return db
-	}
+func CreateUUId() string  {
+	u2 := uuid.NewV4()
+	return strings.ReplaceAll(u2.String(), "-", "")
 }
+
+//func CreateUUId() func(db *gorm.DB) *gorm.DB  {
+//	return func(db *gorm.DB) *gorm.DB {
+//		var commonCreate model.CommonCreate
+//		u2 := uuid.NewV4()
+//		commonCreate.ID = strings.ReplaceAll(u2.String(), "-", "")
+//		db.Where("id = ?", 23)
+//		return db
+//	}
+//}
