@@ -16,3 +16,11 @@ func DepartCreate(data ModelSys.SysDept)(ModelSys.SysDept, *gorm.DB)  {
 	result := db.DB.Create(data)
 	return data, result
 }
+func DepartUpdate(data ModelSys.SysDept)(ModelSys.SysDept, *gorm.DB)  {
+	result := db.DB.Updates(data)
+	return data, result
+}
+func DepartDel(data ModelSys.SysDept)(ModelSys.SysDept, *gorm.DB)  {
+	result := db.DB.Delete(data)
+	return data, result
+}

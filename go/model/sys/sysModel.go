@@ -8,10 +8,10 @@ import (
 
 // 部门
 type SysDept struct {
-	ID   string    `json:"id" xorm:"not null pk autoincr INT(11)"`
-	ParentId string    `json:"parent_id" xorm:"not null INT(11)"`
-	Name     string `json:"name" xorm:"not null comment('部门名称') VARCHAR(50)"`
-	OrderNum int16    `json:"order_num" xorm:"not null comment('排序') INT(11)"`
+	ID   string    `json:"id"`
+	ParentId string    `json:"parent_id"  validate: "required"`
+	Name     string `json:"name" validate: "required"`
+	OrderNum int16    `json:"order_num" validate: "required"`
 }
 
 type SysMenu struct {

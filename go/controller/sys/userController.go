@@ -61,7 +61,7 @@ func UserCreate(c *gin.Context)  {
 // @Param Status body int false "所属状态是否有效  1是有效 0是失效"
 // @Param PhoneNum body string false "用户手机号码"
 // @Success 200 {string} string	"ok"
-// @Router /api/v1/user [put]
+// @Router /api/v1/user/{id} [put]
 func UserUpdate(c *gin.Context)  {
 	sysUser.ID = c.Param("id")
 	valid := utils.Verify(&sysUser, c)
@@ -73,7 +73,7 @@ func UserUpdate(c *gin.Context)  {
 // @Tags 用户
 // @Description 删除用户
 // @Param id path string true "id"
-// @Router /api/v1/user [delete]
+// @Router /api/v1/user/{id} [delete]
 func UserDel(c *gin.Context)  {
 	id := c.Param("id")
 	sysUser.ID = id

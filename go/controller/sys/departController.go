@@ -33,3 +33,30 @@ func DepartCreate(c *gin.Context)  {
 		utils.R(data, result, c)
 	}
 }
+// @Tags 部门
+// @Description 修改部门
+// Param id path string true "id"
+// @Param parent_id body string true "父级id"
+// @Param name body string true "节点名称"
+// @Param order_num body string true "排序"
+// @Router /api/v1/depart/{id}	[put]
+func DepartUpdate(c *gin.Context)  {
+	var sysDepart ModelSys.SysDept
+	valid := utils.Verify(&sysDepart, c)
+	sysDepart.ID = c.Param("id")
+	if valid == nil {
+		data, result := ServiceSys.DepartUpdate(sysDepart)
+		utils.R(data, result, c)
+	}
+}
+
+// @Tags 部门
+// @Description 删除部门
+// Param id path string true "id"
+// @Router /api/v1/depart/{id} [delete]
+func DepartDel(c *gin.Context)  {
+	var sysDepart ModelSys.SysDept
+	sysDepart.ID = c.Param("id")
+	data, result := ServiceSys.DepartDel(sysDepart)
+	utils.R(data, result, c)
+}

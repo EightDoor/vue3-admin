@@ -8,6 +8,8 @@ import Home from '@/views/home/home.vue'
 import Test from '@/views/Test.vue'
 import Demo from '@/views/Demo.vue'
 
+import Depart from '@/views/sys/depart.vue'
+
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
@@ -22,6 +24,15 @@ const routes: RouteRecordRaw[] = [
         meta: {
           title: '首页',
           icon: '23',
+        },
+      },
+      {
+        name: 'depart',
+        path: 'depart',
+        component: Depart,
+        meta: {
+          title: '部门',
+          icon: '1',
         },
       },
       {

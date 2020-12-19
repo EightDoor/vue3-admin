@@ -16,5 +16,7 @@ func LoadSys(e *gin.RouterGroup)  {
 		// 部门
 		e.GET("/depart", ControllerSys.DepartList)
 		e.POST("/depart",ControllerSys.DepartCreate)
+		e.PUT("/depart/:id", ControllerSys.DepartUpdate)
+		e.DELETE("/depart/:id", ControllerSys.DepartDel)
 	}
 }

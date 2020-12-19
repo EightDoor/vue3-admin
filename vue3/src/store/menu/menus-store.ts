@@ -25,6 +25,11 @@ export default {
           path: '/home',
         },
         {
+          key: '3',
+          title: '部门管理',
+          path: '/depart',
+        },
+        {
           key: '2',
           title: 'Navigation 2',
           path: '/test',

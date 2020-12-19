@@ -29,17 +29,57 @@ paths:
             type: string
       tags:
       - 部门
-  /api/v1/user:
-    delete:
-      description: 删除用户
+    post:
       parameters:
-      - description: id
-        in: path
-        name: id
+      - description: 父级id
+        in: body
+        name: parent_id
         required: true
-        type: string
+        schema:
+          type: string
+      - description: 节点名称
+        in: body
+        name: name
+        required: true
+        schema:
+          type: string
+      - description: 排序
+        in: body
+        name: order_num
+        required: true
+        schema:
+          type: string
       tags:
-      - 用户
+      - 部门
+  /api/v1/depart/{id}:
+    delete:
+      description: 删除部门
+      tags:
+      - 部门
+    put:
+      description: 修改部门
+      parameters:
+      - description: 父级id
+        in: body
+        name: parent_id
+        required: true
+        schema:
+          type: string
+      - description: 节点名称
+        in: body
+        name: name
+        required: true
+        schema:
+          type: string
+      - description: 排序
+        in: body
+        name: order_num
+        required: true
+        schema:
+          type: string
+      tags:
+      - 部门
+  /api/v1/user:
     get:
       description: 获取用户列表
       parameters:
@@ -111,6 +151,32 @@ paths:
             type: string
       tags:
       - 用户
+  /api/v1/user/{id}:
+    delete:
+      description: 删除用户
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      tags:
+      - 用户
+    get:
+      description: 获取单条用户信息
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      tags:
+      - 用户
     put:
       description: 修改用户
       parameters:
@@ -162,22 +228,6 @@ paths:
         name: PhoneNum
         schema:
           type: string
-      responses:
-        "200":
-          description: ok
-          schema:
-            type: string
-      tags:
-      - 用户
-  /api/v1/user/{id}:
-    get:
-      description: 获取单条用户信息
-      parameters:
-      - description: id
-        in: path
-        name: id
-        required: true
-        type: string
       responses:
         "200":
           description: ok
