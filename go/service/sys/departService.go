@@ -8,7 +8,9 @@ import (
 	UtilsDB "zhoukai/utils/db"
 )
 func DepartList(list []ModelSys.SysDept, c *gin.Context) ([]ModelSys.SysDept, *gorm.DB)  {
-	result := db.DB.Scopes(UtilsDB.Paginate(c)).Find(&list)
+	var count int64
+	result := db.DB.Scopes(UtilsDB.Paginate(c)).Find(&list).Count(&count)
+	UtilsDB.SetTotal(c, count)
 	return list, result
 }
 func DepartCreate(data ModelSys.SysDept)(ModelSys.SysDept, *gorm.DB)  {

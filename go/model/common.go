@@ -12,7 +12,7 @@ type ResponseData struct {
 	// 返回的元素总数
 	//Size int	`json:"size"`
 	// 筛选条件计算得到的总数，但可能不会全部返回
-	//Total int	`json:"total"`
+	Total interface{}	`json:"total"`
 	List interface{}	`json:"list"`
 }
 

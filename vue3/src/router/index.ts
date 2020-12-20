@@ -1,5 +1,5 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
-import { canUserAccess } from '../authority'
+import { canUserAccess } from '@/authority'
 
 import Layout from '@/layout/layout/layout.vue'
 import Login from '@/views/login/login.vue'

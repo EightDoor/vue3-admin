@@ -28,10 +28,8 @@ var trans ut.Translator
 func R(database interface{},result *gorm.DB, c *gin.Context) {
 	err := result.Error
 	rowsAffected := result.RowsAffected
-	// 总数
-	//dates, _ := result.Rows()
 	pageSize, page := UtilsDB.PageIngService(c)
-
+	total := UtilsDB.GetTotal(c)
 	// 反射获取类型
 	typeOfA := reflect.TypeOf(database)
 	var responseData interface{}
@@ -44,6 +42,7 @@ func R(database interface{},result *gorm.DB, c *gin.Context) {
 			List: database,
 			PageSize: pageSize,
 			Page: page,
+			Total: total,
 		}
 	}
 

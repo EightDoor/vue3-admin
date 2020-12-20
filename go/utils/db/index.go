@@ -29,8 +29,9 @@ func Paginate(c *gin.Context) func(db *gorm.DB) *gorm.DB  {
 		}
 		pageSize, _ := strconv.Atoi(c.Query("page_size"))
 		switch {
-		case pageSize > 100:
-			pageSize = 100
+		// TODO 最大的page_size为1000条
+		case pageSize > 1000:
+			pageSize = 1000
 		case pageSize < 0:
 			pageSize = 10
 		}
@@ -54,3 +55,10 @@ func CreateUUId() string  {
 //		return db
 //	}
 //}
+func SetTotal(c *gin.Context, count int64)  {
+	c.Set("TotalCustom", count)
+}
+func GetTotal(c *gin.Context) interface{}  {
+	r, _ := c.Get("TotalCustom")
+	return r
+}
