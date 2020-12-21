@@ -37,24 +37,15 @@
   >
     <a-form :label-col="{ span: 4 }" :wrapper-col="{ span: 20 }">
       <a-form-item label="父级id" v-bind="validateInfos.parent_id">
-        <a-input
-          v-if="treeOptions.options.length === 0"
-          disabled
+        <a-tree-select
           v-model:value="modelRef.parent_id"
-        ></a-input>
-        <a-select
-          v-else
-          v-model:value="modelRef.parent_id"
+          style="width: 100%"
+          :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
+          :tree-data="treeOptions.options"
           placeholder="请选择"
+          tree-default-expand-all
         >
-          <a-select-option
-            v-for="(item, index) in treeOptions.options"
-            :key="index"
-            :value="item.id"
-          >
-            {{ item.name }}
-          </a-select-option>
-        </a-select>
+        </a-tree-select>
       </a-form-item>
       <a-form-item label="名称" v-bind="validateInfos.name">
         <a-input v-model:value="modelRef.name"></a-input>
@@ -70,7 +61,7 @@ import { defineComponent, reactive, onMounted, toRaw } from 'vue'
 import CommonButton from '@/components/Button/Button.vue'
 import CommonDrawer, { DrawerProps } from '@/components/Drawer/Drawer.vue'
 import { http } from '@/utils/request'
-import { DepartType } from '@/types/sys/depart'
+import { DepartType } from '@/types/sys'
 import { useForm } from '@ant-design-vue/use'
 import { message } from 'ant-design-vue'
 import { TableDataType } from '@/types/type'
@@ -84,7 +75,7 @@ const SysDepart = defineComponent({
   setup() {
     const tableCont = reactive<TableDataType<DepartType>>({
       page: 1,
-      page_size: 1000,
+      page_size: 10,
       total: 0,
       loading: false,
       columns: [
@@ -157,7 +148,11 @@ const SysDepart = defineComponent({
         tableCont.loading = false
         tableCont.data = ListToTree<DepartType>(list)
         tableCont.total = res.total
-        treeOptions.options = list.filter((item) => item.parent_id === '0')
+        list.map((item) => {
+          item.title = item.name
+          item.value = item.id
+        })
+        treeOptions.options = ListToTree<DepartType>(list)
       })
     }
     onMounted(() => {
@@ -191,8 +186,8 @@ const SysDepart = defineComponent({
     function ChangeClick() {
       drawerData.title = '添加'
       drawerData.visible = true
-      modelRef.id = ''
       resetFields()
+      modelRef.parent_id = '0'
     }
     function Editor(record: DepartType) {
       const data = toRaw(record)

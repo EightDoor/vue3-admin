@@ -35,7 +35,7 @@ type Verification struct {
 
 // 公共创建
 type CommonCreate struct {
-	ID	string `json:"id"`
+	ID	string `json:"id" gorm:"primary_key"`
 	CommonTime
 }
 type CommonTime struct {

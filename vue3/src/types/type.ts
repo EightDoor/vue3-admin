@@ -20,3 +20,17 @@ export interface TableDataType<T> extends PaginType{
   columns: any,
   loading: boolean
 }
+
+// 通用的业务类型字段
+export interface CommonTableList {
+  id?: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
+// 树形tree-select
+export interface CommonTreeSelect {
+  title?: string
+  value?: string
+  key?: string;
+}

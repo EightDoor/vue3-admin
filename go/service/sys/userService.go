@@ -10,7 +10,9 @@ import (
 )
 
 func UserQuery(dates []ModelSys.SysUser, c *gin.Context)([]ModelSys.SysUser, *gorm.DB)  {
-	result := db.DB.Scopes(UtilsDB.Paginate(c)).Find(&dates)
+	var total int64
+	result :=db.DB.Scopes(UtilsDB.Paginate(c)).Preload("DepartInfo").Find(&dates).Count(&total)
+	UtilsDB.SetTotal(c, total)
 	return dates, result
 }
 func UserSinge(id string)(ModelSys.SysUser, *gorm.DB)  {

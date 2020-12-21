@@ -3,12 +3,14 @@ import { canUserAccess } from '@/authority'
 
 import Layout from '@/layout/layout/layout.vue'
 import Login from '@/views/login/login.vue'
+import LayoutChildren from '@/views/layout-children.vue';
 
 import Home from '@/views/home/home.vue'
 import Test from '@/views/Test.vue'
 import Demo from '@/views/Demo.vue'
 
 import Depart from '@/views/sys/depart.vue'
+import SysUser from "@/views/sys/user.vue"
 
 const routes: RouteRecordRaw[] = [
   {
@@ -27,13 +29,33 @@ const routes: RouteRecordRaw[] = [
         },
       },
       {
-        name: 'depart',
-        path: 'depart',
-        component: Depart,
+        name: "sys",
+        path: "sys",
+        component: LayoutChildren,
         meta: {
-          title: '部门',
-          icon: '1',
+          title: "系统管理",
+          icon: "1"
         },
+        children: [
+          {
+            name: 'user',
+            path: 'user',
+            component: SysUser,
+            meta: {
+              title: '用户管理',
+              icon: '1',
+            },
+          },
+          {
+            name: 'depart',
+            path: 'depart',
+            component: Depart,
+            meta: {
+              title: '部门管理',
+              icon: '1',
+            },
+          },
+        ]
       },
       {
         name: 'test',

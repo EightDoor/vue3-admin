@@ -21,13 +21,25 @@ export default {
       const list: MenuItem[] = [
         {
           key: '1',
-          title: 'Option 1',
+          title: '首页',
           path: '/home',
         },
         {
-          key: '3',
-          title: '部门管理',
-          path: '/depart',
+          key: "3",
+          title: "系统管理",
+          path: "/sys",
+          children: [
+            {
+              key: "5",
+              title: "部门管理",
+              path: "/sys/depart"
+            },
+            {
+              key: "6",
+              title: "用户管理",
+              path: "/sys/user"
+            },
+          ]
         },
         {
           key: '2',
