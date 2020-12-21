@@ -12,7 +12,7 @@ type ResponseData struct {
 	// 返回的元素总数
 	//Size int	`json:"size"`
 	// 筛选条件计算得到的总数，但可能不会全部返回
-	//Total int	`json:"total"`
+	Total interface{}	`json:"total"`
 	List interface{}	`json:"list"`
 }
 
@@ -35,7 +35,7 @@ type Verification struct {
 
 // 公共创建
 type CommonCreate struct {
-	ID	string `json:"id"`
+	ID	string `json:"id" gorm:"primary_key"`
 	CommonTime
 }
 type CommonTime struct {

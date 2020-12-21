@@ -9,8 +9,8 @@ import (
 	"zhoukai/utils/db"
 )
 
-func UserQuery(dates []ModelSys.SysUser, c *gin.Context)([]ModelSys.SysUser, *gorm.DB)  {
-	result := db.DB.Scopes(UtilsDB.Paginate(c)).Find(&dates)
+func UserQuery(dates []ModelSys.SysUser, c *gin.Context)([]ModelSys.SysUser, *gorm.DB) {
+	result :=db.DB.Scopes(UtilsDB.Paginate(c, dates)).Preload("DepartInfo").Find(&dates)
 	return dates, result
 }
 func UserSinge(id string)(ModelSys.SysUser, *gorm.DB)  {

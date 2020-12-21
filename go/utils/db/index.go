@@ -21,21 +21,26 @@ func PageIngService(c *gin.Context)( pageSize int, page int)   {
 }
 
 // 分页db统一返回数据
-func Paginate(c *gin.Context) func(db *gorm.DB) *gorm.DB  {
+func Paginate(c *gin.Context, data interface{}) func(db *gorm.DB) *gorm.DB  {
 	return func(db *gorm.DB) *gorm.DB {
+		var total int64
 		page, _ := strconv.Atoi(c.Query("page"))
 		if page == 0 {
 			page = 1
 		}
 		pageSize, _ := strconv.Atoi(c.Query("page_size"))
 		switch {
-		case pageSize > 100:
-			pageSize = 100
+		// TODO 最大的page_size为1000条
+		case pageSize > 1000:
+			pageSize = 1000
 		case pageSize < 0:
 			pageSize = 10
 		}
 		offset := (page - 1) * pageSize
-		return db.Offset(offset).Limit(pageSize)
+		db.Model(data).Offset(-1).Count(&total)
+		result := db.Model(data).Offset(offset).Limit(pageSize)
+		SetTotal(c, total)
+		return result
 	}
 }
 
@@ -54,3 +59,10 @@ func CreateUUId() string  {
 //		return db
 //	}
 //}
+func SetTotal(c *gin.Context, count int64)  {
+	c.Set("TotalCustom", count)
+}
+func GetTotal(c *gin.Context) interface{}  {
+	r, _ := c.Get("TotalCustom")
+	return r
+}

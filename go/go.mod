@@ -25,6 +25,7 @@ require (
 	github.com/xxjwxc/public v0.0.0-20201218052000-c0a7944cd347 // indirect
 	go.uber.org/multierr v1.6.0 // indirect
 	go.uber.org/zap v1.16.0
+	golang.org/x/tools v0.0.0-20201120155355-20be4ac4bd6e
 	gopkg.in/go-playground/validator.v9 v9.31.0 // indirect
 	gopkg.in/ini.v1 v1.62.0
 	gopkg.in/yaml.v3 v3.0.0-20200615113413-eeeca48fe776 // indirect

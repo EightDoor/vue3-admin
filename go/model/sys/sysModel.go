@@ -8,7 +8,7 @@ import (
 
 // 部门
 type SysDept struct {
-	ID   string    `json:"id"`
+	model.CommonCreate
 	ParentId string    `json:"parent_id"  validate: "required"`
 	Name     string `json:"name" validate: "required"`
 	OrderNum int16    `json:"order_num" validate: "required"`
@@ -63,8 +63,9 @@ type SysUser struct {
 	Email      string    `json:"email" xorm:"not null comment('邮箱地址') VARCHAR(200)"`
 	Status     int       `json:"status" xorm:"not null default 1 comment('所属状态是否有效  1是有效 0是失效') TINYINT(4)" validate:"required int"`
 	Avatar     string    `json:"avatar" xorm:"not null comment('头像地址') VARCHAR(200)"`
-	DeptId     int       `json:"dept_id" xorm:"not null unique INT(11)" validate:"required"`
+	DeptId     string    `json:"dept_id"`
 	PhoneNum   string    `json:"phone_num" xorm:"comment('用户手机号码') VARCHAR(20)"`
+	DepartInfo SysDept	 `json:"depart_info" gorm:"foreignKey:DeptId"`
 }
 
 type SysUserRole struct {
