@@ -15,13 +15,18 @@ type SysDept struct {
 }
 
 type SysMenu struct {
-	MenuId   int    `xorm:"not null pk autoincr INT(11)"`
-	ParentId int    `xorm:"not null INT(11)"`
-	Name     string `xorm:"not null comment('菜单名称') VARCHAR(50)"`
-	Type     int    `xorm:"not null comment('菜单类型： 1. 菜单/目录 2 tabs 3 按钮') INT(11)"`
-	OrderNum int    `xorm:"not null comment('排序') INT(11)"`
-	Perms    string `xorm:"comment('权限标识，接口标识') VARCHAR(255)"`
-	Code     string `xorm:"not null comment('菜单标识，前端路由name') VARCHAR(30)"`
+	model.CommonCreate
+	ParentId string    `json:"parent_id" binding:"required"`
+	// 菜单名称
+	Name     string `json:"name" binding:"required"`
+	// 菜单类型： 1. 菜单/目录 2 tabs 3 按钮
+	Type     int    `json:"type" binding:"required"`
+	// 排序
+	OrderNum int    `json:"order_num" binding:"required"`
+	// 权限标识，接口标识
+	Perms    string `json:"perms"`
+	// 菜单标识，前端路由name
+	Code     string `json:"code" binding:"required"`
 }
 
 type SysOss struct {
@@ -35,11 +40,9 @@ type SysOss struct {
 }
 
 type SysRole struct {
-	RoleId     int       `xorm:"not null pk autoincr INT(11)"`
-	Remark     string    `xorm:"not null comment('角色备注') VARCHAR(100)"`
-	RoleName   string    `xorm:"not null comment('角色名称') VARCHAR(100)"`
-	DeptId     int       `xorm:"comment('关联部门ID') INT(11)"`
-	CreateDate time.Time `xorm:"not null default 'CURRENT_TIMESTAMP(6)' comment('创建时间') TIMESTAMP(6)"`
+	model.CommonCreate
+	Remark     string    `json:"remark" validate: "required"`
+	RoleName   string    `json:"role_name"`
 }
 
 type SysRoleDept struct {

@@ -26,3 +26,10 @@ export interface UserType extends CommonTableList {
   // 用户手机号码
   phone_num?: string
 }
+
+export interface RoleType extends CommonTableList {
+  // 描述
+  remark?: string;
+  // 角色名称
+  role_name: string
+}

@@ -11,6 +11,7 @@ import Demo from '@/views/Demo.vue'
 
 import Depart from '@/views/sys/depart.vue'
 import SysUser from "@/views/sys/user.vue"
+import SysRole from '@/views/sys/role.vue';
 
 const routes: RouteRecordRaw[] = [
   {
@@ -43,6 +44,15 @@ const routes: RouteRecordRaw[] = [
             component: SysUser,
             meta: {
               title: '用户管理',
+              icon: '1',
+            },
+          },
+          {
+            name: 'role',
+            path: 'role',
+            component: SysRole,
+            meta: {
+              title: '角色管理',
               icon: '1',
             },
           },

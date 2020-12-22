@@ -35,6 +35,11 @@ export default {
               path: "/sys/depart"
             },
             {
+              key: "7",
+              title: "角色管理",
+              path: "/sys/role"
+            },
+            {
               key: "6",
               title: "用户管理",
               path: "/sys/user"
