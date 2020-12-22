@@ -9,9 +9,9 @@ import (
 // 部门
 type SysDept struct {
 	model.CommonCreate
-	ParentId string    `json:"parent_id"  validate: "required"`
-	Name     string `json:"name" validate: "required"`
-	OrderNum int16    `json:"order_num" validate: "required"`
+	ParentId string    `json:"parent_id"  binding:"required"`
+	Name     string `json:"name" binding:"required"`
+	OrderNum int16    `json:"order_num" binding:"required"`
 }
 
 type SysMenu struct {
@@ -41,7 +41,7 @@ type SysOss struct {
 
 type SysRole struct {
 	model.CommonCreate
-	Remark     string    `json:"remark" validate: "required"`
+	Remark     string    `json:"remark" binding:"required"`
 	RoleName   string    `json:"role_name"`
 }
 
@@ -61,10 +61,10 @@ type SysRoleMenu struct {
 type SysUser struct {
 	model.CommonCreate
 	PassWord   string    `json:"pass_word" xorm:"comment('用户登录密码') VARCHAR(200)"`
-	Account    string    `json:"account" xorm:"not null comment('用户登录账号') VARCHAR(32)" validate:"required"`
-	NickName   string    `json:"nick_name" xorm:"comment('用户显示昵称') VARCHAR(32)" validate:"required"`
+	Account    string    `json:"account" xorm:"not null comment('用户登录账号') VARCHAR(32)" binding:"required"`
+	NickName   string    `json:"nick_name" xorm:"comment('用户显示昵称') VARCHAR(32)" binding:"required"`
 	Email      string    `json:"email" xorm:"not null comment('邮箱地址') VARCHAR(200)"`
-	Status     int       `json:"status" xorm:"not null default 1 comment('所属状态是否有效  1是有效 0是失效') TINYINT(4)" validate:"required int"`
+	Status     int       `json:"status" xorm:"not null default 1 comment('所属状态是否有效  1是有效 0是失效') TINYINT(4)" binding:"required"`
 	Avatar     string    `json:"avatar" xorm:"not null comment('头像地址') VARCHAR(200)"`
 	DeptId     string    `json:"dept_id"`
 	PhoneNum   string    `json:"phone_num" xorm:"comment('用户手机号码') VARCHAR(20)"`
