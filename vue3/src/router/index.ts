@@ -12,6 +12,7 @@ import Demo from '@/views/Demo.vue'
 import Depart from '@/views/sys/depart.vue'
 import SysUser from "@/views/sys/user.vue"
 import SysRole from '@/views/sys/role.vue';
+import SysMenu from '@/views/sys/menu.vue';
 
 const routes: RouteRecordRaw[] = [
   {
@@ -44,6 +45,15 @@ const routes: RouteRecordRaw[] = [
             component: SysUser,
             meta: {
               title: '用户管理',
+              icon: '1',
+            },
+          },
+          {
+            name: 'menu',
+            path: 'menu',
+            component: SysMenu,
+            meta: {
+              title: '菜单管理',
               icon: '1',
             },
           },

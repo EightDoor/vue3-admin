@@ -26,5 +26,6 @@ func LoadSys(e *gin.RouterGroup)  {
 		// 菜单
 		e.GET("/menu", ControllerSys.MenuList)
 		e.POST("/menu", ControllerSys.MenuCreate)
+		e.PUT("/menu", ControllerSys.MenuUpdate)
 	}
 }

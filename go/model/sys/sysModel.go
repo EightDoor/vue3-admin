@@ -19,7 +19,7 @@ type SysMenu struct {
 	ParentId string    `json:"parent_id" binding:"required"`
 	// 菜单名称
 	Name     string `json:"name" binding:"required"`
-	// 菜单类型： 1. 菜单/目录 2 tabs 3 按钮
+	// 菜单类型： 1. 目录 2. 菜单  3. 按钮
 	Type     int    `json:"type" binding:"required"`
 	// 排序
 	OrderNum int    `json:"order_num" binding:"required"`

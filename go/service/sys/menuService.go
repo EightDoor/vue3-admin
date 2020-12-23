@@ -18,3 +18,7 @@ func MenuCreate(data ModelSys.SysMenu)(ModelSys.SysMenu, *gorm.DB)  {
 	result := db.DB.Create(&data)
 	return data, result
 }
+func MenuUpdate(data ModelSys.SysMenu)(ModelSys.SysMenu, *gorm.DB)  {
+	result := db.DB.Updates(&data)
+	return data, result
+}
