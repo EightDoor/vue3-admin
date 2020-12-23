@@ -9,19 +9,24 @@ import (
 // 部门
 type SysDept struct {
 	model.CommonCreate
-	ParentId string    `json:"parent_id"  validate: "required"`
-	Name     string `json:"name" validate: "required"`
-	OrderNum int16    `json:"order_num" validate: "required"`
+	ParentId string    `json:"parent_id"  binding:"required"`
+	Name     string `json:"name" binding:"required"`
+	OrderNum int16    `json:"order_num" binding:"required"`
 }
 
 type SysMenu struct {
-	MenuId   int    `xorm:"not null pk autoincr INT(11)"`
-	ParentId int    `xorm:"not null INT(11)"`
-	Name     string `xorm:"not null comment('菜单名称') VARCHAR(50)"`
-	Type     int    `xorm:"not null comment('菜单类型： 1. 菜单/目录 2 tabs 3 按钮') INT(11)"`
-	OrderNum int    `xorm:"not null comment('排序') INT(11)"`
-	Perms    string `xorm:"comment('权限标识，接口标识') VARCHAR(255)"`
-	Code     string `xorm:"not null comment('菜单标识，前端路由name') VARCHAR(30)"`
+	model.CommonCreate
+	ParentId string    `json:"parent_id" binding:"required"`
+	// 菜单名称
+	Name     string `json:"name" binding:"required"`
+	// 菜单类型： 1. 目录 2. 菜单  3. 按钮
+	Type     int    `json:"type" binding:"required"`
+	// 排序
+	OrderNum int    `json:"order_num" binding:"required"`
+	// 权限标识，接口标识
+	Perms    string `json:"perms"`
+	// 菜单标识，前端路由name
+	Code     string `json:"code" binding:"required"`
 }
 
 type SysOss struct {
@@ -35,11 +40,9 @@ type SysOss struct {
 }
 
 type SysRole struct {
-	RoleId     int       `xorm:"not null pk autoincr INT(11)"`
-	Remark     string    `xorm:"not null comment('角色备注') VARCHAR(100)"`
-	RoleName   string    `xorm:"not null comment('角色名称') VARCHAR(100)"`
-	DeptId     int       `xorm:"comment('关联部门ID') INT(11)"`
-	CreateDate time.Time `xorm:"not null default 'CURRENT_TIMESTAMP(6)' comment('创建时间') TIMESTAMP(6)"`
+	model.CommonCreate
+	Remark     string    `json:"remark" binding:"required"`
+	RoleName   string    `json:"role_name"`
 }
 
 type SysRoleDept struct {
@@ -58,10 +61,10 @@ type SysRoleMenu struct {
 type SysUser struct {
 	model.CommonCreate
 	PassWord   string    `json:"pass_word" xorm:"comment('用户登录密码') VARCHAR(200)"`
-	Account    string    `json:"account" xorm:"not null comment('用户登录账号') VARCHAR(32)" validate:"required"`
-	NickName   string    `json:"nick_name" xorm:"comment('用户显示昵称') VARCHAR(32)" validate:"required"`
+	Account    string    `json:"account" xorm:"not null comment('用户登录账号') VARCHAR(32)" binding:"required"`
+	NickName   string    `json:"nick_name" xorm:"comment('用户显示昵称') VARCHAR(32)" binding:"required"`
 	Email      string    `json:"email" xorm:"not null comment('邮箱地址') VARCHAR(200)"`
-	Status     int       `json:"status" xorm:"not null default 1 comment('所属状态是否有效  1是有效 0是失效') TINYINT(4)" validate:"required int"`
+	Status     int       `json:"status" xorm:"not null default 1 comment('所属状态是否有效  1是有效 0是失效') TINYINT(4)" binding:"required"`
 	Avatar     string    `json:"avatar" xorm:"not null comment('头像地址') VARCHAR(200)"`
 	DeptId     string    `json:"dept_id"`
 	PhoneNum   string    `json:"phone_num" xorm:"comment('用户手机号码') VARCHAR(20)"`

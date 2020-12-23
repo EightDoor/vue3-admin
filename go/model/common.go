@@ -42,5 +42,5 @@ type CommonTime struct {
 	// 默认所有字段的零值, 比如 0, '', false 或者其它 零值，都不会保存到数据库内，使用指针可以避免这种情况。
 	CreatedAt int64 `json:"created_at" gorm: "autoCreateTime"`
 	UpdatedAt int64 `json:"updated_at" gorm: "autoUpdateTime"`
-	DeletedAt int64 `json:"deleted_at" gorm:"index"`
+	DeletedAt int64 `json:"deleted_at" gorm:"column:deleted_at;null"`
 }

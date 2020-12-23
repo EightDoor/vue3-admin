@@ -26,3 +26,29 @@ export interface UserType extends CommonTableList {
   // 用户手机号码
   phone_num?: string
 }
+
+export interface RoleType extends CommonTableList {
+  // 描述
+  remark?: string;
+  // 角色名称
+  role_name: string
+}
+
+export interface MenuType extends CommonTableList {
+  id: string;
+  // 父级id
+  parent_id: string;
+  // 菜单名称
+  name: string;
+  // 菜单类型：1. 目录 2. 菜单  3. 按钮
+  type: number;
+  // 排序
+  order_num: number;
+  // 权限标识，接口标识
+  perms?: string
+  // 菜单标识，前端路由name
+  code: string;
+  children?: Array<any>
+  title?: string;
+  value?:string;
+}
