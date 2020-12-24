@@ -39,6 +39,7 @@ interface TreeDataType {
 }
 interface Props {
   visible: boolean
+  data: string[]
 }
 const CommonTree = defineComponent({
   name: 'common-tree',
@@ -52,6 +53,7 @@ const CommonTree = defineComponent({
     },
     loading: {
       type: Boolean,
+      default: false,
     },
   },
   setup(props: Props, { emit }: { emit: Function }) {
@@ -100,6 +102,12 @@ const CommonTree = defineComponent({
     function DSubmit() {
       emit('on-submit')
     }
+    watch(
+      () => props.data,
+      (newValue) => {
+        treeData.selectedKeys = newValue
+      }
+    )
     return {
       // data
       treeData,

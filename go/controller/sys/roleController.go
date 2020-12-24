@@ -57,3 +57,14 @@ func RoleDel(c *gin.Context)  {
 	data, result := ServiceSys.RoleDel(sysRole)
 	utils.R(data, result, c)
 }
+
+// @Tags 角色
+// @Descriptions 查询拥有的权限
+// @Param id path string "角色id"
+// @Router /api/v1/role/permissions/{id} [get]
+func RolePermissions(c *gin.Context)  {
+	var sysModelMenus []ModelSys.SysMenu
+	id := c.Param("id")
+	data, result := ServiceSys.RolePermission(id, sysModelMenus,c)
+	utils.R(data, result, c)
+}

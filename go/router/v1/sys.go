@@ -23,6 +23,7 @@ func LoadSys(e *gin.RouterGroup)  {
 		e.POST("/role", ControllerSys.RoleCreate)
 		e.PUT("/role/:id", ControllerSys.RoleUpdate)
 		e.DELETE("/role/:id", ControllerSys.RoleDel)
+		e.GET("/role/permissions/:id", ControllerSys.RolePermissions)
 		// 菜单
 		e.GET("/menu", ControllerSys.MenuList)
 		e.POST("/menu", ControllerSys.MenuCreate)

@@ -46,15 +46,15 @@ type SysRole struct {
 }
 
 type SysRoleDept struct {
-	Id     int `xorm:"not null pk autoincr INT(11)"`
-	RoleId int `xorm:"comment('角色ID') INT(11)"`
-	DeptId int `xorm:"comment('部门ID') INT(11)"`
+	Id     string `json:"id"`
+	RoleId string `json:"role_id"`
+	DeptId string `json:"dept_id"`
 }
 
 type SysRoleMenu struct {
-	Id     int `xorm:"not null pk autoincr INT(11)"`
-	RoleId int `xorm:"not null index INT(11)"`
-	MenuId int `xorm:"not null index INT(11)"`
+	Id     string `json:"id"`
+	RoleId string `json:"role_id"`
+	MenuId string `json:"menu_id"`
 }
 
 // 用户

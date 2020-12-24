@@ -62,16 +62,17 @@
   </common-drawer>
   <common-tree
     :visible="allocationTree.visible"
+    :data="allocationTree.data"
     :loading="allocationTree.loading"
     @on-close="Close()"
     @on-submit="SubmitOk()"
   />
 </template>
 <script lang="ts">
-import { defineComponent, onMounted, reactive, toRaw, ref } from 'vue'
+import { defineComponent, onMounted, reactive, toRaw } from 'vue'
 import { useForm } from '@ant-design-vue/use'
 import { TableDataType, TablePaginType } from '@/types/type'
-import { RoleType } from '@/types/sys'
+import { MenuType, RoleType } from '@/types/sys'
 import { http } from '@/utils/request'
 import CommonDrawer, { DrawerProps } from '@/components/Drawer/Drawer.vue'
 import CommonButton from '@/components/Button/Button.vue'
@@ -97,9 +98,14 @@ const SysRole = defineComponent({
       loading: false,
       visible: false,
     })
-    const allocationTree = reactive({
+    const allocationTree = reactive<{
+      visible: boolean
+      loading: boolean
+      data: string[]
+    }>({
       visible: false,
       loading: false,
+      data: [],
     })
     const rulesRef = reactive({
       role_name: [
@@ -172,7 +178,7 @@ const SysRole = defineComponent({
           url,
           method,
           data,
-        }).then((res) => {
+        }).then(() => {
           message.success(`${commonDrawerData.title}成功`)
           commonDrawerData.loading = false
           commonDrawerData.visible = false
@@ -206,8 +212,19 @@ const SysRole = defineComponent({
       getList()
     }
     function PowerAllocation(record: RoleType) {
-      console.log(record)
+      allocationTree.loading = true
       allocationTree.visible = true
+      http<MenuType>({
+        url: '/role/permissions/' + record.id,
+        method: 'get',
+      }).then((res) => {
+        const list: string[] = []
+        res.list.forEach((item) => {
+          list.push(item.id)
+        })
+        allocationTree.data = list
+        allocationTree.loading = false
+      })
     }
     function Close() {
       allocationTree.visible = false
