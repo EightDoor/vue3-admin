@@ -1,17 +1,10 @@
-## 待做列表
-- jwt (jwt-go)
-- crud
-- swagger  https://github.com/swaggo/gin-swagger
-- log
-- 数据库
-- 热重载 https://github.com/cosmtrek/air
-- orm gorm.io/gorm
-- 日志框架 zap
-## 运行
-- `air -c air.toml -d`
-- 下载包的可执行文件查看GOPATH路径 windows目前是在C:\GO\bin\bin\
-- swagger访问路径 http://localhost:8081/swagger/index.html
-- 新项目需要拉取执行
-    - air `go get -u github.com/cosmtrek/air`
-    - swag `go get -u github.com/swaggo/swag/cmd/swag`
-    - xorm `go get github.com/go-xorm/cmd/xorm`
+# vue3+gin 构建的后台管理系统
+## 完成
+- 用户管理  <> 关联角色
+- 角色管理  <> 关联菜单
+- 菜单管理  
+- 部门管理
+## 待做
+- 部门 <> 关联角色
+- 登录、权限校验jwt
+
