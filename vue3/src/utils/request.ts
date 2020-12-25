@@ -39,7 +39,7 @@ instance.interceptors.response.use(
 interface HttpCustomType {
   url: string
   method: Method
-  data?: any
+  body?: any
   params?: any
 }
 function httpCustom<T>(c: HttpCustomType): Promise<CommonResponse<T>> {
@@ -47,7 +47,7 @@ function httpCustom<T>(c: HttpCustomType): Promise<CommonResponse<T>> {
     instance({
       url: c.url,
       method: c.method,
-      data: c.data,
+      data: c.body,
       params: c.params,
     })
       .then((res: any) => {

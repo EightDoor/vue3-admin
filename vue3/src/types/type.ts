@@ -39,3 +39,8 @@ export interface CommonTreeSelect {
   value?: string
   key?: string
 }
+// 树形结构选中selectKey
+export interface CommonTreeSelectKeys {
+  checked: string[],
+  halfChecked: string[]
+}

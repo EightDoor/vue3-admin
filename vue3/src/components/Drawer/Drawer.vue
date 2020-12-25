@@ -32,6 +32,7 @@ export interface DrawerProps {
 import { defineComponent, reactive, watch } from 'vue'
 
 const CommonDrawer = defineComponent({
+  name: 'component-drawer',
   props: {
     title: {
       type: String,
@@ -61,8 +62,7 @@ const CommonDrawer = defineComponent({
       default: false,
     },
   },
-  name: 'common-drawer',
-  setup(props: DrawerProps, { emit }: { emit: Function }) {
+  setup(props, { emit }: { emit: Function }) {
     const commdrawerData = reactive({
       visible: false,
     })

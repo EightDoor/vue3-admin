@@ -228,7 +228,7 @@ const SysMenu = defineComponent({
           http<MenuType>({
             url: modelRef.id ? `menu/${modelRef.id}` : 'menu',
             method,
-            data,
+            body: data,
           }).then(() => {
             message.success(`${drawerData.title}成功`)
             drawerData.loading = false

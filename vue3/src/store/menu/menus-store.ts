@@ -51,18 +51,6 @@ export default {
             },
           ]
         },
-        {
-          key: '2',
-          title: 'Navigation 2',
-          path: '/test',
-          children: [
-            {
-              key: '2.1',
-              title: 'Navigation 3',
-              path: '/test/demo',
-            },
-          ],
-        },
       ]
       commit(SET_MENUS_MUTATION, list)
     },

@@ -12,12 +12,20 @@
     @change="Change"
   >
     <template #status="{ text }">
-      {{ formatStatus(text) }}
+      <div :style="text === 0 ? { color: 'red' } : { color: 'green' }">
+        {{ formatStatus(text) }}
+      </div>
     </template>
     <template #depart="{ record }">
       {{ record.depart_info.name }}
     </template>
     <template #action="{ record }">
+      <a-button
+        type="primary"
+        style="margin-right: 15px"
+        @click="Allocate(record)"
+        >角色分配</a-button
+      >
       <a-button
         type="primary"
         style="margin-right: 15px"
@@ -101,12 +109,34 @@
       </a-form-item>
     </a-form>
   </common-drawer>
+  <common-drawer
+    title="角色列表"
+    ok-text="确定"
+    cancel-text="取消"
+    :visible="allocationTree.visible"
+    :loading="allocationTree.loading"
+    @on-close="Close"
+    @on-ok="SubmitOk"
+  >
+    <a-spin :spinning="allocationTree.loading">
+      <a-checkbox-group
+        class="checkoutContainer"
+        v-model:value="selectkeys"
+        v-if="roleList.length > 0"
+      >
+        <div v-for="(item, index) in roleList" :key="index">
+          <a-checkbox :value="item.id"> {{ item.remark }} </a-checkbox>
+        </div>
+      </a-checkbox-group>
+      <a-empty v-else />
+    </a-spin>
+  </common-drawer>
 </template>
 <script lang="ts">
-import { defineComponent, onMounted, reactive, toRaw } from 'vue'
+import { defineComponent, onMounted, reactive, toRaw, ref } from 'vue'
 import { useForm } from '@ant-design-vue/use'
 import { TableDataType, TablePaginType } from '@/types/type'
-import { DepartType, UserType } from '@/types/sys'
+import { DepartType, RoleType, UserType } from '@/types/sys'
 import { http } from '@/utils/request'
 import CommonDrawer, { DrawerProps } from '@/components/Drawer/Drawer.vue'
 import CommonButton from '@/components/Button/Button.vue'
@@ -114,6 +144,7 @@ import { ListObjCompare, ListToTree } from '@/utils'
 import { PlusOutlined, LoadingOutlined } from '@ant-design/icons-vue'
 import { message } from 'ant-design-vue'
 import { Method } from 'axios'
+import { AllocateType } from '@/views/sys/role.vue'
 
 const SysUser = defineComponent({
   name: 'sys-user',
@@ -124,6 +155,13 @@ const SysUser = defineComponent({
     LoadingOutlined,
   },
   setup() {
+    const selectkeys = ref<string[]>([])
+    const roleList = ref<RoleType[]>([])
+    const allocationTree = reactive<AllocateType>({
+      visible: false,
+      loading: false,
+      allocateId: '',
+    })
     const modelRef = reactive<UserType>({
       account: '',
       pass_word: '',
@@ -258,9 +296,22 @@ const SysUser = defineComponent({
         treeOptions.options = ListToTree<DepartType>(list)
       })
     }
+    function getRoleList() {
+      http<RoleType>({
+        url: '/role',
+        method: 'get',
+        params: {
+          page: 1,
+          page_size: 1000,
+        },
+      }).then((res) => {
+        roleList.value = res.list
+      })
+    }
     onMounted(() => {
       getList()
       getDepartList()
+      getRoleList()
     })
 
     function formatStatus(text: number): string {
@@ -292,8 +343,8 @@ const SysUser = defineComponent({
         http({
           url,
           method,
-          data,
-        }).then((res) => {
+          body: data,
+        }).then(() => {
           message.success(`${commonDrawerData.title}成功`)
           commonDrawerData.loading = false
           commonDrawerData.visible = false
@@ -365,6 +416,49 @@ const SysUser = defineComponent({
       tableData.page = pagin.current
       getList()
     }
+    function Allocate(record: UserType) {
+      allocationTree.loading = true
+      allocationTree.visible = true
+      if (record.id != null) {
+        allocationTree.allocateId = record.id
+      }
+      http<RoleType>({
+        url: '/user/permissions/' + record.id,
+        method: 'get',
+      }).then((res) => {
+        const list: string[] = []
+        res.list.forEach((item) => {
+          if (item.id != null) {
+            list.push(item.id)
+          }
+        })
+        selectkeys.value = list
+        allocationTree.loading = false
+      })
+    }
+    function Close() {
+      allocationTree.visible = false
+    }
+    function SubmitOk() {
+      const data = {
+        user_id: allocationTree.allocateId,
+        role_id: selectkeys.value.join(','),
+      }
+      allocationTree.loading = true
+      http<UserType>({
+        url: '/user/permissions',
+        method: 'post',
+        body: data,
+      })
+        .then(() => {
+          message.success('更新成功')
+          allocationTree.loading = false
+          allocationTree.visible = false
+        })
+        .catch(() => {
+          allocationTree.loading = false
+        })
+    }
     return {
       //data
       tableData,
@@ -372,6 +466,9 @@ const SysUser = defineComponent({
       modelRef,
       treeOptions,
       uploadImageData,
+      allocationTree,
+      selectkeys,
+      roleList,
 
       // methods
       ChangAdd,
@@ -382,7 +479,9 @@ const SysUser = defineComponent({
       Editor,
       Del,
       Change,
-
+      Allocate,
+      Close,
+      SubmitOk,
       // form
       validateInfos,
     }
@@ -391,3 +490,11 @@ const SysUser = defineComponent({
 
 export default SysUser
 </script>
+<style scoped lang="less">
+.checkoutContainer {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+</style>

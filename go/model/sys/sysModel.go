@@ -47,12 +47,13 @@ type SysRole struct {
 
 type SysRoleDept struct {
 	Id     string `json:"id"`
-	RoleId string `json:"role_id"`
-	DeptId string `json:"dept_id"`
+	RoleId string `json:"role_id" binding: "required"`
+	DeptId string `json:"dept_id" binding: "required"`
 }
 
 type SysRoleMenu struct {
-	Id     string `json:"id"`
+	model.CommonCreate
+	ID     string `json:"id" gorm:"primary_key"`
 	RoleId string `json:"role_id"`
 	MenuId string `json:"menu_id"`
 }
@@ -72,7 +73,8 @@ type SysUser struct {
 }
 
 type SysUserRole struct {
-	Id     int `xorm:"not null pk autoincr INT(11)"`
-	UserId int `xorm:"not null index INT(11)"`
-	RoleId int `xorm:"not null index INT(11)"`
+	model.CommonCreate
+	ID string `json:"id"`
+	UserId string `json:"user_id"`
+	RoleId string `json:"role_id"`
 }

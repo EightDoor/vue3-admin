@@ -3,7 +3,7 @@ package ServiceSys
 import (
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
-	"strconv"
+	"strings"
 	"zhoukai/db"
 	ModelSys "zhoukai/model/sys"
 	UtilsDB "zhoukai/utils/db"
@@ -29,14 +29,49 @@ func RoleDel(data ModelSys.SysRole)(ModelSys.SysRole, *gorm.DB)  {
 }
 func RolePermission(id string, datas []ModelSys.SysMenu, c *gin.Context)([]ModelSys.SysMenu, *gorm.DB)  {
 	var sysRolePermi []ModelSys.SysRoleMenu
-	var list []int
+	var list []string
 	var count int64
-	db.DB.Where("role_id = ?", id).Find(&sysRolePermi)
-	for _,value := range sysRolePermi{
-		result, _ := strconv.Atoi(value.MenuId)
-		list = append(list, result)
+	var result *gorm.DB
+	findList := db.DB.Where("role_id = ?", id).Find(&sysRolePermi)
+	if findList.RowsAffected > 0 {
+		for _,value := range sysRolePermi{
+			list = append(list, value.MenuId)
+		}
+		result = db.DB.Find(&datas, list).Count(&count)
+	}else {
+		datas = make([]ModelSys.SysMenu, 0)
+		result = new(gorm.DB)
 	}
-	result := db.DB.Find(&datas, list).Count(&count)
 	UtilsDB.SetTotal(c, count)
 	return datas, result
+}
+func RoleAssociatedMenu(data ModelSys.SysRoleMenu)(ModelSys.SysRoleMenu, *gorm.DB)  {
+	var sysRoleMenu ModelSys.SysRoleMenu
+	var datas []ModelSys.SysRoleMenu
+	var permission []ModelSys.SysRoleMenu
+	var result *gorm.DB
+	roleId := data.RoleId
+	menuId := strings.Split(data.MenuId, ",")
+	// 先删除存在的权限，然后存储权限
+	rr := db.DB.Where("role_id = ?", roleId).Find(&permission)
+	if rr.RowsAffected > 0 {
+		db.DB.Delete(&permission)
+	}
+
+	for i := 0;i<len(menuId); i++  {
+		r := db.DB.Where("role_id = ? AND menu_id = ?", roleId, menuId[i]).Find(&sysRoleMenu)
+		if r.RowsAffected == 0 {
+			datas = append(datas, ModelSys.SysRoleMenu{
+				ID: UtilsDB.CreateUUId(),
+				RoleId: roleId,
+				MenuId: menuId[i],
+			})
+		}
+	}
+	if len(datas) > 0 {
+		result = db.DB.Create(&datas)
+	}else {
+		result = new(gorm.DB)
+	}
+	return data, result
 }

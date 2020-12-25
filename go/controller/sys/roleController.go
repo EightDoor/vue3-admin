@@ -59,7 +59,7 @@ func RoleDel(c *gin.Context)  {
 }
 
 // @Tags 角色
-// @Descriptions 查询拥有的权限
+// @Descriptions 查询拥有的菜单
 // @Param id path string "角色id"
 // @Router /api/v1/role/permissions/{id} [get]
 func RolePermissions(c *gin.Context)  {
@@ -67,4 +67,15 @@ func RolePermissions(c *gin.Context)  {
 	id := c.Param("id")
 	data, result := ServiceSys.RolePermission(id, sysModelMenus,c)
 	utils.R(data, result, c)
+}
+// @Tags 角色
+// @Descriptions 角色关联菜单
+// @Router /api/v1/role/permissions	[post]
+func RoleAssociatedMenu(c *gin.Context)  {
+	var roleMenu ModelSys.SysRoleMenu
+	err := utils.Verify(&roleMenu, c)
+	if err == nil {
+		data, result := ServiceSys.RoleAssociatedMenu(roleMenu)
+		utils.R(data, result, c)
+	}
 }

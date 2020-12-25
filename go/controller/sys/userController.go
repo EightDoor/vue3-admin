@@ -83,3 +83,25 @@ func UserDel(c *gin.Context)  {
 	result := ServiceSys.UserDel(sysUser)
 	utils.R(id, result, c)
 }
+
+// @Tags 用户
+// @Descriptions 查询拥有的菜单
+// @Param id path string "用户id"
+// @Router /api/v1/user/permissions/{id} [get]
+func UserPermissions(c *gin.Context)  {
+	var datas []ModelSys.SysRole
+	id := c.Param("id")
+	data, result := ServiceSys.UserPermission(id, datas,c)
+	utils.R(data, result, c)
+}
+// @Tags 用户
+// @Descriptions 用户拥有菜单
+// @Router /api/v1/user/permissions	[post]
+func UserAssociatedMenu(c *gin.Context)  {
+	var userRole ModelSys.SysUserRole
+	err := utils.Verify(&userRole, c)
+	if err == nil {
+		data, result := ServiceSys.UserAssociatedMenu(userRole)
+		utils.R(data, result, c)
+	}
+}

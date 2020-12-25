@@ -31,7 +31,8 @@ export interface RoleType extends CommonTableList {
   // 描述
   remark?: string;
   // 角色名称
-  role_name: string
+  role_name: string;
+  id?: string
 }
 
 export interface MenuType extends CommonTableList {
@@ -51,4 +52,5 @@ export interface MenuType extends CommonTableList {
   children?: Array<any>
   title?: string;
   value?:string;
+  key?: string;
 }

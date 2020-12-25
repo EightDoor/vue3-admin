@@ -12,18 +12,17 @@
       <a-tree
         v-model:checkedKeys="treeData.checkedKeys"
         checkable
-        :expanded-keys="treeData.expandedKeys"
-        :auto-expand-parent="treeData.autoExpandParent"
+        checkStrictly
+        defaultExpandAll
         :selected-keys="treeData.selectedKeys"
         :tree-data="treeData.data"
-        @expand="onExpand"
         @select="onSelect"
       />
     </a-spin>
   </common-drawer>
 </template>
 <script lang="ts">
-import { defineComponent, reactive, onMounted, watch } from 'vue'
+import { defineComponent, reactive, onMounted, watch, toRaw } from 'vue'
 import CommonDrawer from '@/components/Drawer/Drawer.vue'
 import { http } from '@/utils/request'
 import { MenuType } from '@/types/sys'
@@ -32,20 +31,13 @@ import { ListObjCompare, ListToTree } from '@/utils'
 interface TreeDataType {
   spinningLoading: boolean
   checkedKeys: string[]
-  expandedKeys: string[]
+  expandedKeys?: string[]
   autoExpandParent: boolean
-  selectedKeys: string[]
+  selectedKeys?: string[]
   data: MenuType[]
-}
-interface Props {
-  visible: boolean
-  data: string[]
 }
 const CommonTree = defineComponent({
   name: 'common-tree',
-  components: {
-    CommonDrawer,
-  },
   props: {
     visible: {
       type: Boolean,
@@ -55,17 +47,31 @@ const CommonTree = defineComponent({
       type: Boolean,
       default: false,
     },
+    data: {
+      type: Array,
+    },
   },
-  setup(props: Props, { emit }: { emit: Function }) {
+  components: {
+    CommonDrawer,
+  },
+  setup(props, { emit }: { emit: Function }) {
     const treeData = reactive<TreeDataType>({
       spinningLoading: false,
       checkedKeys: [],
-      expandedKeys: [],
       autoExpandParent: true,
-      selectedKeys: [],
       data: [],
     })
-
+    watch<string[]>(
+      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+      // @ts-ignore
+      () => props.data,
+      (newValue: string[]) => {
+        treeData.checkedKeys = toRaw<string[]>(newValue)
+      },
+      {
+        deep: false,
+      }
+    )
     function getList() {
       treeData.spinningLoading = true
       http<MenuType>({
@@ -76,44 +82,35 @@ const CommonTree = defineComponent({
           page_size: 1000,
         },
       }).then((res) => {
-        const list = res.list.sort(ListObjCompare('order_num'))
-        treeData.spinningLoading = false
-        const result = ListToTree<MenuType>(list)
-        result.map((item) => {
+        res.list.map((item: MenuType) => {
           item.title = item.name
           item.key = item.id
         })
+        const list = res.list.sort(ListObjCompare('order_num'))
+        treeData.spinningLoading = false
+        const result = ListToTree<MenuType>(list)
         treeData.data = result
       })
     }
     onMounted(() => {
       getList()
     })
-    function onExpand(expandedKeys: string[]) {
-      console.log(expandedKeys)
-    }
     function onSelect(selectedKeys: string[], info: any) {
-      console.log(selectedKeys)
-      console.log(info)
+      console.log(selectedKeys, 'selec')
+      console.log(info, 'info')
     }
     function DClose() {
       emit('on-close')
     }
     function DSubmit() {
-      emit('on-submit')
+      emit('on-submit', toRaw(treeData.checkedKeys))
     }
-    watch(
-      () => props.data,
-      (newValue) => {
-        treeData.selectedKeys = newValue
-      }
-    )
+
     return {
       // data
       treeData,
 
       // methods
-      onExpand,
       onSelect,
       DClose,
       DSubmit,
