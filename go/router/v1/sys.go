@@ -12,6 +12,7 @@ func LoadSys(e *gin.RouterGroup)  {
 		e.PUT("/user/:id", ControllerSys.UserUpdate)
 		e.POST("/user", ControllerSys.UserCreate)
 		e.DELETE("/user/:id", ControllerSys.UserDel)
+		e.GET("/user/getInfo", ControllerSys.GetUserInfo)
 		e.GET("/user/permissions/:id", ControllerSys.UserPermissions)
 		e.POST("/user/permissions", ControllerSys.UserAssociatedMenu)
 		// 部门

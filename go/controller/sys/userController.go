@@ -2,6 +2,9 @@ package ControllerSys
 
 import (
 	"github.com/gin-gonic/gin"
+	"net/http"
+	"zhoukai/configure"
+	"zhoukai/middleware"
 	"zhoukai/model/sys"
 	ServiceSys "zhoukai/service/sys"
 	"zhoukai/utils"
@@ -103,5 +106,29 @@ func UserAssociatedMenu(c *gin.Context)  {
 	if err == nil {
 		data, result := ServiceSys.UserAssociatedMenu(userRole)
 		utils.R(data, result, c)
+	}
+}
+
+// Tags 用户
+// @Descriptions 获取用户信息(登录成功之后header携带 token参数获取)
+// @Router /api/v1/user/getInfo [get]
+func GetUserInfo(c *gin.Context)  {
+	j := middleware.NewJWT()
+	token := c.Request.Header.Get("token")
+	if token == "" {
+		c.JSON(http.StatusOK, gin.H{
+			"status": configure.RequestError,
+			"msg":    "请求未携带token，无权限访问",
+			"data":   nil,
+		})
+		c.Abort()
+		return
+	}
+	result, error := j.ParserToken(token)
+	if error ==nil {
+		var sysUserInfo ModelSys.SysUser
+		sysUserInfo.ID = result.ID
+		data, r := ServiceSys.UserGetInfo(sysUserInfo)
+		utils.R(data, r ,c)
 	}
 }

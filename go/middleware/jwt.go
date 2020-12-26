@@ -75,8 +75,8 @@ type JWT struct {
 
 // 定义载荷
 type CustomClaims struct {
-	Name  string `json:"userName"`
-	Email string `json:"email"`
+	ID string `json:"id"`
+	Account string `json:"account"`
 	// StandardClaims结构体实现了Claims接口(Valid()函数)
 	jwt.StandardClaims
 }

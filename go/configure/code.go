@@ -22,6 +22,7 @@ const (
 	RequestParameterMiss       Code = 4005
 	RequestMethodNotAllowed    Code = 4006
 	RequestExpired             Code = 4007
+	RequestParameterRangeError Code = 4008
 	RequestAccessDeny          Code = 4009
-	RequestParameterRangeError Code = 4002
+	RequestUserPassValidationError Code = 4010
 )

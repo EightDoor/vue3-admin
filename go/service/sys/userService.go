@@ -41,6 +41,10 @@ func UserDel(data ModelSys.SysUser) *gorm.DB  {
 	result := db.DB.Delete(&data)
 	return result
 }
+func UserGetInfo(data ModelSys.SysUser)(ModelSys.SysUser ,*gorm.DB)  {
+	result := db.DB.Preload("DepartInfo").First(&data)
+	return data, result
+}
 
 func UserPermission(id string, datas []ModelSys.SysRole, c *gin.Context)([]ModelSys.SysRole, *gorm.DB)  {
 	var sysUserPermi []ModelSys.SysUserRole

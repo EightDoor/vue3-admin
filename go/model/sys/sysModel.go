@@ -9,9 +9,9 @@ import (
 // 部门
 type SysDept struct {
 	model.CommonCreate
-	ParentId string    `json:"parent_id"  binding:"required"`
-	Name     string `json:"name" binding:"required"`
-	OrderNum int16    `json:"order_num" binding:"required"`
+	ParentId string    `json:"parent_id"`
+	Name     string `json:"name"`
+	OrderNum int16    `json:"order_num"`
 }
 
 type SysMenu struct {
@@ -77,4 +77,9 @@ type SysUserRole struct {
 	ID string `json:"id"`
 	UserId string `json:"user_id"`
 	RoleId string `json:"role_id"`
+}
+type SysUserLogin struct {
+	ID string `json:"id"`
+	Account string `json:"account" binding: "required"`
+	PassWord string `json:"pass_word" binding: "required"`
 }
