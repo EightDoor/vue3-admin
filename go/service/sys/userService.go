@@ -94,5 +94,37 @@ func UserAssociatedMenu(data ModelSys.SysUserRole)(ModelSys.SysUserRole, *gorm.D
 	}
 	return data, result
 }
+func UserGetWithMenu(id string, data ModelSys.SysUserWithTheMenu)(ModelSys.SysUserWithTheMenu, *gorm.DB)  {
+	var userRoles []ModelSys.SysUserRole
+	var roleMenus []ModelSys.SysRoleMenu
+	var userInfoR ModelSys.SysUser
+	var menusR []ModelSys.SysMenu
+	var menuIds []string
+	var roleIds []string
+	userInfoR.ID = id
+	// 查询用户信息
+	result :=db.DB.Preload("DepartInfo").Take(&userInfoR)
+	data.UserInfo = userInfoR
+	// 查询用户拥有角色列表
+	roles := db.DB.Table("sys_user_role").Where("user_id = ?", id).Find(&userRoles)
+	if roles.RowsAffected > 0 {
+		for _, value := range userRoles{
+			roleIds = append(roleIds, value.RoleId)
+		}
+		// 查询角色拥有菜单列表
+		 roleMenusR := db.DB.Table("sys_role_menu").Find(&roleMenus)
+		 if roleMenusR.RowsAffected >0 {
+			 for _, value := range roleMenus{
+				 menuIds = append(menuIds, value.MenuId)
+			 }
+			 db.DB.Find(&menusR, menuIds)
+			 // TODO 解决菜单重复问题
+			 data.Menu = menusR
+		 }else {
+			 data.Menu = nil
+		 }
+	}
+	return data, result
+}
 
 

@@ -15,6 +15,7 @@ func LoadSys(e *gin.RouterGroup)  {
 		e.GET("/user/getInfo", ControllerSys.GetUserInfo)
 		e.GET("/user/permissions/:id", ControllerSys.UserPermissions)
 		e.POST("/user/permissions", ControllerSys.UserAssociatedMenu)
+		e.GET("/user/getWithTheMenu", ControllerSys.UserGetWithMenu)
 		// 部门
 		e.GET("/depart", ControllerSys.DepartList)
 		e.POST("/depart",ControllerSys.DepartCreate)

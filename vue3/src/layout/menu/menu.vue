@@ -25,6 +25,7 @@ import SubMenu from './menu-item.vue'
 import { MenuItem, MenusInfo } from '@/types/alyout/menu'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
+import { StoreType } from '@/store'
 
 export default defineComponent({
   name: 'common-menu',
@@ -50,7 +51,7 @@ export default defineComponent({
     }
     return {
       menusInfo,
-      getMenus: computed(() => store.state.menu.list),
+      getMenus: computed(() => store.state.sys.menus),
       //methods
       jumpTo,
     }

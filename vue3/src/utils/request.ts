@@ -1,6 +1,8 @@
 import axios, { Method } from 'axios'
-import { notification } from 'ant-design-vue'
+import { message, notification } from 'ant-design-vue'
 import { CommonResponse } from '@/types/type'
+import { RequestAuthorizedFailed } from '@/utils/constant'
+import { ClearInfo } from '@/utils/index'
 
 const instance = axios.create({
   baseURL: '/api',
@@ -23,10 +25,15 @@ instance.interceptors.response.use(
     const data = response.data
     if (response.status === 200 && data.code === 0) {
       //
+    }  else if (data.code === RequestAuthorizedFailed) {
+      console.log(data)
+      message.info("token失效, 请重新登录")
+      ClearInfo()
+      window.location.href = "/login"
     } else {
       notification.error({
         message: data.code,
-        description: data.data,
+        description: data.message,
       })
     }
     return response.data.data

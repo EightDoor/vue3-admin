@@ -26,22 +26,19 @@ import { defineComponent, reactive, toRaw } from 'vue'
 import { useForm } from '@ant-design-vue/use'
 import { message } from 'ant-design-vue'
 import { useRouter } from 'vue-router'
-import { SET_MENUS } from '@/store/mutation-types'
-import { useStore } from 'vuex'
 
-interface Login {
+interface LoginType {
   name: string
   password: string
 }
-export default defineComponent({
+const Login = defineComponent({
   name: 'login',
   setup() {
     const router = useRouter()
-    const store = useStore()
     const submitData = reactive({ loading: false })
     const wrapperCol = { span: 14 }
     const labelCol = { span: 4 }
-    const modelRef = reactive<Login>({
+    const modelRef = reactive<LoginType>({
       name: '',
       password: '',
     })
@@ -69,7 +66,6 @@ export default defineComponent({
           submitData.loading = true
           setTimeout(() => {
             // 获取菜单值直接存储
-            store.dispatch(`${SET_MENUS}`)
             submitData.loading = false
             message.success('登录成功!')
             router.push('/')
@@ -90,6 +86,7 @@ export default defineComponent({
     }
   },
 })
+export default Login
 </script>
 <style lang="less" scoped>
 @import 'login.less';

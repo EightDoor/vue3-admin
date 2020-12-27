@@ -132,3 +132,19 @@ func GetUserInfo(c *gin.Context)  {
 		utils.R(data, r ,c)
 	}
 }
+
+// @Tags 用户
+// @Descriptions 获取用户拥有的菜单、角色
+// @Router /api/v1/user/getWithTheMenu [get]
+func UserGetWithMenu(c *gin.Context)  {
+	j := middleware.NewJWT()
+	token := c.Request.Header.Get("token")
+	result, error := j.ParserToken(token)
+	if error ==nil {
+		var userWithTheMenu ModelSys.SysUserWithTheMenu
+		var id string
+		id = result.ID
+		data, r := ServiceSys.UserGetWithMenu(id, userWithTheMenu)
+		utils.R(data, r ,c)
+	}
+}

@@ -4,6 +4,7 @@ import { canUserAccess } from '@/authority'
 import Layout from '@/layout/layout/layout.vue'
 import Login from '@/views/login/login.vue'
 import LayoutChildren from '@/views/layout-children.vue';
+import NotFound  from '@/views/other/not-found.vue';
 
 import Home from '@/views/home/home.vue'
 import Test from '@/views/Test.vue'
@@ -104,6 +105,11 @@ const routes: RouteRecordRaw[] = [
     name: 'login',
     component: Login,
   },
+  {
+    path: "/**",
+    name: "404",
+    component: NotFound,
+  }
 ]
 const app = createRouter({
   history: createWebHashHistory(),
@@ -111,8 +117,8 @@ const app = createRouter({
 })
 
 // 全局路由前置钩子
-app.beforeEach(async () => {
-  await canUserAccess()
+app.beforeEach(async (to, from,next) => {
+  await canUserAccess(to, from, next)
 })
 
 export default app

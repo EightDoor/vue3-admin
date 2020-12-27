@@ -61,15 +61,20 @@ type SysRoleMenu struct {
 // 用户
 type SysUser struct {
 	model.CommonCreate
-	PassWord   string    `json:"pass_word" xorm:"comment('用户登录密码') VARCHAR(200)"`
-	Account    string    `json:"account" xorm:"not null comment('用户登录账号') VARCHAR(32)" binding:"required"`
-	NickName   string    `json:"nick_name" xorm:"comment('用户显示昵称') VARCHAR(32)" binding:"required"`
-	Email      string    `json:"email" xorm:"not null comment('邮箱地址') VARCHAR(200)"`
-	Status     int       `json:"status" xorm:"not null default 1 comment('所属状态是否有效  1是有效 0是失效') TINYINT(4)" binding:"required"`
-	Avatar     string    `json:"avatar" xorm:"not null comment('头像地址') VARCHAR(200)"`
+	PassWord   string    `json:"pass_word"`
+	Account    string    `json:"account"`
+	NickName   string    `json:"nick_name"`
+	Email      string    `json:"email"`
+	Status     int       `json:"status"`
+	Avatar     string    `json:"avatar"`
 	DeptId     string    `json:"dept_id"`
-	PhoneNum   string    `json:"phone_num" xorm:"comment('用户手机号码') VARCHAR(20)"`
+	PhoneNum   string    `json:"phone_num"`
 	DepartInfo SysDept	 `json:"depart_info" gorm:"foreignKey:DeptId"`
+}
+// 用户拥有的信息，拥有角色，拥有菜单
+type SysUserWithTheMenu struct {
+	UserInfo SysUser `json:"user_info"`
+	Menu interface{} `json:"menu"`
 }
 
 type SysUserRole struct {

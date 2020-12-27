@@ -1,11 +1,12 @@
 import { createStore, createLogger } from 'vuex'
 
-import menu, { MenusStoreInter } from './menu/menus-store'
+import sys, { SysStoreType } from './sys/sys-store'
 const debug = process.env.NODE_ENV !== 'production'
 
-export default createStore<MenusStoreInter>({
+export type StoreType = SysStoreType
+export default createStore<StoreType>({
   modules: {
-    menu,
+    sys,
   },
   strict: debug,
   plugins: debug ? [createLogger()] : [],
