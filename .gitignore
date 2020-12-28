@@ -1,2 +1,3 @@
 /go/log
 /go/tmp
+/go/conf/config.local.ini
