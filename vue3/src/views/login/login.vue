@@ -26,6 +26,8 @@ import { defineComponent, reactive, toRaw } from 'vue'
 import { useForm } from '@ant-design-vue/use'
 import { message } from 'ant-design-vue'
 import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
+import { LOGIN } from '@/store/mutation-types'
 
 interface LoginType {
   name: string
@@ -38,6 +40,7 @@ const Login = defineComponent({
     const submitData = reactive({ loading: false })
     const wrapperCol = { span: 14 }
     const labelCol = { span: 4 }
+    const store = useStore()
     const modelRef = reactive<LoginType>({
       name: '',
       password: '',
@@ -63,14 +66,18 @@ const Login = defineComponent({
       e.preventDefault()
       validate()
         .then(() => {
+          const data = toRaw(modelRef)
           submitData.loading = true
-          setTimeout(() => {
-            // 获取菜单值直接存储
-            submitData.loading = false
-            message.success('登录成功!')
-            router.push('/')
-          }, 2000)
-          console.log(toRaw(modelRef))
+          store
+            .dispatch(LOGIN, {
+              account: data.name,
+              pass_word: data.password,
+            })
+            .then(() => {
+              submitData.loading = false
+              message.success('登录成功!')
+              router.push('/')
+            })
         })
         .catch((err) => {
           console.log('error', err)

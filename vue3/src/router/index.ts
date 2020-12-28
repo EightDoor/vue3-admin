@@ -3,17 +3,17 @@ import { canUserAccess } from '@/authority'
 
 import Layout from '@/layout/layout/layout.vue'
 import Login from '@/views/login/login.vue'
-import LayoutChildren from '@/views/layout-children.vue';
-import NotFound  from '@/views/other/not-found.vue';
+import LayoutChildren from '@/views/layout-children.vue'
+import NotFound from '@/views/other/not-found.vue'
 
 import Home from '@/views/home/home.vue'
 import Test from '@/views/Test.vue'
 import Demo from '@/views/Demo.vue'
 
 import Depart from '@/views/sys/depart.vue'
-import SysUser from "@/views/sys/user.vue"
-import SysRole from '@/views/sys/role.vue';
-import SysMenu from '@/views/sys/menu.vue';
+import SysUser from '@/views/sys/user.vue'
+import SysRole from '@/views/sys/role.vue'
+import SysMenu from '@/views/sys/menu.vue'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -32,12 +32,12 @@ const routes: RouteRecordRaw[] = [
         },
       },
       {
-        name: "sys",
-        path: "sys",
+        name: 'sys',
+        path: 'sys',
         component: LayoutChildren,
         meta: {
-          title: "系统管理",
-          icon: "1"
+          title: '系统管理',
+          icon: '1',
         },
         children: [
           {
@@ -76,7 +76,7 @@ const routes: RouteRecordRaw[] = [
               icon: '1',
             },
           },
-        ]
+        ],
       },
       {
         name: 'test',
@@ -106,10 +106,10 @@ const routes: RouteRecordRaw[] = [
     component: Login,
   },
   {
-    path: "/**",
-    name: "404",
+    path: '/**',
+    name: '404',
     component: NotFound,
-  }
+  },
 ]
 const app = createRouter({
   history: createWebHashHistory(),
@@ -117,7 +117,7 @@ const app = createRouter({
 })
 
 // 全局路由前置钩子
-app.beforeEach(async (to, from,next) => {
+app.beforeEach(async (to, from, next) => {
   await canUserAccess(to, from, next)
 })
 

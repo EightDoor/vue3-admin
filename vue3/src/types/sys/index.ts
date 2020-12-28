@@ -25,32 +25,41 @@ export interface UserType extends CommonTableList {
   dept_id: string
   // 用户手机号码
   phone_num?: string
+  depart_info?: DepartType
 }
 
 export interface RoleType extends CommonTableList {
   // 描述
-  remark?: string;
+  remark?: string
   // 角色名称
-  role_name: string;
+  role_name: string
   id?: string
 }
 
 export interface MenuType extends CommonTableList {
-  id: string;
+  id: string
   // 父级id
-  parent_id: string;
+  parent_id: string
   // 菜单名称
-  name: string;
+  name: string
   // 菜单类型：1. 目录 2. 菜单  3. 按钮
-  type: number;
+  type: number
   // 排序
-  order_num: number;
+  order_num: number
   // 权限标识，接口标识
   perms?: string
   // 菜单标识，前端路由name
-  code: string;
+  code: string
   children?: Array<any>
-  title?: string;
-  value?:string;
-  key?: string;
+  title?: string
+  value?: string
+  key?: string
+}
+export interface LoginType {
+  account: string
+  pass_word: string
+}
+export interface UserInfoType {
+  menu: MenuType[]
+  user_info: UserType
 }

@@ -1,5 +1,5 @@
 export interface CommonResponse<T> extends PaginType {
-  list: T[]
+  list: T[] | T
 }
 
 // 请求接口分页
@@ -41,6 +41,6 @@ export interface CommonTreeSelect {
 }
 // 树形结构选中selectKey
 export interface CommonTreeSelectKeys {
-  checked: string[],
+  checked: string[]
   halfChecked: string[]
 }
