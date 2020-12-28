@@ -2,6 +2,9 @@ package ControllerSys
 
 import (
 	"github.com/gin-gonic/gin"
+	"net/http"
+	"zhoukai/configure"
+	"zhoukai/middleware"
 	"zhoukai/model/sys"
 	ServiceSys "zhoukai/service/sys"
 	"zhoukai/utils"
@@ -82,4 +85,66 @@ func UserDel(c *gin.Context)  {
 	sysUser.ID = id
 	result := ServiceSys.UserDel(sysUser)
 	utils.R(id, result, c)
+}
+
+// @Tags 用户
+// @Descriptions 查询拥有的菜单
+// @Param id path string "用户id"
+// @Router /api/v1/user/permissions/{id} [get]
+func UserPermissions(c *gin.Context)  {
+	var datas []ModelSys.SysRole
+	id := c.Param("id")
+	data, result := ServiceSys.UserPermission(id, datas,c)
+	utils.R(data, result, c)
+}
+// @Tags 用户
+// @Descriptions 用户拥有菜单
+// @Router /api/v1/user/permissions	[post]
+func UserAssociatedMenu(c *gin.Context)  {
+	var userRole ModelSys.SysUserRole
+	err := utils.Verify(&userRole, c)
+	if err == nil {
+		data, result := ServiceSys.UserAssociatedMenu(userRole)
+		utils.R(data, result, c)
+	}
+}
+
+// Tags 用户
+// @Descriptions 获取用户信息(登录成功之后header携带 token参数获取)
+// @Router /api/v1/user/getInfo [get]
+func GetUserInfo(c *gin.Context)  {
+	j := middleware.NewJWT()
+	token := c.Request.Header.Get("token")
+	if token == "" {
+		c.JSON(http.StatusOK, gin.H{
+			"status": configure.RequestError,
+			"msg":    "请求未携带token，无权限访问",
+			"data":   nil,
+		})
+		c.Abort()
+		return
+	}
+	result, error := j.ParserToken(token)
+	if error ==nil {
+		var sysUserInfo ModelSys.SysUser
+		sysUserInfo.ID = result.ID
+		data, r := ServiceSys.UserGetInfo(sysUserInfo)
+		utils.R(data, r ,c)
+	}
+}
+
+// @Tags 用户
+// @Descriptions 获取用户拥有的菜单、角色
+// @Router /api/v1/user/getWithTheMenu [get]
+func UserGetWithMenu(c *gin.Context)  {
+	j := middleware.NewJWT()
+	token := c.Request.Header.Get("token")
+	result, error := j.ParserToken(token)
+	if error ==nil {
+		var userWithTheMenu ModelSys.SysUserWithTheMenu
+		var id string
+		id = result.ID
+		data, r := ServiceSys.UserGetWithMenu(id, userWithTheMenu)
+		utils.R(data, r ,c)
+	}
 }

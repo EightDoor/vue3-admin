@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"time"
 	"zhoukai/configure"
+	"zhoukai/model"
 )
 
 var (
@@ -25,10 +26,10 @@ func JWTAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		token := c.Request.Header.Get("token")
 		if token == "" {
-			c.JSON(http.StatusOK, gin.H{
-				"status": configure.RequestError,
-				"msg":    "请求未携带token，无权限访问",
-				"data":   nil,
+			c.JSON(http.StatusOK, model.Response{
+				Data: nil,
+				Message: "请求未携带token，无权限访问",
+				Code: configure.RequestAuthorizedFailed,
 			})
 			c.Abort()
 			return
@@ -43,19 +44,17 @@ func JWTAuth() gin.HandlerFunc {
 		if err != nil {
 			// token过期
 			if err == TokenExpired {
-				c.JSON(http.StatusOK, gin.H{
-					"status": configure.RequestError,
-					"msg":    "token授权已过期，请重新申请授权",
-					"data":   nil,
+				c.JSON(http.StatusOK, model.Response{
+					Code: configure.RequestError,
+					Message: "token授权已过期，请重新申请授权",
 				})
 				c.Abort()
 				return
 			}
 			// 其他错误
-			c.JSON(http.StatusOK, gin.H{
-				"status": configure.RequestError,
-				"msg":    err.Error(),
-				"data":   nil,
+			c.JSON(http.StatusOK, model.Response{
+				Code: configure.RequestError,
+				Message: err.Error(),
 			})
 			c.Abort()
 			return
@@ -75,8 +74,8 @@ type JWT struct {
 
 // 定义载荷
 type CustomClaims struct {
-	Name  string `json:"userName"`
-	Email string `json:"email"`
+	ID string `json:"id"`
+	Account string `json:"account"`
 	// StandardClaims结构体实现了Claims接口(Valid()函数)
 	jwt.StandardClaims
 }
@@ -161,7 +160,6 @@ func (j *JWT) UpdateToken(tokenString string) (string, error) {
 	// 拿到token基础数据
 	token, err := jwt.ParseWithClaims(tokenString, &CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
 		return j.SigningKey, nil
-
 	})
 
 	// 校验token当前还有效

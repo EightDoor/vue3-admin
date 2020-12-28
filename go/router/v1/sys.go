@@ -9,10 +9,13 @@ func LoadSys(e *gin.RouterGroup)  {
 	{
 		// 用户
 		e.GET("/user", ControllerSys.UserList)
-		e.GET("/user/:id", ControllerSys.UserSinge)
 		e.PUT("/user/:id", ControllerSys.UserUpdate)
 		e.POST("/user", ControllerSys.UserCreate)
 		e.DELETE("/user/:id", ControllerSys.UserDel)
+		e.GET("/user/getInfo", ControllerSys.GetUserInfo)
+		e.GET("/user/permissions/:id", ControllerSys.UserPermissions)
+		e.POST("/user/permissions", ControllerSys.UserAssociatedMenu)
+		e.GET("/user/getWithTheMenu", ControllerSys.UserGetWithMenu)
 		// 部门
 		e.GET("/depart", ControllerSys.DepartList)
 		e.POST("/depart",ControllerSys.DepartCreate)
@@ -23,6 +26,8 @@ func LoadSys(e *gin.RouterGroup)  {
 		e.POST("/role", ControllerSys.RoleCreate)
 		e.PUT("/role/:id", ControllerSys.RoleUpdate)
 		e.DELETE("/role/:id", ControllerSys.RoleDel)
+		e.GET("/role/permissions/:id", ControllerSys.RolePermissions)
+		e.POST("/role/permissions", ControllerSys.RoleAssociatedMenu)
 		// 菜单
 		e.GET("/menu", ControllerSys.MenuList)
 		e.POST("/menu", ControllerSys.MenuCreate)

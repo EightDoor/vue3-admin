@@ -26,4 +26,9 @@ function ListObjCompare(property: string){
     return value1 - value2;//升序,降序为value2 - value1
   }
 }
-export  {ListToTree, ListObjCompare}
+
+// 清空token
+const ClearInfo = () =>{
+  localStorage.clear()
+}
+export  {ListToTree, ListObjCompare,ClearInfo}

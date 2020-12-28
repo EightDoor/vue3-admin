@@ -62,16 +62,21 @@
   </common-drawer>
   <common-tree
     :visible="allocationTree.visible"
+    :data="allocationTree.data"
     :loading="allocationTree.loading"
-    @on-close="Close()"
-    @on-submit="SubmitOk()"
+    @on-close="Close"
+    @on-submit="SubmitOk"
   />
 </template>
 <script lang="ts">
-import { defineComponent, onMounted, reactive, toRaw, ref } from 'vue'
+import { defineComponent, onMounted, reactive, toRaw } from 'vue'
 import { useForm } from '@ant-design-vue/use'
-import { TableDataType, TablePaginType } from '@/types/type'
-import { RoleType } from '@/types/sys'
+import {
+  CommonTreeSelectKeys,
+  TableDataType,
+  TablePaginType,
+} from '@/types/type'
+import { MenuType, RoleType } from '@/types/sys'
 import { http } from '@/utils/request'
 import CommonDrawer, { DrawerProps } from '@/components/Drawer/Drawer.vue'
 import CommonButton from '@/components/Button/Button.vue'
@@ -79,6 +84,12 @@ import CommonTree from '@/views/common/tree.vue'
 import { message } from 'ant-design-vue'
 import { Method } from 'axios'
 
+export interface AllocateType {
+  visible: boolean
+  loading: boolean
+  data?: string[]
+  allocateId: string
+}
 const SysRole = defineComponent({
   name: 'sys-role',
   components: {
@@ -97,9 +108,11 @@ const SysRole = defineComponent({
       loading: false,
       visible: false,
     })
-    const allocationTree = reactive({
+    const allocationTree = reactive<AllocateType>({
       visible: false,
       loading: false,
+      data: [],
+      allocateId: '',
     })
     const rulesRef = reactive({
       role_name: [
@@ -162,7 +175,7 @@ const SysRole = defineComponent({
       validate().then(() => {
         let url = 'role'
         let method: Method = 'POST'
-        const data = toRaw(modelRef)
+        const body = toRaw(modelRef)
         commonDrawerData.loading = true
         if (editId.id) {
           url = `role/${editId.id}`
@@ -171,8 +184,8 @@ const SysRole = defineComponent({
         http({
           url,
           method,
-          data,
-        }).then((res) => {
+          body,
+        }).then(() => {
           message.success(`${commonDrawerData.title}成功`)
           commonDrawerData.loading = false
           commonDrawerData.visible = false
@@ -206,14 +219,45 @@ const SysRole = defineComponent({
       getList()
     }
     function PowerAllocation(record: RoleType) {
-      console.log(record)
+      allocationTree.loading = true
       allocationTree.visible = true
+      if (record.id != null) {
+        allocationTree.allocateId = record.id
+      }
+      http<MenuType>({
+        url: '/role/permissions/' + record.id,
+        method: 'get',
+      }).then((res) => {
+        const list: string[] = []
+        res.list.forEach((item) => {
+          list.push(item.id)
+        })
+        allocationTree.data = list
+        allocationTree.loading = false
+      })
     }
     function Close() {
       allocationTree.visible = false
     }
-    function SubmitOk() {
-      console.log('提交数据了')
+    function SubmitOk(val: CommonTreeSelectKeys) {
+      const data = {
+        role_id: allocationTree.allocateId,
+        menu_id: val.checked.join(','),
+      }
+      allocationTree.loading = true
+      http<MenuType>({
+        url: '/role/permissions',
+        method: 'post',
+        body: data,
+      })
+        .then(() => {
+          message.success('更新成功')
+          allocationTree.loading = false
+          allocationTree.visible = false
+        })
+        .catch(() => {
+          allocationTree.loading = false
+        })
     }
     return {
       //data

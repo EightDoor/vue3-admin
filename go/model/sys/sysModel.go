@@ -9,16 +9,16 @@ import (
 // 部门
 type SysDept struct {
 	model.CommonCreate
-	ParentId string    `json:"parent_id"  binding:"required"`
-	Name     string `json:"name" binding:"required"`
-	OrderNum int16    `json:"order_num" binding:"required"`
+	ParentId string    `json:"parent_id"`
+	Name     string `json:"name"`
+	OrderNum int16    `json:"order_num"`
 }
 
 type SysMenu struct {
 	model.CommonCreate
 	ParentId string    `json:"parent_id" binding:"required"`
 	// 菜单名称
-	Name     string `json:"name" binding:"required"`
+	Title     string `json:"title" binding:"required"`
 	// 菜单类型： 1. 目录 2. 菜单  3. 按钮
 	Type     int    `json:"type" binding:"required"`
 	// 排序
@@ -26,7 +26,7 @@ type SysMenu struct {
 	// 权限标识，接口标识
 	Perms    string `json:"perms"`
 	// 菜单标识，前端路由name
-	Code     string `json:"code" binding:"required"`
+	Name     string `json:"name" binding:"required"`
 }
 
 type SysOss struct {
@@ -46,33 +46,45 @@ type SysRole struct {
 }
 
 type SysRoleDept struct {
-	Id     int `xorm:"not null pk autoincr INT(11)"`
-	RoleId int `xorm:"comment('角色ID') INT(11)"`
-	DeptId int `xorm:"comment('部门ID') INT(11)"`
+	Id     string `json:"id"`
+	RoleId string `json:"role_id" binding: "required"`
+	DeptId string `json:"dept_id" binding: "required"`
 }
 
 type SysRoleMenu struct {
-	Id     int `xorm:"not null pk autoincr INT(11)"`
-	RoleId int `xorm:"not null index INT(11)"`
-	MenuId int `xorm:"not null index INT(11)"`
+	model.CommonCreate
+	ID     string `json:"id" gorm:"primary_key"`
+	RoleId string `json:"role_id"`
+	MenuId string `json:"menu_id"`
 }
 
 // 用户
 type SysUser struct {
 	model.CommonCreate
-	PassWord   string    `json:"pass_word" xorm:"comment('用户登录密码') VARCHAR(200)"`
-	Account    string    `json:"account" xorm:"not null comment('用户登录账号') VARCHAR(32)" binding:"required"`
-	NickName   string    `json:"nick_name" xorm:"comment('用户显示昵称') VARCHAR(32)" binding:"required"`
-	Email      string    `json:"email" xorm:"not null comment('邮箱地址') VARCHAR(200)"`
-	Status     int       `json:"status" xorm:"not null default 1 comment('所属状态是否有效  1是有效 0是失效') TINYINT(4)" binding:"required"`
-	Avatar     string    `json:"avatar" xorm:"not null comment('头像地址') VARCHAR(200)"`
+	PassWord   string    `json:"pass_word"`
+	Account    string    `json:"account"`
+	NickName   string    `json:"nick_name"`
+	Email      string    `json:"email"`
+	Status     int       `json:"status"`
+	Avatar     string    `json:"avatar"`
 	DeptId     string    `json:"dept_id"`
-	PhoneNum   string    `json:"phone_num" xorm:"comment('用户手机号码') VARCHAR(20)"`
+	PhoneNum   string    `json:"phone_num"`
 	DepartInfo SysDept	 `json:"depart_info" gorm:"foreignKey:DeptId"`
+}
+// 用户拥有的信息，拥有角色，拥有菜单
+type SysUserWithTheMenu struct {
+	UserInfo SysUser `json:"user_info"`
+	Menu interface{} `json:"menu"`
 }
 
 type SysUserRole struct {
-	Id     int `xorm:"not null pk autoincr INT(11)"`
-	UserId int `xorm:"not null index INT(11)"`
-	RoleId int `xorm:"not null index INT(11)"`
+	model.CommonCreate
+	ID string `json:"id"`
+	UserId string `json:"user_id"`
+	RoleId string `json:"role_id"`
+}
+type SysUserLogin struct {
+	ID string `json:"id"`
+	Account string `json:"account" binding: "required"`
+	PassWord string `json:"pass_word" binding: "required"`
 }

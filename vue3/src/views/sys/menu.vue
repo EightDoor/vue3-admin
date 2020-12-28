@@ -50,8 +50,8 @@
         >
         </a-tree-select>
       </a-form-item>
-      <a-form-item label="名称" v-bind="validateInfos.name">
-        <a-input v-model:value="modelRef.name"></a-input>
+      <a-form-item label="名称" v-bind="validateInfos.title">
+        <a-input v-model:value="modelRef.title"></a-input>
       </a-form-item>
       <a-form-item label="菜单类型" v-bind="validateInfos.type">
         <a-select v-model:value="modelRef.type">
@@ -67,8 +67,8 @@
       <a-form-item label="权限标识">
         <a-input v-model:value="modelRef.perms"></a-input>
       </a-form-item>
-      <a-form-item label="菜单标识(name)" v-bind="validateInfos.code">
-        <a-input v-model:value="modelRef.code"></a-input>
+      <a-form-item label="菜单标识" v-bind="validateInfos.name">
+        <a-input v-model:value="modelRef.name"></a-input>
       </a-form-item>
       <a-form-item label="排序" v-bind="validateInfos.order_num">
         <a-input-number v-model:value="modelRef.order_num"></a-input-number>
@@ -115,7 +115,7 @@ const SysMenu = defineComponent({
       columns: [
         {
           title: '名称',
-          dataIndex: 'name',
+          dataIndex: 'title',
         },
         {
           title: '父级节点',
@@ -126,8 +126,8 @@ const SysMenu = defineComponent({
           dataIndex: 'perms',
         },
         {
-          title: '菜单标识(name)',
-          dataIndex: 'code',
+          title: '菜单标识',
+          dataIndex: 'name',
         },
         {
           title: '排序',
@@ -151,9 +151,9 @@ const SysMenu = defineComponent({
     })
     const modelRef = reactive<MenuType>({
       parent_id: '',
-      name: '',
+      title: '',
       perms: '',
-      code: '',
+      name: '',
       type: 1,
       order_num: 1,
       id: '',
@@ -165,7 +165,7 @@ const SysMenu = defineComponent({
           message: '请选择父级',
         },
       ],
-      name: [
+      title: [
         {
           required: true,
           message: '请输入名称',
@@ -177,7 +177,7 @@ const SysMenu = defineComponent({
           message: '请选择类型',
         },
       ],
-      code: [
+      name: [
         {
           required: true,
           message: '请输入菜单标识，前端路由name',
@@ -228,7 +228,7 @@ const SysMenu = defineComponent({
           http<MenuType>({
             url: modelRef.id ? `menu/${modelRef.id}` : 'menu',
             method,
-            data,
+            body: data,
           }).then(() => {
             message.success(`${drawerData.title}成功`)
             drawerData.loading = false
@@ -250,12 +250,12 @@ const SysMenu = defineComponent({
       const data = toRaw(record)
       drawerData.title = '修改'
       drawerData.visible = true
-      modelRef.name = data.name
+      modelRef.title = data.title
       modelRef.order_num = data.order_num
       modelRef.parent_id = data.parent_id
       modelRef.id = data.id
       modelRef.type = data.type
-      modelRef.code = data.code
+      modelRef.name = data.name
       modelRef.perms = data.perms
     }
     function Del(record: MenuType) {

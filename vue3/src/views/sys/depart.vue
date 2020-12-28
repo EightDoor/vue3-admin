@@ -174,7 +174,7 @@ const SysDepart = defineComponent({
           http<DepartType>({
             url: modelRef.id ? `depart/${modelRef.id}` : 'depart',
             method,
-            data,
+            body: data,
           }).then(() => {
             message.success(`${drawerData.title}成功`)
             drawerData.loading = false

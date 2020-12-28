@@ -14,3 +14,7 @@
 - `air -c air.toml -d`
 - 下载包的可执行文件查看GOPATH路径 windows目前是在C:\GO\bin\bin\
 - swagger访问路径 http://localhost:8081/swagger/index.html
+- 新项目需要拉取执行
+    - air `go get -u github.com/cosmtrek/air`
+    - swag `go get -u github.com/swaggo/swag/cmd/swag`
+    - xorm `go get github.com/go-xorm/cmd/xorm`
