@@ -1,6 +1,5 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-import './index.css'
 
 // 路由
 import router from './router/index'

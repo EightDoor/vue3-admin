@@ -1,20 +1,63 @@
-## 待做列表
-- jwt (jwt-go)
-- crud
-- swagger  https://github.com/swaggo/gin-swagger
-- log
-- 数据库
-- 热重载 https://github.com/cosmtrek/air
-- orm gorm.io/gorm
-- 日志框架 zap
-- uuid https://github.com/satori/go.uuid
-- gorm 数据库生成model https://github.com/xxjwxc/gormt
-- 密码使用md5加密
+# 目录结构
+
+> conf 配置
+>
+> configure 读取配置文件
+>
+> controller 控制器
+>
+> db 数据库
+>
+> > index 数据库连接配置
+> >
+> > nest.sql 数据文件
+>
+> docs swagger文档
+>
+> log zap日志
+>
+> middleware 中间件
+>
+> model 类型定义
+>
+> router 路由定义
+>
+> > v1 v1版本路由
+> >
+> > router 路由入口
+> >
+> > whitelistRouter 不需要登录鉴权的路由
+>
+> service 服务
+>
+> tmp air运行生成目录
+>
+> utils 工具类
+>
+> > db 数据库相关的
+> >
+> > R   请求统一封装的返回
+>
+> .gitignore git忽略文件或者文件夹
+>
+> air.toml air配置
+>
+> main 主入口
+
+## 完成
+
+- 用户管理	<> 关联角色
+- 角色管理    <> 关联菜单
+- 菜单管理
+- 部门管理
+- 登录、权限校验
+- swagger 文档生成
+- 日志zap集成
+- 热重载 air
+
 ## 运行
-- `air -c air.toml -d`
-- 下载包的可执行文件查看GOPATH路径 windows目前是在C:\GO\bin\bin\
+
+- 自己创建数据库，从db找到nest.sql 导入到数据库中，修改conf下面的DB配置为自己的
+
+- air 运行 `air -c air.toml -d or air` 启动端口为8081
 - swagger访问路径 http://localhost:8081/swagger/index.html
-- 新项目需要拉取执行
-    - air `go get -u github.com/cosmtrek/air`
-    - swag `go get -u github.com/swaggo/swag/cmd/swag`
-    - xorm `go get github.com/go-xorm/cmd/xorm`
