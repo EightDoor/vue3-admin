@@ -41,7 +41,7 @@ export interface MenuType extends CommonTableList {
   // 父级id
   parent_id: string
   // 菜单名称
-  name: string
+  title: string
   // 菜单类型：1. 目录 2. 菜单  3. 按钮
   type: number
   // 排序
@@ -49,9 +49,8 @@ export interface MenuType extends CommonTableList {
   // 权限标识，接口标识
   perms?: string
   // 菜单标识，前端路由name
-  code: string
+  name: string
   children?: Array<any>
-  title?: string
   value?: string
   key?: string
 }

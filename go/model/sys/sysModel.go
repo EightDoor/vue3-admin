@@ -18,7 +18,7 @@ type SysMenu struct {
 	model.CommonCreate
 	ParentId string    `json:"parent_id" binding:"required"`
 	// 菜单名称
-	Name     string `json:"name" binding:"required"`
+	Title     string `json:"title" binding:"required"`
 	// 菜单类型： 1. 目录 2. 菜单  3. 按钮
 	Type     int    `json:"type" binding:"required"`
 	// 排序
@@ -26,7 +26,7 @@ type SysMenu struct {
 	// 权限标识，接口标识
 	Perms    string `json:"perms"`
 	// 菜单标识，前端路由name
-	Code     string `json:"code" binding:"required"`
+	Name     string `json:"name" binding:"required"`
 }
 
 type SysOss struct {

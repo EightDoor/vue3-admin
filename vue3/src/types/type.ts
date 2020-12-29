@@ -1,5 +1,5 @@
 export interface CommonResponse<T> extends PaginType {
-  list: T[] | T
+  list: T[]
 }
 
 // 请求接口分页
