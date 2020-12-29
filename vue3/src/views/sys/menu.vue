@@ -67,8 +67,20 @@
       <a-form-item label="权限标识">
         <a-input v-model:value="modelRef.perms"></a-input>
       </a-form-item>
-      <a-form-item label="菜单标识" v-bind="validateInfos.name">
+      <a-form-item label="菜单name" v-bind="validateInfos.name">
         <a-input v-model:value="modelRef.name"></a-input>
+      </a-form-item>
+      <a-form-item label="路径" v-bind="validateInfos.path">
+        <a-input v-model:value="modelRef.path"></a-input>
+      </a-form-item>
+      <a-form-item label="组件地址">
+        <a-input v-model:value="modelRef.component"></a-input>
+      </a-form-item>
+      <a-form-item label="重定向地址">
+        <a-input v-model:value="modelRef.redirect"></a-input>
+      </a-form-item>
+      <a-form-item label="图标">
+        <a-input v-model:value="modelRef.icon"></a-input>
       </a-form-item>
       <a-form-item label="排序" v-bind="validateInfos.order_num">
         <a-input-number v-model:value="modelRef.order_num"></a-input-number>
@@ -151,6 +163,10 @@ const SysMenu = defineComponent({
     })
     const modelRef = reactive<MenuType>({
       parent_id: '',
+      path: '',
+      component: '',
+      redirect: '',
+      icon: '',
       title: '',
       perms: '',
       name: '',
@@ -169,6 +185,12 @@ const SysMenu = defineComponent({
         {
           required: true,
           message: '请输入名称',
+        },
+      ],
+      path: [
+        {
+          required: true,
+          message: '请输入路径',
         },
       ],
       type: [

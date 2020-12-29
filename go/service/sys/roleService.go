@@ -24,6 +24,8 @@ func RoleUpdate(data ModelSys.SysRole)(ModelSys.SysRole, *gorm.DB)  {
 	return data, result
 }
 func RoleDel(data ModelSys.SysRole)(ModelSys.SysRole, *gorm.DB)  {
+	var RoleMenu ModelSys.SysRoleMenu
+	db.DB.Table("sys_role_menu").Where("role_id = ?", data.ID).Delete(&RoleMenu)
 	result := db.DB.Delete(&data)
 	return data, result
 }

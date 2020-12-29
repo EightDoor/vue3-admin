@@ -10,17 +10,11 @@ import { TOKEN } from '@/utils/constant'
 import { Commit } from 'vuex'
 import { MenuItem } from '@/types/alyout/menu'
 import { RouteRecordRaw, useRouter } from 'vue-router'
-import Layout from '@/layout/layout/layout.vue'
-import Home from '@/views/home/home.vue'
-import LayoutChildren from '@/views/layout-children.vue'
 
-import SysUser from '@/views/sys/user.vue'
-import SysMenu from '@/views/sys/menu.vue'
-import SysRole from '@/views/sys/role.vue'
 import Depart from '@/views/sys/depart.vue'
 
 export interface SysStoreType {
-  menus: MenuType[]
+  menus: MenuItem[]
   userInfo: UserType
 }
 
@@ -46,13 +40,13 @@ const FormatMenuTree = (item: MenuType[]): RouteRecordRaw[] => {
     {
       path: '/',
       name: 'layout',
-      component: Layout,
+      component: () => import('@/layout/layout/layout.vue'),
       redirect: '/home',
       children: [
         {
           name: 'home',
           path: 'home',
-          component: Home,
+          component: () => import('@/views/home/home.vue'),
           meta: {
             title: '首页',
             icon: '23',
@@ -61,7 +55,7 @@ const FormatMenuTree = (item: MenuType[]): RouteRecordRaw[] => {
         {
           name: 'sys',
           path: 'sys',
-          component: LayoutChildren,
+          component: () => import('@/views/layout-children.vue'),
           meta: {
             title: '系统管理',
             icon: '1',
@@ -70,7 +64,7 @@ const FormatMenuTree = (item: MenuType[]): RouteRecordRaw[] => {
             {
               name: 'user',
               path: 'user',
-              component: SysUser,
+              component: () => import('@/views/sys/user.vue'),
               meta: {
                 title: '用户管理',
                 icon: '1',
@@ -79,7 +73,7 @@ const FormatMenuTree = (item: MenuType[]): RouteRecordRaw[] => {
             {
               name: 'menu',
               path: 'menu',
-              component: SysMenu,
+              component: () => import('@/views/sys/menu.vue'),
               meta: {
                 title: '菜单管理',
                 icon: '1',
@@ -88,7 +82,7 @@ const FormatMenuTree = (item: MenuType[]): RouteRecordRaw[] => {
             {
               name: 'role',
               path: 'role',
-              component: SysRole,
+              component: () => import('@/views/sys/role.vue'),
               meta: {
                 title: '角色管理',
                 icon: '1',
@@ -97,7 +91,7 @@ const FormatMenuTree = (item: MenuType[]): RouteRecordRaw[] => {
             {
               name: 'depart',
               path: 'depart',
-              component: Depart,
+              component: () => import('@/views/sys/depart.vue'),
               meta: {
                 title: '部门管理',
                 icon: '1',
@@ -120,7 +114,43 @@ export default {
   },
   mutations: {
     [SET_MENUS_MUTATION](state: SysStoreType, payload: UserInfoType) {
-      state.menus = payload.menu
+      console.log(payload.menu, 'menu')
+      const list: MenuItem[] = [
+        {
+          key: '1',
+          title: '首页',
+          path: '/home',
+        },
+        {
+          key: '3',
+          title: '系统管理',
+          path: '/sys',
+          children: [
+            {
+              key: '5',
+              title: '部门管理',
+              path: '/sys/depart',
+            },
+            {
+              key: '8',
+              title: '菜单管理',
+              path: '/sys/menu',
+            },
+            {
+              key: '7',
+              title: '角色管理',
+              path: '/sys/role',
+            },
+            {
+              key: '6',
+              title: '用户管理',
+              path: '/sys/user',
+            },
+          ],
+        },
+      ]
+      // state.menus = payload.menu
+      state.menus = list
     },
     [SETUSERINFO](state: SysStoreType, payload: UserInfoType) {
       state.userInfo = payload.user_info
@@ -146,40 +176,6 @@ export default {
           .catch((err) => {
             reject(err)
           })
-        // const list: MenuItem[] = [
-        //   {
-        //     key: '1',
-        //     title: '首页',
-        //     path: '/home',
-        //   },
-        //   {
-        //     key: '3',
-        //     title: '系统管理',
-        //     path: '/sys',
-        //     children: [
-        //       {
-        //         key: '5',
-        //         title: '部门管理',
-        //         path: '/sys/depart',
-        //       },
-        //       {
-        //         key: '8',
-        //         title: '菜单管理',
-        //         path: '/sys/menu',
-        //       },
-        //       {
-        //         key: '7',
-        //         title: '角色管理',
-        //         path: '/sys/role',
-        //       },
-        //       {
-        //         key: '6',
-        //         title: '用户管理',
-        //         path: '/sys/user',
-        //       },
-        //     ],
-        //   },
-        // ]
       })
     },
     [LOGIN](

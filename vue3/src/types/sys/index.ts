@@ -44,6 +44,14 @@ export interface MenuType extends CommonTableList {
   title: string
   // 菜单类型：1. 目录 2. 菜单  3. 按钮
   type: number
+  // 路径
+  path: string
+  // 组件地址
+  component: string
+  // 重定向地址
+  redirect: string
+  // 图标
+  icon: string
   // 排序
   order_num: number
   // 权限标识，接口标识

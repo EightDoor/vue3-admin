@@ -25,7 +25,6 @@ import SubMenu from './menu-item.vue'
 import { MenuItem, MenusInfo } from '@/types/alyout/menu'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
-import { StoreType } from '@/store'
 
 export default defineComponent({
   name: 'common-menu',

@@ -18,8 +18,8 @@ const app = createRouter({
 })
 
 // 全局路由前置钩子
-app.beforeEach(async (to, from, next) => {
-  await canUserAccess(to, from, next, app)
+app.beforeEach(async (to, from) => {
+  await canUserAccess(to, from, app)
 })
 
 export default app
