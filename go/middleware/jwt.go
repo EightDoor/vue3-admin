@@ -45,7 +45,7 @@ func JWTAuth() gin.HandlerFunc {
 			// token过期
 			if err == TokenExpired {
 				c.JSON(http.StatusOK, model.Response{
-					Code: configure.RequestError,
+					Code: configure.RequestAuthorizedFailed,
 					Message: "token授权已过期，请重新申请授权",
 				})
 				c.Abort()
@@ -53,7 +53,7 @@ func JWTAuth() gin.HandlerFunc {
 			}
 			// 其他错误
 			c.JSON(http.StatusOK, model.Response{
-				Code: configure.RequestError,
+				Code: configure.RequestAuthorizedFailed,
 				Message: err.Error(),
 			})
 			c.Abort()

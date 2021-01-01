@@ -1,4 +1,5 @@
 import { CommonTableList, CommonTreeSelect } from '@/types/type'
+import { Key } from 'ant-design-vue/es/_util/type'
 
 export interface DepartType extends CommonTreeSelect {
   parent_id: string
@@ -61,6 +62,7 @@ export interface MenuType extends CommonTableList {
   children?: Array<any>
   value?: string
   key?: string
+  hidden?: number
 }
 export interface LoginType {
   account: string

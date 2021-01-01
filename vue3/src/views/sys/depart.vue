@@ -149,13 +149,13 @@ const SysDepart = defineComponent({
       }).then((res) => {
         const list = res.list.sort(ListObjCompare('order_num'))
         tableCont.loading = false
-        tableCont.data = ListToTree<DepartType>(list)
+        tableCont.data = ListToTree(list)
         tableCont.total = res.total
         list.map((item) => {
           item.title = item.name
           item.value = item.id
         })
-        treeOptions.options = ListToTree<DepartType>(list)
+        treeOptions.options = ListToTree(list)
       })
     }
     onMounted(() => {

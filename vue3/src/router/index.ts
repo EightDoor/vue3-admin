@@ -10,7 +10,11 @@ const staticRoutes: RouteRecordRaw[] = [
     name: 'login',
     component: Login,
   },
-  { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    component: NotFound,
+  },
 ]
 const app = createRouter({
   history: createWebHashHistory(),

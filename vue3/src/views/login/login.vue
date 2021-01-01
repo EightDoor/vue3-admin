@@ -7,7 +7,10 @@
           <a-input v-model:value="modelRef.name" />
         </a-form-item>
         <a-form-item label="密码" v-bind="validateInfos.password">
-          <a-input type="password" v-model:value="modelRef.password" />
+          <a-input-password
+            @pressEnter="onSubmit"
+            v-model:value="modelRef.password"
+          />
         </a-form-item>
         <a-form-item :wrapper-col="{ span: 18, offset: 6 }">
           <a-button
@@ -25,16 +28,9 @@
 import { defineComponent, reactive, toRaw } from 'vue'
 import { useForm } from '@ant-design-vue/use'
 import { message } from 'ant-design-vue'
-import { RouteRecordRaw, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { LOGIN } from '@/store/mutation-types'
-import Layout from '@/layout/layout/layout.vue'
-import Home from '@/views/home/home.vue'
-import LayoutChildren from '@/views/layout-children.vue'
-import SysUser from '@/views/sys/user.vue'
-import SysMenu from '@/views/sys/menu.vue'
-import SysRole from '@/views/sys/role.vue'
-import Depart from '@/views/sys/depart.vue'
 
 interface LoginType {
   name: string
@@ -84,6 +80,9 @@ const Login = defineComponent({
               submitData.loading = false
               message.success('登录成功!')
               router.push('/home')
+            })
+            .catch(() => {
+              submitData.loading = false
             })
         })
         .catch((err) => {

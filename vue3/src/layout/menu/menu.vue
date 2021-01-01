@@ -22,7 +22,7 @@
 <script lang="ts">
 import { defineComponent, reactive, onMounted, computed } from 'vue'
 import SubMenu from './menu-item.vue'
-import { MenuItem, MenusInfo } from '@/types/alyout/menu'
+import { MenuItem, MenusInfo } from '@/types/layout/menu'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 

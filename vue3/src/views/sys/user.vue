@@ -293,7 +293,7 @@ const SysUser = defineComponent({
           item.value = item.id
           item.key = item.id
         })
-        treeOptions.options = ListToTree<DepartType>(list)
+        treeOptions.options = ListToTree(list)
       })
     }
     function getRoleList() {

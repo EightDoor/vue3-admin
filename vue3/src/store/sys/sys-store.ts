@@ -8,15 +8,18 @@ import { LoginType, MenuType, UserInfoType, UserType } from '@/types/sys'
 import { http } from '@/utils/request'
 import { TOKEN } from '@/utils/constant'
 import { Commit } from 'vuex'
-import { MenuItem } from '@/types/alyout/menu'
-import { RouteRecordRaw, useRouter } from 'vue-router'
+import { MenuItem } from '@/types/layout/menu'
+import { RouteRecordRaw } from 'vue-router'
 
-import Depart from '@/views/sys/depart.vue'
+import { Key } from 'ant-design-vue/es/_util/type'
+import { ListObjCompare, ListToTree } from '@/utils'
+import { cloneDeep } from 'lodash'
 
 export interface SysStoreType {
   menus: MenuItem[]
   userInfo: UserType
 }
+type CustomMenus = RouteRecordRaw & { id: string; parent_id: string }
 
 const getUserInfo = (): Promise<UserInfoType> => {
   return new Promise((resolve, reject) => {
@@ -33,78 +36,57 @@ const getUserInfo = (): Promise<UserInfoType> => {
   })
 }
 const FormatMenuTree = (item: MenuType[]): RouteRecordRaw[] => {
-  const list: MenuItem[] = []
-  const router = useRouter()
-  // item.forEach((item) => {})
-  const dynamicRoutes: RouteRecordRaw[] = [
-    {
-      path: '/',
-      name: 'layout',
-      component: () => import('@/layout/layout/layout.vue'),
-      redirect: '/home',
-      children: [
-        {
-          name: 'home',
-          path: 'home',
-          component: () => import('@/views/home/home.vue'),
-          meta: {
-            title: '首页',
-            icon: '23',
-          },
-        },
-        {
-          name: 'sys',
-          path: 'sys',
-          component: () => import('@/views/layout-children.vue'),
-          meta: {
-            title: '系统管理',
-            icon: '1',
-          },
-          children: [
-            {
-              name: 'user',
-              path: 'user',
-              component: () => import('@/views/sys/user.vue'),
-              meta: {
-                title: '用户管理',
-                icon: '1',
-              },
-            },
-            {
-              name: 'menu',
-              path: 'menu',
-              component: () => import('@/views/sys/menu.vue'),
-              meta: {
-                title: '菜单管理',
-                icon: '1',
-              },
-            },
-            {
-              name: 'role',
-              path: 'role',
-              component: () => import('@/views/sys/role.vue'),
-              meta: {
-                title: '角色管理',
-                icon: '1',
-              },
-            },
-            {
-              name: 'depart',
-              path: 'depart',
-              component: () => import('@/views/sys/depart.vue'),
-              meta: {
-                title: '部门管理',
-                icon: '1',
-              },
-            },
-          ],
-        },
-      ],
-    },
-  ]
-
-  console.log(item)
-  return dynamicRoutes
+  // {
+  //   name: 'home',
+  //     path: 'home',
+  //   component: () => import('@/views/home/home.vue'),
+  //   meta: {
+  //   title: '首页',
+  //     icon: '23',
+  // },
+  //   redirect: '/home',
+  // },
+  let result: CustomMenus[] = []
+  item.forEach((item) => {
+    result.push({
+      path: item.path,
+      name: item.name,
+      component: () => import(`@/${item.component}`),
+      redirect: item.redirect,
+      meta: {
+        title: item.title,
+        icon: item.icon,
+      },
+      id: item.id,
+      parent_id: item.parent_id,
+    })
+  })
+  result = ListToTree(result)
+  return result
+}
+function ListToTreeMenus(jsonData: any[], id = 'id', pid = 'parent_id') {
+  const result: any = [],
+    temp: any = {}
+  for (let i = 0; i < jsonData.length; i++) {
+    temp[jsonData[i][id]] = jsonData[i] // 以id作为索引存储元素，可以无需遍历直接定位元素
+  }
+  for (let j = 0; j < jsonData.length; j++) {
+    const currentElement = jsonData[j]
+    const tempCurrentElementParent = temp[currentElement[pid]] // 临时变量里面的当前元素的父元素
+    if (tempCurrentElementParent) {
+      // 如果存在父元素
+      if (!tempCurrentElementParent['children']) {
+        // 如果父元素没有chindren键
+        tempCurrentElementParent['children'] = [] // 设上父元素的children键
+      }
+      currentElement.path = `${tempCurrentElementParent.path}/${currentElement.path}`
+      tempCurrentElementParent['children'].push(currentElement) // 给父元素加上当前元素作为子元素
+    } else {
+      // 不存在父元素，意味着当前元素是一级元素
+      result.push(currentElement)
+    }
+  }
+  return result
 }
 export default {
   namespace: true,
@@ -114,43 +96,22 @@ export default {
   },
   mutations: {
     [SET_MENUS_MUTATION](state: SysStoreType, payload: UserInfoType) {
-      console.log(payload.menu, 'menu')
-      const list: MenuItem[] = [
-        {
-          key: '1',
-          title: '首页',
-          path: '/home',
-        },
-        {
-          key: '3',
-          title: '系统管理',
-          path: '/sys',
-          children: [
-            {
-              key: '5',
-              title: '部门管理',
-              path: '/sys/depart',
-            },
-            {
-              key: '8',
-              title: '菜单管理',
-              path: '/sys/menu',
-            },
-            {
-              key: '7',
-              title: '角色管理',
-              path: '/sys/role',
-            },
-            {
-              key: '6',
-              title: '用户管理',
-              path: '/sys/user',
-            },
-          ],
-        },
-      ]
-      // state.menus = payload.menu
-      state.menus = list
+      let result: MenuItem[] = []
+      const list = cloneDeep(payload.menu.sort(ListObjCompare('order_num')))
+      list.forEach((item) => {
+        if (!item.hidden) {
+          result.push({
+            key: item.id,
+            title: item.title,
+            path: item.path,
+            icon: item.icon,
+            id: item.id,
+            parent_id: item.parent_id,
+          })
+        }
+      })
+      result = ListToTreeMenus(result)
+      state.menus = result
     },
     [SETUSERINFO](state: SysStoreType, payload: UserInfoType) {
       state.userInfo = payload.user_info
@@ -185,7 +146,7 @@ export default {
         commit: Commit
       },
       payload: LoginType
-    ): Promise<string> {
+    ): Promise<Key> {
       return new Promise<string>((resolve, reject) => {
         const body = {
           account: payload.account,

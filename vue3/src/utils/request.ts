@@ -30,17 +30,15 @@ instance.interceptors.response.use(
     if (response.status === 200 && data.code === 0) {
       //
     } else if (data.code === RequestAuthorizedFailed) {
-      console.log(data)
       message.info('token失效, 请重新登录')
       ClearInfo()
-      window.location.href = '/login'
     } else {
       notification.error({
         message: data.code,
         description: data.message,
       })
     }
-    return response.data.data
+    return response.data
   },
   function (error) {
     return Promise.reject(error)
@@ -62,7 +60,11 @@ function httpCustom<T>(c: HttpCustomType): Promise<CommonResponse<T>> {
       params: c.params,
     })
       .then((res: any) => {
-        resolve(res)
+        if (res.code !== 0) {
+          reject(res.code)
+        } else {
+          resolve(res.data)
+        }
       })
       .catch((err) => {
         reject(err)

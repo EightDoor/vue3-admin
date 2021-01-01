@@ -35,7 +35,8 @@ type SysMenu struct {
 	Redirect	string	`json:"redirect"`
 	// 图标
 	Icon	string	`json:"icon"`
-
+	// 左侧菜单是否隐藏
+	Hidden	int	`json:"hidden"`
 }
 
 type SysOss struct {

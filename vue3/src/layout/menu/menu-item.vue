@@ -23,7 +23,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { useRouter } from 'vue-router'
-import { MenuItem } from '@/types/alyout/menu'
+import { MenuItem } from '@/types/layout/menu'
 export default defineComponent({
   name: 'sub-menu',
   props: {
