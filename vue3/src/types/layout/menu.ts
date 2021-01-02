@@ -11,4 +11,5 @@ export interface MenusInfo {
   selectedKeys: string[]
   collapsed: boolean
   list: MenuItem[]
+  openKeys: string[]
 }

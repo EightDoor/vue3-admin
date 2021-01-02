@@ -14,7 +14,7 @@ export const canUserAccess = async (
   const token = localStorage.getItem(TOKEN)
   if (!status) {
     if (token) {
-      if (store.state.sys.userInfo) {
+      if (store.state.sys.userInfo && store.state.sys.userInfo.account) {
         return true
       } else {
         try {

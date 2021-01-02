@@ -1,5 +1,10 @@
 <template>
-  <common-button title="添加" icon-name="add" @change="ChangAdd" />
+  <common-button
+    v-bt-auth:add
+    title="添加"
+    icon-name="add"
+    @change="ChangAdd"
+  />
   <a-table
     style="margin-top: 15px"
     :columns="tableData.columns"
@@ -22,12 +27,14 @@
         type="primary"
         style="margin-right: 15px"
         @click="PowerAllocation(record)"
+        v-bt-auth:power
       >
         权限分配
       </a-button>
       <a-button
         type="primary"
         style="margin-right: 15px"
+        v-bt-auth:edit
         @click="Editor(record)"
         >编辑</a-button
       >
@@ -37,7 +44,7 @@
         cancel-text="取消"
         @confirm="Del(record)"
       >
-        <a-button type="danger">删除</a-button>
+        <a-button type="danger" v-bt-auth:del>删除</a-button>
       </a-popconfirm>
     </template>
   </a-table>

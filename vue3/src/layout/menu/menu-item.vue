@@ -21,9 +21,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, toRaw } from 'vue'
 import { useRouter } from 'vue-router'
 import { MenuItem } from '@/types/layout/menu'
+import { STORELETMENUPATH } from '@/utils/constant'
+import { localForage } from '@/utils/localforage'
 export default defineComponent({
   name: 'sub-menu',
   props: {
@@ -37,6 +39,7 @@ export default defineComponent({
     // methods
     function jumpTo(item: MenuItem) {
       if (item.path) {
+        localForage.setItem(STORELETMENUPATH, toRaw(item))
         router.push({
           path: item.path,
         })

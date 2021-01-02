@@ -1,12 +1,14 @@
 import {
   LOGIN,
+  LOGINRESET,
   SET_MENUS_MUTATION,
   SET_SYS,
   SETUSERINFO,
+  USERINFOMENUS,
 } from '@/store/mutation-types'
 import { LoginType, MenuType, UserInfoType, UserType } from '@/types/sys'
 import { http } from '@/utils/request'
-import { TOKEN } from '@/utils/constant'
+import { PERMISSIONBUTTONS, TOKEN } from '@/utils/constant'
 import { Commit } from 'vuex'
 import { MenuItem } from '@/types/layout/menu'
 import { RouteRecordRaw } from 'vue-router'
@@ -18,6 +20,8 @@ import { cloneDeep } from 'lodash'
 export interface SysStoreType {
   menus: MenuItem[]
   userInfo: UserType
+  userInfoMenus: MenuType[]
+  permissionButtons: MenuType[]
 }
 type CustomMenus = RouteRecordRaw & { id: string; parent_id: string }
 
@@ -49,7 +53,7 @@ const FormatMenuTree = (item: MenuType[]): RouteRecordRaw[] => {
   let result: CustomMenus[] = []
   item.forEach((item) => {
     result.push({
-      path: item.path,
+      path: item.path || '',
       name: item.name,
       component: () => import(`@/${item.component}`),
       redirect: item.redirect,
@@ -88,16 +92,21 @@ function ListToTreeMenus(jsonData: any[], id = 'id', pid = 'parent_id') {
   }
   return result
 }
+function formatMenus(menus: MenuType[], status = false) {
+  return menus.filter((item) => (status ? item.type === 3 : item.type !== 3))
+}
 export default {
   namespace: true,
   state: {
     menus: [],
+    userInfoMenus: [],
     userInfo: null,
   },
   mutations: {
     [SET_MENUS_MUTATION](state: SysStoreType, payload: UserInfoType) {
+      const menus = formatMenus(payload.menu)
       let result: MenuItem[] = []
-      const list = cloneDeep(payload.menu.sort(ListObjCompare('order_num')))
+      const list = cloneDeep(menus.sort(ListObjCompare('order_num')))
       list.forEach((item) => {
         if (!item.hidden) {
           result.push({
@@ -116,6 +125,32 @@ export default {
     [SETUSERINFO](state: SysStoreType, payload: UserInfoType) {
       state.userInfo = payload.user_info
     },
+    [USERINFOMENUS](state: SysStoreType, payload: UserInfoType) {
+      state.userInfoMenus = payload.menu
+    },
+    [PERMISSIONBUTTONS](state: SysStoreType, payload: UserInfoType) {
+      const menus = cloneDeep(payload.menu)
+      const data = formatMenus(menus, true)
+      data.map((item) => {
+        const r = menus.find((v) => v.id === item.parent_id)
+        if (r) {
+          item.name = r.id
+        }
+      })
+      state.permissionButtons = data
+    },
+    [LOGINRESET](state: SysStoreType) {
+      state.permissionButtons = []
+      state.userInfoMenus = []
+      state.menus = []
+      state.userInfo = {
+        nick_name: '',
+        status: 0,
+        pass_word: '',
+        account: '',
+        dept_id: '',
+      }
+    },
   },
   actions: {
     [SET_SYS]({
@@ -127,11 +162,13 @@ export default {
         // 获取数据然后直接存储
         getUserInfo()
           .then((res) => {
+            commit(PERMISSIONBUTTONS, res)
+            commit(USERINFOMENUS, res)
             commit(SETUSERINFO, res)
             commit(SET_MENUS_MUTATION, res)
             resolve({
               userInfo: res.user_info,
-              menus: FormatMenuTree(res.menu),
+              menus: FormatMenuTree(formatMenus(res.menu)),
             })
           })
           .catch((err) => {

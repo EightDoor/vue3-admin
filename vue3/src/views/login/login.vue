@@ -30,7 +30,9 @@ import { useForm } from '@ant-design-vue/use'
 import { message } from 'ant-design-vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
-import { LOGIN } from '@/store/mutation-types'
+import { LOGIN, LOGINRESET } from '@/store/mutation-types'
+import { localForage } from '@/utils/localforage'
+import { STORELETMENUPATH } from '@/utils/constant'
 
 interface LoginType {
   name: string
@@ -79,6 +81,8 @@ const Login = defineComponent({
             .then(() => {
               submitData.loading = false
               message.success('登录成功!')
+              localForage.setItem(STORELETMENUPATH, {})
+              store.commit(`${LOGINRESET}`)
               router.push('/home')
             })
             .catch(() => {

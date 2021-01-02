@@ -10,6 +10,9 @@ import 'ant-design-vue/dist/antd.css' // or 'ant-design-vue/dist/antd.less'
 import store from '@/store/index'
 // 公用style
 import '@/assets/style/common.less'
+// 自定义指令
+import Directive from '@/directive/index'
 
 const app = createApp(App)
+Directive(app)
 app.use(store).use(router).use(AntDesign).mount('#app')

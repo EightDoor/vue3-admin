@@ -26,9 +26,9 @@ type SysMenu struct {
 	// 权限标识，接口标识
 	Perms    string `json:"perms"`
 	// 菜单标识，前端路由name
-	Name     string `json:"name" binding:"required"`
+	Name     string `json:"name"`
 	// 路由路径 (第一级带/ 子级没有/)
-	Path	string	`json:"path" binding:"required"`
+	Path	string	`json:"path"`
 	// 组件地址
 	Component	string	`json:"component"`
 	// 重定向地址

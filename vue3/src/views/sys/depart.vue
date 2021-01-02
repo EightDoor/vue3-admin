@@ -1,6 +1,11 @@
 <template>
   <div class="space-margin-bottom">
-    <common-button title="添加" @change="ChangeClick()" icon-name="add" />
+    <common-button
+      v-bt-auth:add
+      title="添加"
+      @change="ChangeClick()"
+      icon-name="add"
+    />
   </div>
   <a-table
     :columns="tableCont.columns"
@@ -17,6 +22,7 @@
         type="primary"
         style="margin-right: 15px"
         @click="Editor(record)"
+        v-bt-auth:edit
         >编辑</a-button
       >
       <a-popconfirm
@@ -25,7 +31,7 @@
         cancel-text="取消"
         @confirm="Del(record)"
       >
-        <a-button type="danger">删除</a-button>
+        <a-button type="danger" v-bt-auth:del>删除</a-button>
       </a-popconfirm>
     </template>
   </a-table>
