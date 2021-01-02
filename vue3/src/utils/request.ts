@@ -3,7 +3,6 @@ import { message, notification } from 'ant-design-vue'
 import { CommonResponse } from '@/types/type'
 import { RequestAuthorizedFailed, TOKEN } from '@/utils/constant'
 import { ClearInfo } from '@/utils/index'
-import { isArray } from 'ant-design-vue/es/_util/util'
 
 const instance = axios.create({
   baseURL: '/api',
