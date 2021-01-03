@@ -1,5 +1,7 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 import { canUserAccess } from '@/authority'
+import nprogress from 'nprogress'
+import 'nprogress/nprogress.css' // progress bar style
 
 import Login from '@/views/login/login.vue'
 import NotFound from '@/views/other/not-found.vue'
@@ -23,7 +25,12 @@ const app = createRouter({
 
 // 全局路由前置钩子
 app.beforeEach(async (to, from) => {
+  nprogress.start()
   await canUserAccess(to, from, app)
+})
+
+app.afterEach(() => {
+  nprogress.done()
 })
 
 export default app

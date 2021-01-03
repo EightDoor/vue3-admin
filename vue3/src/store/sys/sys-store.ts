@@ -1,4 +1,5 @@
 import {
+  COLLAPSED,
   LOGIN,
   LOGINRESET,
   SET_MENUS_MUTATION,
@@ -22,6 +23,7 @@ export interface SysStoreType {
   userInfo: UserType
   userInfoMenus: MenuType[]
   permissionButtons: MenuType[]
+  collapsed: boolean
 }
 type CustomMenus = RouteRecordRaw & { id: string; parent_id: string }
 
@@ -101,8 +103,12 @@ export default {
     menus: [],
     userInfoMenus: [],
     userInfo: null,
+    collapsed: false,
   },
   mutations: {
+    [COLLAPSED](state: SysStoreType) {
+      state.collapsed = !state.collapsed
+    },
     [SET_MENUS_MUTATION](state: SysStoreType, payload: UserInfoType) {
       const menus = formatMenus(payload.menu)
       let result: MenuItem[] = []

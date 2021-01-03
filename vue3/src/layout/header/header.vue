@@ -1,6 +1,10 @@
 <template>
   <a-layout-header class="container">
     <div class="content">
+      <div @click="ToggleCollapsed()" class="button-icon-container">
+        <MenuUnfoldOutlined class="button-icon" v-if="collapsed" />
+        <MenuFoldOutlined class="button-icon" v-else />
+      </div>
       <a-dropdown>
         <a class="ant-dropdown-link" @click="(e) => e.preventDefault()">
           <a-avatar :size="50">
@@ -19,16 +23,23 @@
   </a-layout-header>
 </template>
 <script lang="ts">
-import { UserOutlined } from '@ant-design/icons-vue'
-import { defineComponent, ref } from 'vue'
+import {
+  UserOutlined,
+  MenuUnfoldOutlined,
+  MenuFoldOutlined,
+} from '@ant-design/icons-vue'
+import { defineComponent, ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
+import { COLLAPSED } from '@/store/mutation-types'
 
 export default defineComponent({
   name: 'common-header',
-  components: { UserOutlined },
+  components: { UserOutlined, MenuUnfoldOutlined, MenuFoldOutlined },
   setup() {
     const data = ref<string[]>(['个人中心', '退出'])
     const router = useRouter()
+    const store = useStore()
     function GoTo(val: string) {
       console.log(val)
       switch (val) {
@@ -38,11 +49,16 @@ export default defineComponent({
           break
       }
     }
+    function ToggleCollapsed() {
+      store.commit(COLLAPSED)
+    }
     return {
       // data
       data,
+      collapsed: computed(() => store.state.sys.collapsed),
       // methods
       GoTo,
+      ToggleCollapsed,
     }
   },
 })

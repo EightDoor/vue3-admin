@@ -4,7 +4,8 @@
     v-model:selectedKeys="menusInfo.selectedKeys"
     mode="inline"
     theme="dark"
-    :inline-collapsed="menusInfo.collapsed"
+    :inline-collapsed="collapsed"
+    :collapsed="collapsed"
   >
     <template v-for="item in getMenus" :key="item.key">
       <template v-if="!item.children">
@@ -36,7 +37,6 @@ export default defineComponent({
     const store = useStore()
     const menusInfo = reactive<MenusInfo>({
       selectedKeys: [],
-      collapsed: false,
       list: [],
       openKeys: [],
     })
@@ -66,8 +66,10 @@ export default defineComponent({
       }
     }
     return {
+      // data
       menusInfo,
       getMenus: computed(() => store.state.sys.menus),
+      collapsed: computed(() => store.state.sys.collapsed),
       //methods
       jumpTo,
     }

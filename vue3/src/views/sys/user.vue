@@ -1,6 +1,6 @@
 <template>
   <common-button
-    v-bt-auth:add
+    v-bt-auth:add="{ title: true }"
     title="添加"
     icon-name="add"
     @change="ChangAdd"
@@ -30,22 +30,20 @@
         style="margin-right: 15px"
         @click="Allocate(record)"
         v-bt-auth:power
-        >角色分配</a-button
-      >
+      />
       <a-button
         type="primary"
         style="margin-right: 15px"
         @click="Editor(record)"
         v-bt-auth:edit
-        >编辑</a-button
-      >
+      />
       <a-popconfirm
         title="确定删除吗?"
         ok-text="删除"
         cancel-text="取消"
         @confirm="Del(record)"
       >
-        <a-button type="danger" v-bt-auth:del>删除</a-button>
+        <a-button type="danger" v-bt-auth:del />
       </a-popconfirm>
     </template>
   </a-table>
