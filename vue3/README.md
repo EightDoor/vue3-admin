@@ -62,5 +62,10 @@
   # 运行
 
 - 安装依赖 `npm install or yarn install`
+
 - 运行 `npm run dev`
+
+# 其他
+
+- 微信: zzkk851708184
 
