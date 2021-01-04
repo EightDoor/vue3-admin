@@ -5,7 +5,7 @@ export interface DepartType extends CommonTreeSelect {
   parent_id: string
   name: string
   order_num: number
-  id: string
+  id?: string
   children?: Array<any>
 }
 
@@ -38,7 +38,7 @@ export interface RoleType extends CommonTableList {
 }
 
 export interface MenuType extends CommonTableList {
-  id: string
+  id?: string
   // 父级id
   parent_id: string
   // 菜单名称

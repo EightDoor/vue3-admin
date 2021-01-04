@@ -230,7 +230,7 @@ const SysRole = defineComponent({
       }).then((res) => {
         const list: string[] = []
         res.list.forEach((item) => {
-          list.push(item.id)
+          return list.push(item.id || '')
         })
         allocationTree.data = list
         allocationTree.loading = false

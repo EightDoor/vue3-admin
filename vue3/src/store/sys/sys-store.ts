@@ -63,7 +63,7 @@ const FormatMenuTree = (item: MenuType[]): RouteRecordRaw[] => {
         title: item.title,
         icon: item.icon,
       },
-      id: item.id,
+      id: item.id || '',
       parent_id: item.parent_id,
     })
   })
@@ -116,7 +116,7 @@ export default {
       list.forEach((item) => {
         if (!item.hidden) {
           result.push({
-            key: item.id,
+            key: item.id || '',
             title: item.title,
             path: item.path,
             icon: item.icon,

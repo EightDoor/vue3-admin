@@ -54,7 +54,7 @@ const CommonTree = defineComponent({
   components: {
     CommonDrawer,
   },
-  setup(props, { emit }: { emit: Function }) {
+  setup(props, { emit }: { emit: any }) {
     const treeData = reactive<TreeDataType>({
       spinningLoading: false,
       checkedKeys: [],

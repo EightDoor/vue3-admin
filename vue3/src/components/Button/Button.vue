@@ -30,7 +30,7 @@ const CommonButton = defineComponent({
       default: 'primary',
     },
   },
-  setup(props: any, { emit }: { emit: Function }) {
+  setup(props: any, { emit }: { emit: any }) {
     function CommonClick() {
       emit('change')
     }

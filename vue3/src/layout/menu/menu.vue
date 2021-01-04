@@ -50,7 +50,7 @@ export default defineComponent({
           const data: MenuType[] = toRaw(getUserInfoMenus.value)
           const r = data.find((item) => item.id === parent_id)
           if (r) {
-            menusInfo.openKeys = [r.id]
+            menusInfo.openKeys = [r.id || '']
           }
         }
       })
