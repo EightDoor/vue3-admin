@@ -1,5 +1,5 @@
 <template>
-  <div>首页123</div>
+  <div>vue3-gin-admin</div>
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue'

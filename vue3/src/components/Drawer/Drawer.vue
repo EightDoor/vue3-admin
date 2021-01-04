@@ -6,7 +6,9 @@
     :width="width"
     @close="onClose"
   >
-    <slot></slot>
+    <div class="drawerContainer">
+      <slot></slot>
+    </div>
     <div class="drawerBottom" v-if="okText || cancelText">
       <a-button
         :loading="loading"

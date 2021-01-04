@@ -1,4 +1,5 @@
 import { CommonTableList, CommonTreeSelect } from '@/types/type'
+import { Key } from 'ant-design-vue/es/_util/type'
 
 export interface DepartType extends CommonTreeSelect {
   parent_id: string
@@ -44,15 +45,24 @@ export interface MenuType extends CommonTableList {
   title: string
   // 菜单类型：1. 目录 2. 菜单  3. 按钮
   type: number
+  // 路径
+  path?: string
+  // 组件地址
+  component?: string
+  // 重定向地址
+  redirect?: string
+  // 图标
+  icon?: string
   // 排序
   order_num: number
   // 权限标识，接口标识
   perms?: string
   // 菜单标识，前端路由name
-  name: string
+  name?: string
   children?: Array<any>
   value?: string
   key?: string
+  hidden?: number
 }
 export interface LoginType {
   account: string

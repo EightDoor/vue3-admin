@@ -1,8 +1,14 @@
 <template>
   <div class="space-margin-bottom">
-    <common-button title="添加" @change="ChangeClick()" icon-name="add" />
+    <common-button
+      v-bt-auth:add="{ title: true }"
+      title="添加"
+      @change="ChangeClick()"
+      icon-name="add"
+    />
   </div>
   <a-table
+    :scroll="{ x: 500 }"
     :columns="tableCont.columns"
     rowKey="id"
     :data-source="tableCont.data"
@@ -16,16 +22,16 @@
       <a-button
         type="primary"
         style="margin-right: 15px"
+        v-bt-auth:edit
         @click="Editor(record)"
-        >编辑</a-button
-      >
+      ></a-button>
       <a-popconfirm
         title="确定删除吗?"
         ok-text="删除"
         cancel-text="取消"
         @confirm="Del(record)"
       >
-        <a-button type="danger">删除</a-button>
+        <a-button type="danger" v-bt-auth:del></a-button>
       </a-popconfirm>
     </template>
   </a-table>
@@ -64,12 +70,32 @@
           </a-select-option>
         </a-select>
       </a-form-item>
-      <a-form-item label="权限标识">
+      <a-form-item label="权限标识" v-if="modelRef.type === 3">
         <a-input v-model:value="modelRef.perms"></a-input>
       </a-form-item>
-      <a-form-item label="菜单标识" v-bind="validateInfos.name">
-        <a-input v-model:value="modelRef.name"></a-input>
-      </a-form-item>
+      <div v-if="modelRef.type !== 3">
+        <a-form-item label="菜单name">
+          <a-input v-model:value="modelRef.name"></a-input>
+        </a-form-item>
+        <a-form-item label="路径">
+          <a-input v-model:value="modelRef.path"></a-input>
+        </a-form-item>
+        <a-form-item label="组件地址">
+          <a-input v-model:value="modelRef.component"></a-input>
+        </a-form-item>
+        <a-form-item label="重定向地址">
+          <a-input v-model:value="modelRef.redirect"></a-input>
+        </a-form-item>
+        <a-form-item label="图标">
+          <a-input v-model:value="modelRef.icon"></a-input>
+        </a-form-item>
+        <a-form-item label="是否隐藏">
+          <a-radio-group name="radioGroup" v-model:value="modelRef.hidden">
+            <a-radio :value="0"> 否 </a-radio>
+            <a-radio :value="1"> 是 </a-radio>
+          </a-radio-group>
+        </a-form-item>
+      </div>
       <a-form-item label="排序" v-bind="validateInfos.order_num">
         <a-input-number v-model:value="modelRef.order_num"></a-input-number>
       </a-form-item>
@@ -107,35 +133,69 @@ const SysMenu = defineComponent({
         label: '按钮',
       },
     ])
+    const width = 150
     const tableCont = reactive<TableDataType<MenuType>>({
       page: 1,
-      page_size: 10,
+      page_size: 1000,
       total: 0,
       loading: false,
       columns: [
         {
           title: '名称',
           dataIndex: 'title',
+          width: width * 2,
+          fixed: true,
+        },
+        {
+          title: '类型',
+          dataIndex: 'type',
+          width: width / 2,
+        },
+        {
+          title: '路径',
+          dataIndex: 'path',
+          width,
+        },
+        {
+          title: '组件地址',
+          dataIndex: 'component',
+          width,
+        },
+        {
+          title: '重定向地址',
+          dataIndex: 'redirect',
+          width,
+        },
+        {
+          title: '图标',
+          dataIndex: 'icon',
+          width,
         },
         {
           title: '父级节点',
           dataIndex: 'parent_id',
+          width,
         },
         {
           title: '权限标识',
           dataIndex: 'perms',
+          width: width / 2,
         },
         {
           title: '菜单标识',
           dataIndex: 'name',
+          width: width / 2,
         },
         {
           title: '排序',
           dataIndex: 'order_num',
+          width: width / 2,
         },
         {
           title: '操作',
           key: 'action',
+          fixed: 'right',
+          width: 200,
           slots: {
             customRender: 'action',
           },
@@ -149,14 +209,19 @@ const SysMenu = defineComponent({
       visible: false,
       loading: false,
     })
-    const modelRef = reactive<MenuType>({
+    let modelRef = reactive<MenuType>({
       parent_id: '',
+      path: '',
+      component: '',
+      redirect: '',
+      icon: '',
       title: '',
       perms: '',
       name: '',
       type: 1,
       order_num: 1,
       id: '',
+      hidden: 0,
     })
     const ruleRef = reactive({
       parent_id: [
@@ -177,12 +242,6 @@ const SysMenu = defineComponent({
           message: '请选择类型',
         },
       ],
-      name: [
-        {
-          required: true,
-          message: '请输入菜单标识，前端路由name',
-        },
-      ],
       order_num: [
         {
           required: true,
@@ -201,15 +260,15 @@ const SysMenu = defineComponent({
           page_size: tableCont.page_size,
         },
       }).then((res) => {
-        const list = res.list.sort(ListObjCompare('order_num'))
+        const list = cloneDeep(res.list.sort(ListObjCompare('order_num')))
         tableCont.loading = false
-        tableCont.data = ListToTree<MenuType>(list)
+        tableCont.data = ListToTree(list)
         tableCont.total = res.total
-        list.map((item) => {
-          item.title = item.name
+        const treeMenus = cloneDeep(res.list)
+        treeMenus.map((item) => {
           item.value = item.id
         })
-        treeOptions.options = ListToTree<MenuType>(list)
+        treeOptions.options = ListToTree(treeMenus)
       })
     }
     onMounted(() => {
@@ -247,16 +306,9 @@ const SysMenu = defineComponent({
       modelRef.parent_id = '0'
     }
     function Editor(record: MenuType) {
-      const data = toRaw(record)
       drawerData.title = '修改'
       drawerData.visible = true
-      modelRef.title = data.title
-      modelRef.order_num = data.order_num
-      modelRef.parent_id = data.parent_id
-      modelRef.id = data.id
-      modelRef.type = data.type
-      modelRef.name = data.name
-      modelRef.perms = data.perms
+      modelRef = Object.assign(modelRef, record)
     }
     function Del(record: MenuType) {
       const data = toRaw(record)

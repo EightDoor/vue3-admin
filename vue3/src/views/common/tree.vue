@@ -83,12 +83,11 @@ const CommonTree = defineComponent({
         },
       }).then((res) => {
         res.list.map((item: MenuType) => {
-          item.title = item.name
           item.key = item.id
         })
         const list = res.list.sort(ListObjCompare('order_num'))
         treeData.spinningLoading = false
-        const result = ListToTree<MenuType>(list)
+        const result = ListToTree(list)
         treeData.data = result
       })
     }

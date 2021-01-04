@@ -1,7 +1,7 @@
 <template>
   <a-layout id="components-layout-demo-fixed-sider">
     <a-layout-sider class="sider-height">
-      <div class="logo" />
+      <div class="logo">vue3-gin-admin</div>
       <common-menu />
     </a-layout-sider>
     <a-layout>

@@ -58,6 +58,6 @@
 ## 运行
 
 - 自己创建数据库，从db找到nest.sql 导入到数据库中，修改conf下面的DB配置为自己的
-
 - air 运行 `air -c air.toml -d or air` 启动端口为8081
 - swagger访问路径 http://localhost:8081/swagger/index.html
+- 交叉编译工具 gox

@@ -1,8 +1,10 @@
 <template>
   个人博客
-  <a href="https://gitee.com/EightDoor">http://www.start6.cn</a> 码云:<a
-    href="https://gitee.com/EightDoor"
-    >https://gitee.com/EightDoor</a
+  <a style="margin-right: 50px" href="http://www.start6.cn"
+    >http://www.start6.cn</a
+  >
+  github:<a href="http://www.github.com/EightDoor"
+    >http://www.github.com/EightDoor</a
   >
 </template>
 <script lang="ts">

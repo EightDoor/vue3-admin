@@ -1,6 +1,11 @@
 <template>
   <div class="space-margin-bottom">
-    <common-button title="添加" @change="ChangeClick()" icon-name="add" />
+    <common-button
+      v-bt-auth:add="{ title: true }"
+      title="添加"
+      @change="ChangeClick()"
+      icon-name="add"
+    />
   </div>
   <a-table
     :columns="tableCont.columns"
@@ -17,15 +22,15 @@
         type="primary"
         style="margin-right: 15px"
         @click="Editor(record)"
-        >编辑</a-button
-      >
+        v-bt-auth:edit
+      />
       <a-popconfirm
         title="确定删除吗?"
         ok-text="删除"
         cancel-text="取消"
         @confirm="Del(record)"
       >
-        <a-button type="danger">删除</a-button>
+        <a-button type="danger" v-bt-auth:del />
       </a-popconfirm>
     </template>
   </a-table>
@@ -149,13 +154,13 @@ const SysDepart = defineComponent({
       }).then((res) => {
         const list = res.list.sort(ListObjCompare('order_num'))
         tableCont.loading = false
-        tableCont.data = ListToTree<DepartType>(list)
+        tableCont.data = ListToTree(list)
         tableCont.total = res.total
         list.map((item) => {
           item.title = item.name
           item.value = item.id
         })
-        treeOptions.options = ListToTree<DepartType>(list)
+        treeOptions.options = ListToTree(list)
       })
     }
     onMounted(() => {

@@ -49,15 +49,31 @@
 - 菜单管理  
 - 部门管理
 - 登录、权限校验
+- 动态路由生成 - 按钮权限
 
 # 待办
 
-- 动态路由生成
 - 首页样式调整美化
-- 顶部header调整
 
-# 运行
+- 字典管理
+
+- header  菜单栏切换面包屑 tab
+
+  # 运行
 
 - 安装依赖 `npm install or yarn install`
+
 - 运行 `npm run dev`
+
+# 使用
+
+## 按钮权限使用
+
+- ```vue
+  // 使用的是按钮权限的名字
+  <a-button type="danger" v-bt-auth:del></a-button>
+  // 或者
+  // 使用的是自定义的名称  '删除 - 1'
+  <a-button type="danger" v-bt-auth:del="{title:true}">删除 - 1</a-button>
+  ```
 

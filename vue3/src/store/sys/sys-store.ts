@@ -1,28 +1,31 @@
 import {
+  COLLAPSED,
   LOGIN,
+  LOGINRESET,
   SET_MENUS_MUTATION,
   SET_SYS,
   SETUSERINFO,
+  USERINFOMENUS,
 } from '@/store/mutation-types'
 import { LoginType, MenuType, UserInfoType, UserType } from '@/types/sys'
 import { http } from '@/utils/request'
-import { TOKEN } from '@/utils/constant'
+import { PERMISSIONBUTTONS, TOKEN } from '@/utils/constant'
 import { Commit } from 'vuex'
-import { MenuItem } from '@/types/alyout/menu'
-import { RouteRecordRaw, useRouter } from 'vue-router'
-import Layout from '@/layout/layout/layout.vue'
-import Home from '@/views/home/home.vue'
-import LayoutChildren from '@/views/layout-children.vue'
+import { MenuItem } from '@/types/layout/menu'
+import { RouteRecordRaw } from 'vue-router'
 
-import SysUser from '@/views/sys/user.vue'
-import SysMenu from '@/views/sys/menu.vue'
-import SysRole from '@/views/sys/role.vue'
-import Depart from '@/views/sys/depart.vue'
+import { Key } from 'ant-design-vue/es/_util/type'
+import { ListObjCompare, ListToTree } from '@/utils'
+import { cloneDeep } from 'lodash'
 
 export interface SysStoreType {
-  menus: MenuType[]
+  menus: MenuItem[]
   userInfo: UserType
+  userInfoMenus: MenuType[]
+  permissionButtons: MenuType[]
+  collapsed: boolean
 }
+type CustomMenus = RouteRecordRaw & { id: string; parent_id: string }
 
 const getUserInfo = (): Promise<UserInfoType> => {
   return new Promise((resolve, reject) => {
@@ -39,91 +42,120 @@ const getUserInfo = (): Promise<UserInfoType> => {
   })
 }
 const FormatMenuTree = (item: MenuType[]): RouteRecordRaw[] => {
-  const list: MenuItem[] = []
-  const router = useRouter()
-  // item.forEach((item) => {})
-  const dynamicRoutes: RouteRecordRaw[] = [
-    {
-      path: '/',
-      name: 'layout',
-      component: Layout,
-      redirect: '/home',
-      children: [
-        {
-          name: 'home',
-          path: 'home',
-          component: Home,
-          meta: {
-            title: '首页',
-            icon: '23',
-          },
-        },
-        {
-          name: 'sys',
-          path: 'sys',
-          component: LayoutChildren,
-          meta: {
-            title: '系统管理',
-            icon: '1',
-          },
-          children: [
-            {
-              name: 'user',
-              path: 'user',
-              component: SysUser,
-              meta: {
-                title: '用户管理',
-                icon: '1',
-              },
-            },
-            {
-              name: 'menu',
-              path: 'menu',
-              component: SysMenu,
-              meta: {
-                title: '菜单管理',
-                icon: '1',
-              },
-            },
-            {
-              name: 'role',
-              path: 'role',
-              component: SysRole,
-              meta: {
-                title: '角色管理',
-                icon: '1',
-              },
-            },
-            {
-              name: 'depart',
-              path: 'depart',
-              component: Depart,
-              meta: {
-                title: '部门管理',
-                icon: '1',
-              },
-            },
-          ],
-        },
-      ],
-    },
-  ]
-
-  console.log(item)
-  return dynamicRoutes
+  // {
+  //   name: 'home',
+  //     path: 'home',
+  //   component: () => import('@/views/home/home.vue'),
+  //   meta: {
+  //   title: '首页',
+  //     icon: '23',
+  // },
+  //   redirect: '/home',
+  // },
+  let result: CustomMenus[] = []
+  item.forEach((item) => {
+    result.push({
+      path: item.path || '',
+      name: item.name,
+      component: () => import(`@/${item.component}`),
+      redirect: item.redirect,
+      meta: {
+        title: item.title,
+        icon: item.icon,
+      },
+      id: item.id,
+      parent_id: item.parent_id,
+    })
+  })
+  result = ListToTree(result)
+  return result
+}
+function ListToTreeMenus(jsonData: any[], id = 'id', pid = 'parent_id') {
+  const result: any = [],
+    temp: any = {}
+  for (let i = 0; i < jsonData.length; i++) {
+    temp[jsonData[i][id]] = jsonData[i] // 以id作为索引存储元素，可以无需遍历直接定位元素
+  }
+  for (let j = 0; j < jsonData.length; j++) {
+    const currentElement = jsonData[j]
+    const tempCurrentElementParent = temp[currentElement[pid]] // 临时变量里面的当前元素的父元素
+    if (tempCurrentElementParent) {
+      // 如果存在父元素
+      if (!tempCurrentElementParent['children']) {
+        // 如果父元素没有chindren键
+        tempCurrentElementParent['children'] = [] // 设上父元素的children键
+      }
+      currentElement.path = `${tempCurrentElementParent.path}/${currentElement.path}`
+      tempCurrentElementParent['children'].push(currentElement) // 给父元素加上当前元素作为子元素
+    } else {
+      // 不存在父元素，意味着当前元素是一级元素
+      result.push(currentElement)
+    }
+  }
+  return result
+}
+function formatMenus(menus: MenuType[], status = false) {
+  return menus.filter((item) => (status ? item.type === 3 : item.type !== 3))
 }
 export default {
   namespace: true,
   state: {
     menus: [],
+    userInfoMenus: [],
     userInfo: null,
+    collapsed: false,
   },
   mutations: {
+    [COLLAPSED](state: SysStoreType) {
+      state.collapsed = !state.collapsed
+    },
     [SET_MENUS_MUTATION](state: SysStoreType, payload: UserInfoType) {
-      state.menus = payload.menu
+      const menus = formatMenus(payload.menu)
+      let result: MenuItem[] = []
+      const list = cloneDeep(menus.sort(ListObjCompare('order_num')))
+      list.forEach((item) => {
+        if (!item.hidden) {
+          result.push({
+            key: item.id,
+            title: item.title,
+            path: item.path,
+            icon: item.icon,
+            id: item.id,
+            parent_id: item.parent_id,
+          })
+        }
+      })
+      result = ListToTreeMenus(result)
+      state.menus = result
     },
     [SETUSERINFO](state: SysStoreType, payload: UserInfoType) {
       state.userInfo = payload.user_info
+    },
+    [USERINFOMENUS](state: SysStoreType, payload: UserInfoType) {
+      state.userInfoMenus = payload.menu
+    },
+    [PERMISSIONBUTTONS](state: SysStoreType, payload: UserInfoType) {
+      const menus = cloneDeep(payload.menu)
+      const data = formatMenus(menus, true)
+      data.map((item) => {
+        const r = menus.find((v) => v.id === item.parent_id)
+        if (r) {
+          item.name = r.id
+        }
+      })
+      state.permissionButtons = data
+    },
+    [LOGINRESET](state: SysStoreType) {
+      state.permissionButtons = []
+      state.userInfoMenus = []
+      state.menus = []
+      state.userInfo = {
+        nick_name: '',
+        status: 0,
+        pass_word: '',
+        account: '',
+        dept_id: '',
+      }
     },
   },
   actions: {
@@ -136,50 +168,18 @@ export default {
         // 获取数据然后直接存储
         getUserInfo()
           .then((res) => {
+            commit(PERMISSIONBUTTONS, res)
+            commit(USERINFOMENUS, res)
             commit(SETUSERINFO, res)
             commit(SET_MENUS_MUTATION, res)
             resolve({
               userInfo: res.user_info,
-              menus: FormatMenuTree(res.menu),
+              menus: FormatMenuTree(formatMenus(res.menu)),
             })
           })
           .catch((err) => {
             reject(err)
           })
-        // const list: MenuItem[] = [
-        //   {
-        //     key: '1',
-        //     title: '首页',
-        //     path: '/home',
-        //   },
-        //   {
-        //     key: '3',
-        //     title: '系统管理',
-        //     path: '/sys',
-        //     children: [
-        //       {
-        //         key: '5',
-        //         title: '部门管理',
-        //         path: '/sys/depart',
-        //       },
-        //       {
-        //         key: '8',
-        //         title: '菜单管理',
-        //         path: '/sys/menu',
-        //       },
-        //       {
-        //         key: '7',
-        //         title: '角色管理',
-        //         path: '/sys/role',
-        //       },
-        //       {
-        //         key: '6',
-        //         title: '用户管理',
-        //         path: '/sys/user',
-        //       },
-        //     ],
-        //   },
-        // ]
       })
     },
     [LOGIN](
@@ -189,7 +189,7 @@ export default {
         commit: Commit
       },
       payload: LoginType
-    ): Promise<string> {
+    ): Promise<Key> {
       return new Promise<string>((resolve, reject) => {
         const body = {
           account: payload.account,

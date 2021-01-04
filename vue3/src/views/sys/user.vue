@@ -1,5 +1,10 @@
 <template>
-  <common-button title="添加" icon-name="add" @change="ChangAdd" />
+  <common-button
+    v-bt-auth:add="{ title: true }"
+    title="添加"
+    icon-name="add"
+    @change="ChangAdd"
+  />
   <a-table
     style="margin-top: 15px"
     :columns="tableData.columns"
@@ -24,21 +29,21 @@
         type="primary"
         style="margin-right: 15px"
         @click="Allocate(record)"
-        >角色分配</a-button
-      >
+        v-bt-auth:power
+      />
       <a-button
         type="primary"
         style="margin-right: 15px"
         @click="Editor(record)"
-        >编辑</a-button
-      >
+        v-bt-auth:edit
+      />
       <a-popconfirm
         title="确定删除吗?"
         ok-text="删除"
         cancel-text="取消"
         @confirm="Del(record)"
       >
-        <a-button type="danger">删除</a-button>
+        <a-button type="danger" v-bt-auth:del />
       </a-popconfirm>
     </template>
   </a-table>
@@ -293,7 +298,7 @@ const SysUser = defineComponent({
           item.value = item.id
           item.key = item.id
         })
-        treeOptions.options = ListToTree<DepartType>(list)
+        treeOptions.options = ListToTree(list)
       })
     }
     function getRoleList() {

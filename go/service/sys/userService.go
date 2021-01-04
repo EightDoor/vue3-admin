@@ -26,11 +26,12 @@ func UserCreate(data ModelSys.SysUser)(ModelSys.SysUser, *gorm.DB)  {
 	return data, result
 }
 func UserUpdate(data ModelSys.SysUser)(ModelSys.SysUser, *gorm.DB)  {
+	var userInfo ModelSys.SysUser
 	var result *gorm.DB
 	if data.PassWord != "" {
-		passwdR := db.DB.Find(&data, data.ID)
+		passwdR := db.DB.Table("sys_user").Where("id = ?", data.ID).Find(&userInfo)
 		data.PassWord = utils.GetMd5String(data.PassWord)
-		if passwdR.Error != nil && passwdR.RowsAffected != 0 {
+		if passwdR.Error == nil && passwdR.RowsAffected != 0 {
 			result = db.DB.Updates(&data)
 		}
 	}
@@ -67,16 +68,16 @@ func UserPermission(id string, datas []ModelSys.SysRole, c *gin.Context)([]Model
 func UserAssociatedMenu(data ModelSys.SysUserRole)(ModelSys.SysUserRole, *gorm.DB)  {
 	var sysUserMenu ModelSys.SysUserRole
 	var datas []ModelSys.SysUserRole
-	var permission []ModelSys.SysUserRole
+	var permiss []ModelSys.SysUserRole
 	var result *gorm.DB
+	var deleteResult *gorm.DB
+	var roleId []string
 	userId := data.UserId
-	roleId := strings.Split(data.RoleId, ",")
-	// 先删除存在的权限，然后存储权限
-	rr := db.DB.Where("user_id = ?", userId).Find(&permission)
-	if rr.RowsAffected > 0 {
-		db.DB.Delete(&permission)
+	if data.RoleId != "" {
+		roleId = strings.Split(data.RoleId, ",")
 	}
-
+	// 先删除存在的权限，然后存储权限
+	deleteResult = db.DB.Table("sys_user_role").Where("user_id = ?", userId).Delete(&permiss)
 	for i := 0;i<len(roleId); i++  {
 		r := db.DB.Where("role_id = ? AND menu_id = ?", roleId, roleId[i]).Find(&sysUserMenu)
 		if r.RowsAffected == 0 {
@@ -90,7 +91,12 @@ func UserAssociatedMenu(data ModelSys.SysUserRole)(ModelSys.SysUserRole, *gorm.D
 	if len(datas) > 0 {
 		result = db.DB.Create(&datas)
 	}else {
-		result = new(gorm.DB)
+		if data.RoleId == "" {
+			result = deleteResult
+		}else {
+			result = new(gorm.DB)
+		}
+
 	}
 	return data, result
 }
@@ -112,7 +118,7 @@ func UserGetWithMenu(id string, data ModelSys.SysUserWithTheMenu)(ModelSys.SysUs
 			roleIds = append(roleIds, value.RoleId)
 		}
 		// 查询角色拥有菜单列表
-		 roleMenusR := db.DB.Table("sys_role_menu").Find(&roleMenus)
+		 roleMenusR := db.DB.Where("role_id = ?", roleIds).Find(&roleMenus)
 		 if roleMenusR.RowsAffected >0 {
 			 for _, value := range roleMenus{
 				 menuIds = append(menuIds, value.MenuId)

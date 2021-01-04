@@ -1,10 +1,11 @@
 <template>
   <a-menu
-    :default-selected-keys="menusInfo.selectedKeys"
-    :default-open-keys="menusInfo.selectedKeys"
+    v-model:openKeys="menusInfo.openKeys"
+    v-model:selectedKeys="menusInfo.selectedKeys"
     mode="inline"
     theme="dark"
-    :inline-collapsed="menusInfo.collapsed"
+    :inline-collapsed="collapsed"
+    :collapsed="collapsed"
   >
     <template v-for="item in getMenus" :key="item.key">
       <template v-if="!item.children">
@@ -20,12 +21,14 @@
   </a-menu>
 </template>
 <script lang="ts">
-import { defineComponent, reactive, onMounted, computed } from 'vue'
+import { defineComponent, reactive, onMounted, computed, toRaw } from 'vue'
 import SubMenu from './menu-item.vue'
-import { MenuItem, MenusInfo } from '@/types/alyout/menu'
+import { MenuItem, MenusInfo } from '@/types/layout/menu'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
-import { StoreType } from '@/store'
+import { STORELETMENUPATH } from '@/utils/constant'
+import { MenuType } from '@/types/sys'
+import { localForage } from '@/utils/localforage'
 
 export default defineComponent({
   name: 'common-menu',
@@ -34,24 +37,39 @@ export default defineComponent({
     const store = useStore()
     const menusInfo = reactive<MenusInfo>({
       selectedKeys: [],
-      collapsed: false,
       list: [],
+      openKeys: [],
     })
+    const getUserInfoMenus = computed(() => store.state.sys.userInfoMenus)
     onMounted(() => {
       menusInfo.list = []
+      localForage.getItem<MenuType>(STORELETMENUPATH).then((res) => {
+        if (res) {
+          menusInfo.selectedKeys = [res.key || '']
+          const parent_id = res.parent_id
+          const data: MenuType[] = toRaw(getUserInfoMenus.value)
+          const r = data.find((item) => item.id === parent_id)
+          if (r) {
+            menusInfo.openKeys = [r.id]
+          }
+        }
+      })
     })
 
     // methods
     function jumpTo(item: MenuItem) {
       if (item.path) {
+        localForage.setItem(STORELETMENUPATH, toRaw(item))
         router.push({
           path: item.path,
         })
       }
     }
     return {
+      // data
       menusInfo,
       getMenus: computed(() => store.state.sys.menus),
+      collapsed: computed(() => store.state.sys.collapsed),
       //methods
       jumpTo,
     }

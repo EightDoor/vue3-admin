@@ -7,7 +7,10 @@
           <a-input v-model:value="modelRef.name" />
         </a-form-item>
         <a-form-item label="密码" v-bind="validateInfos.password">
-          <a-input type="password" v-model:value="modelRef.password" />
+          <a-input-password
+            @pressEnter="onSubmit"
+            v-model:value="modelRef.password"
+          />
         </a-form-item>
         <a-form-item :wrapper-col="{ span: 18, offset: 6 }">
           <a-button
@@ -25,16 +28,11 @@
 import { defineComponent, reactive, toRaw } from 'vue'
 import { useForm } from '@ant-design-vue/use'
 import { message } from 'ant-design-vue'
-import { RouteRecordRaw, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
-import { LOGIN } from '@/store/mutation-types'
-import Layout from '@/layout/layout/layout.vue'
-import Home from '@/views/home/home.vue'
-import LayoutChildren from '@/views/layout-children.vue'
-import SysUser from '@/views/sys/user.vue'
-import SysMenu from '@/views/sys/menu.vue'
-import SysRole from '@/views/sys/role.vue'
-import Depart from '@/views/sys/depart.vue'
+import { LOGIN, LOGINRESET } from '@/store/mutation-types'
+import { localForage } from '@/utils/localforage'
+import { STORELETMENUPATH } from '@/utils/constant'
 
 interface LoginType {
   name: string
@@ -83,76 +81,12 @@ const Login = defineComponent({
             .then(() => {
               submitData.loading = false
               message.success('登录成功!')
-              const dynamicRoutes: RouteRecordRaw[] = [
-                {
-                  path: '/',
-                  name: 'layout',
-                  component: Layout,
-                  redirect: '/home',
-                  children: [
-                    {
-                      name: 'home',
-                      path: 'home',
-                      component: Home,
-                      meta: {
-                        title: '首页',
-                        icon: '23',
-                      },
-                    },
-                    {
-                      name: 'sys',
-                      path: 'sys',
-                      component: LayoutChildren,
-                      meta: {
-                        title: '系统管理',
-                        icon: '1',
-                      },
-                      children: [
-                        {
-                          name: 'user',
-                          path: 'user',
-                          component: SysUser,
-                          meta: {
-                            title: '用户管理',
-                            icon: '1',
-                          },
-                        },
-                        {
-                          name: 'menu',
-                          path: 'menu',
-                          component: SysMenu,
-                          meta: {
-                            title: '菜单管理',
-                            icon: '1',
-                          },
-                        },
-                        {
-                          name: 'role',
-                          path: 'role',
-                          component: SysRole,
-                          meta: {
-                            title: '角色管理',
-                            icon: '1',
-                          },
-                        },
-                        {
-                          name: 'depart',
-                          path: 'depart',
-                          component: Depart,
-                          meta: {
-                            title: '部门管理',
-                            icon: '1',
-                          },
-                        },
-                      ],
-                    },
-                  ],
-                },
-              ]
-              dynamicRoutes.forEach((item) => {
-                router.addRoute(item)
-              })
+              localForage.setItem(STORELETMENUPATH, {})
+              store.commit(`${LOGINRESET}`)
               router.push('/home')
+            })
+            .catch(() => {
+              submitData.loading = false
             })
         })
         .catch((err) => {
