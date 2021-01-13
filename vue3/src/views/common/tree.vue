@@ -61,8 +61,7 @@ const CommonTree = defineComponent({
       autoExpandParent: true,
       data: [],
     })
-    watch<string[]>(
-      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+    watch(
       // @ts-ignore
       () => props.data,
       (newValue: string[]) => {

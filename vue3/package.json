@@ -14,12 +14,15 @@
     "ant-design-vue": "2.0.0-rc.7",
     "axios": "^0.21.1",
     "core-js": "^3.8.2",
+    "localforage": "^1.9.0",
     "lodash": "^4.17.20",
+    "nprogress": "^0.2.0",
     "vue": "3.0.5",
     "vue-router": "4.0.2",
     "vuex": "^4.0.0-0"
   },
   "devDependencies": {
+    "@types/nprogress": "^0.2.0",
     "@typescript-eslint/eslint-plugin": "^4.11.1",
     "@typescript-eslint/parser": "^4.11.1",
     "@vue/cli-plugin-babel": "~4.5.0",
@@ -55,7 +58,8 @@
       "ecmaVersion": 2020
     },
     "rules": {
-      "@typescript-eslint/camelcase": "off"
+      "@typescript-eslint/camelcase": "off",
+      "@typescript-eslint/ban-ts-comment": "off"
     }
   },
   "browserslist": [
