@@ -6,6 +6,7 @@ export interface MenuItem {
   children?: MenuItem[]
   id?: string
   parent_id?: string
+  crumbs?: string
 }
 export interface MenusInfo {
   selectedKeys: string[]

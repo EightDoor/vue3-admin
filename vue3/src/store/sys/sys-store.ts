@@ -85,7 +85,10 @@ function ListToTreeMenus(jsonData: any[], id = 'id', pid = 'parent_id') {
         // 如果父元素没有chindren键
         tempCurrentElementParent['children'] = [] // 设上父元素的children键
       }
+      // 组合路由跳转地址
       currentElement.path = `${tempCurrentElementParent.path}/${currentElement.path}`
+      // 组合面包屑
+      currentElement.crumbs = `${tempCurrentElementParent.title},${currentElement.title}`
       tempCurrentElementParent['children'].push(currentElement) // 给父元素加上当前元素作为子元素
     } else {
       // 不存在父元素，意味着当前元素是一级元素
@@ -122,6 +125,7 @@ export default {
             icon: item.icon,
             id: item.id,
             parent_id: item.parent_id,
+            crumbs: `${item.title}`,
           })
         }
       })

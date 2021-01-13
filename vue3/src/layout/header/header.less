@@ -13,7 +13,17 @@
   }
 }
 .button-icon-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  .button-breadcrumb {
+    vertical-align: middle;
+  }
+  &>div:nth-child(1) {
+    margin-right: 15px;
+  }
   .button-icon {
+    vertical-align: middle;
     font-size: 22px;
     padding-left: 10px;
     &:hover {

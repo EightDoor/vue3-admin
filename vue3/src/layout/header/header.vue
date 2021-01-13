@@ -1,9 +1,22 @@
 <template>
   <a-layout-header class="container">
     <div class="content">
-      <div @click="ToggleCollapsed()" class="button-icon-container">
-        <MenuUnfoldOutlined class="button-icon" v-if="collapsed" />
-        <MenuFoldOutlined class="button-icon" v-else />
+      <div class="button-icon-container">
+        <div @click="ToggleCollapsed()">
+          <MenuUnfoldOutlined class="button-icon" v-if="collapsed" />
+          <MenuFoldOutlined class="button-icon" v-else />
+        </div>
+        <a-breadcrumb>
+          <a-breadcrumb-item
+            class="button-breadcrumb"
+            v-for="(item, index) in crumbs"
+            :key="index"
+            >{{ item }}
+            {{
+              index > 0 && index + 1 !== crumbs.length ? '/' : ''
+            }}</a-breadcrumb-item
+          >
+        </a-breadcrumb>
       </div>
       <a-dropdown>
         <a class="ant-dropdown-link" @click="(e) => e.preventDefault()">
@@ -52,10 +65,26 @@ export default defineComponent({
     function ToggleCollapsed() {
       store.commit(COLLAPSED)
     }
+    const crumbs = computed({
+      get: () => {
+        let r = []
+        try {
+          r = store.state.crumbs.list.split(',')
+          console.log(r, 'rr')
+        } catch (err) {
+          console.error(err)
+        }
+        return r
+      },
+      set: () => {
+        // do
+      },
+    })
     return {
       // data
       data,
       collapsed: computed(() => store.state.sys.collapsed),
+      crumbs,
       // methods
       GoTo,
       ToggleCollapsed,

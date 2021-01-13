@@ -8,3 +8,6 @@ export const USERINFOMENUS = 'USERINFOMENUS'
 // login
 export const LOGIN = 'LOGIN'
 export const LOGINRESET = 'LOGINRESET'
+
+// crumbs
+export const SETCRUMBSLIST = 'SETCRUMBSLIST'

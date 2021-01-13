@@ -23,9 +23,11 @@
 <script lang="ts">
 import { defineComponent, toRaw } from 'vue'
 import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 import { MenuItem } from '@/types/layout/menu'
 import { STORELETMENUPATH } from '@/utils/constant'
 import { localForage } from '@/utils/localforage'
+import { SETCRUMBSLIST } from '@/store/mutation-types'
 export default defineComponent({
   name: 'sub-menu',
   props: {
@@ -36,9 +38,11 @@ export default defineComponent({
   },
   setup: function () {
     const router = useRouter()
+    const store = useStore()
     // methods
     function jumpTo(item: MenuItem) {
       if (item.path) {
+        store.commit(SETCRUMBSLIST, toRaw(item.crumbs))
         localForage.setItem(STORELETMENUPATH, toRaw(item))
         router.push({
           path: item.path,

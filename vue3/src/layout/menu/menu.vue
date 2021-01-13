@@ -29,6 +29,7 @@ import { useStore } from 'vuex'
 import { STORELETMENUPATH } from '@/utils/constant'
 import { MenuType } from '@/types/sys'
 import { localForage } from '@/utils/localforage'
+import { SETCRUMBSLIST } from '@/store/mutation-types'
 
 export default defineComponent({
   name: 'common-menu',
@@ -59,6 +60,7 @@ export default defineComponent({
     // methods
     function jumpTo(item: MenuItem) {
       if (item.path) {
+        store.commit(SETCRUMBSLIST, toRaw(item.crumbs))
         localForage.setItem(STORELETMENUPATH, toRaw(item))
         router.push({
           path: item.path,

@@ -7,7 +7,6 @@
     <a-layout>
       <common-header />
       <a-layout-content class="layout-content">
-        <breadcrumb />
         <router-view />
       </a-layout-content>
       <a-layout-footer :style="{ textAlign: 'center' }">
@@ -22,7 +21,6 @@ import { defineComponent } from 'vue'
 import CommonFooter from '@/layout/footer/footer.vue'
 import CommonMenu from '@/layout/menu/menu.vue'
 import CommonHeader from '@/layout/header/header.vue'
-import Breadcrumb from '@/layout/breadcrumb/breadcrumb.vue'
 
 export default defineComponent({
   name: 'layout',
@@ -36,7 +34,6 @@ export default defineComponent({
     CommonMenu,
     CommonFooter,
     CommonHeader,
-    Breadcrumb,
   },
 })
 </script>
