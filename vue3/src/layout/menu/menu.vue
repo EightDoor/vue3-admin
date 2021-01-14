@@ -44,7 +44,7 @@ export default defineComponent({
     const getUserInfoMenus = computed(() => store.state.sys.userInfoMenus)
     onMounted(() => {
       menusInfo.list = []
-      localForage.getItem<MenuType>(STORELETMENUPATH).then((res) => {
+      localForage.getItem<MenuType>(STORELETMENUPATH).then((res: any) => {
         if (res) {
           menusInfo.selectedKeys = [res.key || '']
           const parent_id = res.parent_id

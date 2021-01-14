@@ -171,6 +171,7 @@ const SysDepart = defineComponent({
         .then(() => {
           drawerData.loading = true
           const data = cloneDeep(toRaw(modelRef))
+          // @ts-ignore
           delete data.id
           let method: Method = 'POST'
           if (modelRef.id) {

@@ -70,7 +70,6 @@ export default defineComponent({
         let r = []
         try {
           r = store.state.crumbs.list.split(',')
-          console.log(r, 'rr')
         } catch (err) {
           console.error(err)
         }

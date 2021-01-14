@@ -18,7 +18,7 @@ const ButtonPermissionType = {
     const arg = binding.arg
     const value = binding.value
     const permissions = store.state.sys.permissionButtons
-    localForage.getItem<MenuItem>(STORELETMENUPATH).then((res) => {
+    localForage.getItem<MenuItem>(STORELETMENUPATH).then((res: any) => {
       const data = permissions.filter((item) => item.name === res?.id)
       if (data.length > 0) {
         const r = data.find((item) => item.perms === arg)

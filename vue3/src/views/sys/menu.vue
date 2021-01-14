@@ -279,6 +279,7 @@ const SysMenu = defineComponent({
         .then(() => {
           drawerData.loading = true
           const data = cloneDeep(toRaw(modelRef))
+          // @ts-gnore
           delete data.id
           let method: Method = 'POST'
           if (modelRef.id) {

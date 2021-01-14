@@ -7,7 +7,9 @@
     <a-layout>
       <common-header />
       <a-layout-content class="layout-content">
-        <router-view />
+        <common-tabs>
+          <router-view />
+        </common-tabs>
       </a-layout-content>
       <a-layout-footer :style="{ textAlign: 'center' }">
         <common-footer />
@@ -21,6 +23,7 @@ import { defineComponent } from 'vue'
 import CommonFooter from '@/layout/footer/footer.vue'
 import CommonMenu from '@/layout/menu/menu.vue'
 import CommonHeader from '@/layout/header/header.vue'
+import CommonTabs from '@/layout/tabs/index.vue'
 
 export default defineComponent({
   name: 'layout',
@@ -34,6 +37,7 @@ export default defineComponent({
     CommonMenu,
     CommonFooter,
     CommonHeader,
+    CommonTabs,
   },
 })
 </script>
