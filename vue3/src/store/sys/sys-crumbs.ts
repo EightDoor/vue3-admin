@@ -1,6 +1,6 @@
-import { SETCRUMBSLIST } from '@/store/mutation-types'
-
-interface PanesType {
+import { SETCRUMBSLIST, MENUTABS } from '@/store/mutation-types'
+import _ from 'lodash'
+export interface PanesType {
   id: string
   title: string
   closable?: boolean
@@ -18,6 +18,11 @@ export default {
   mutations: {
     [SETCRUMBSLIST](state: CrumbsStoreType, payload: string[]) {
       state.list = payload
+    },
+    [MENUTABS](state: CrumbsStoreType, payload: PanesType) {
+      const data: PanesType[] = state.panes
+      data.push(payload)
+      state.panes = _.unionBy<PanesType>(data)
     },
   },
 }

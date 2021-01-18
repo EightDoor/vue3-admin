@@ -30,6 +30,8 @@ import { STORELETMENUPATH } from '@/utils/constant'
 import { MenuType } from '@/types/sys'
 import { localForage } from '@/utils/localforage'
 import { SETCRUMBSLIST } from '@/store/mutation-types'
+import { MenuFormatBrumb } from './menu-common'
+import { PanesType } from '@/store/sys/sys-crumbs'
 
 export default defineComponent({
   name: 'common-menu',
@@ -65,6 +67,11 @@ export default defineComponent({
         router.push({
           path: item.path,
         })
+        const data: PanesType = {
+          id: item.id || '',
+          title: item.title,
+        }
+        MenuFormatBrumb(data)
       }
     }
     return {

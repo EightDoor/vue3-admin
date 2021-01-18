@@ -18,7 +18,7 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { computed, defineComponent, ref } from 'vue'
 import { useStore } from 'vuex'
 
 export default defineComponent({
@@ -31,6 +31,7 @@ export default defineComponent({
     return {
       activeKey,
       OnEdit,
+      panes: computed(() => store.state.crumbs.panes),
     }
   },
 })
