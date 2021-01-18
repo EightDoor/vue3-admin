@@ -13,3 +13,5 @@ export const LOGINRESET = 'LOGINRESET'
 export const SETCRUMBSLIST = 'SETCRUMBSLIST'
 // tabs
 export const MENUTABS = 'MENUTABS'
+export const DELETETABS = 'DELETETABS'
+export const TABSELECTKEY = 'TABSELECTKEY'
