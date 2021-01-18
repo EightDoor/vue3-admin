@@ -80,6 +80,12 @@
         <a-form-item label="路径">
           <a-input v-model:value="modelRef.path"></a-input>
         </a-form-item>
+        <a-form-item label="是否首页">
+          <a-radio-group v-model:value="modelRef.is_home">
+            <a-radio :value="true"> 是 </a-radio>
+            <a-radio :value="false"> 否 </a-radio>
+          </a-radio-group>
+        </a-form-item>
         <a-form-item label="组件地址">
           <a-input v-model:value="modelRef.component"></a-input>
         </a-form-item>
@@ -222,6 +228,7 @@ const SysMenu = defineComponent({
       order_num: 1,
       id: '',
       hidden: 0,
+      is_home: false,
     })
     const ruleRef = reactive({
       parent_id: [

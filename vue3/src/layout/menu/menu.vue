@@ -56,6 +56,10 @@ export default defineComponent({
       menusInfo.list = []
       localForage.getItem<MenuType>(STORELETMENUPATH).then((res: any) => {
         if (res) {
+          // 初始化顶部面包屑
+          store.commit(SETCRUMBSLIST, toRaw(res.crumbs))
+          // 初始化顶部tabs
+          MenuFormatBrumb(res)
           FormatSelectKey(res)
         }
       })

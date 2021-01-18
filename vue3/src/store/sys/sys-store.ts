@@ -6,6 +6,7 @@ import {
   SET_SYS,
   SETUSERINFO,
   USERINFOMENUS,
+  RESET,
 } from '@/store/mutation-types'
 import { LoginType, MenuType, UserInfoType, UserType } from '@/types/sys'
 import { http } from '@/utils/request'
@@ -16,6 +17,7 @@ import { RouteRecordRaw } from 'vue-router'
 
 import { Key } from 'ant-design-vue/es/_util/type'
 import { ListObjCompare, ListToTree } from '@/utils'
+import store from '../index';
 import { cloneDeep } from 'lodash'
 
 export interface SysStoreType {
@@ -131,6 +133,7 @@ export default {
       })
       result = ListToTreeMenus(result)
       state.menus = result
+      store.dispatch(RESET, payload.menu)
     },
     [SETUSERINFO](state: SysStoreType, payload: UserInfoType) {
       state.userInfo = payload.user_info
@@ -212,7 +215,6 @@ export default {
             reject(err)
           })
       })
-      // commit(LOGIN, LOGIN)
     },
   },
 }

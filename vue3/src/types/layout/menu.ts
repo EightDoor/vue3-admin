@@ -7,6 +7,7 @@ export interface MenuItem {
   id?: string
   parent_id?: string
   crumbs?: string
+  is_home?: boolean
 }
 export interface MenusInfo {
   selectedKeys: string[]

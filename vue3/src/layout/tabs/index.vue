@@ -28,7 +28,8 @@ import { useRouter } from 'vue-router'
 import { localForage } from '@/utils/localforage'
 import { STORELETMENUPATH } from '@/utils/constant'
 import { SysTab, SysTabDel } from '@/types/sys/tab'
-import { DELETETABS } from '@/store/mutation-types'
+import { DELETETABS, DELETETABSACTION } from '@/store/mutation-types'
+import _ from 'lodash'
 
 export default defineComponent({
   setup() {
@@ -41,21 +42,11 @@ export default defineComponent({
       localForage.getItem<SysTab>(STORELETMENUPATH).then((res) => {
         if (data && data.length > 0) {
           if (res) {
-            const list = FormatData()
-            const result = list.findIndex((item) => item.id === res.id)
+            const result = data.findIndex((item) => item.id === res.id)
             // 设置当前被选择项
             if (result !== -1) {
               activeKey.value = result
-            } else {
-              // 设置菜单选中项
-              localForage
-                .setItem(STORELETMENUPATH, toRaw(data[data.length - 1]))
-                .then(() => {
-                  activeKey.value = data.length - 1
-                })
             }
-          } else {
-            activeKey.value = data.length - 1
           }
         }
       })
@@ -76,14 +67,17 @@ export default defineComponent({
       return list
     }
     const OnEdit = (val: number) => {
+      const value = _.cloneDeep(toRaw(activeKey.value))
       const result: SysTabDel = {
         delData: FormatData()[val],
         selectData: '',
       }
       if (FormatData().length > 1) {
-        result.selectData = FormatData()[val - 1]
+        const index = value >= val ? value - 1 : value
+
+        result.selectData = FormatData()[index]
       }
-      store.commit(DELETETABS, toRaw(result))
+      store.dispatch(DELETETABSACTION, toRaw(result))
     }
     return {
       activeKey,

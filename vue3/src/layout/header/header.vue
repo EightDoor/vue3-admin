@@ -71,7 +71,7 @@ export default defineComponent({
         try {
           r = store.state.crumbs.list.split(',')
         } catch (err) {
-          console.error(err)
+          console.log('err: ', err)
         }
         return r
       },

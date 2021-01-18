@@ -57,6 +57,8 @@ export interface MenuType extends CommonTableList {
   order_num: number
   // 权限标识，接口标识
   perms?: string
+  // 是否首页
+  is_home: boolean;
   // 菜单标识，前端路由name
   name?: string
   children?: Array<any>

@@ -1,7 +1,12 @@
-import { SETCRUMBSLIST, MENUTABS, DELETETABS } from '@/store/mutation-types'
+import { SETCRUMBSLIST, MENUTABS, DELETETABS, DELETETABSACTION, RESET, RESETMU } from '@/store/mutation-types'
+import { MenuItem } from '@/types/layout/menu'
 import { SysTabDel } from '@/types/sys/tab'
+import { STORELETMENUPATH } from '@/utils/constant'
+import { localForage } from '@/utils/localforage'
 import _ from 'lodash'
 import { toRaw } from 'vue'
+import { Commit } from 'vuex'
+
 export interface PanesType {
   id: string
   title: string
@@ -14,6 +19,10 @@ export interface CrumbsStoreType {
   panes: PanesType[]
   delPane: PanesType
   selectPane: PanesType | string
+}
+interface ResetType {
+  result: PanesType,
+  title: string;
 }
 export default {
   namespace: true,
@@ -39,5 +48,38 @@ export default {
         )
       }
     },
+    // 设置当前的登录默认显示的选中项
+    [RESETMU](state: CrumbsStoreType, payload: ResetType){
+       // 默认首页只能是一级的
+       state.list = [payload.title];
+       state.panes = [payload.result]
+       state.selectPane = payload.result
+    }
   },
+  actions:{
+    [DELETETABSACTION]({commit}:{commit: any},payload: SysTabDel){
+      // 设置菜单选中项
+      localForage.setItem(STORELETMENUPATH, toRaw(payload.selectData)).then(res=>{
+        commit(DELETETABS, payload)
+      })
+    },
+    // 设置当前的登录默认显示的选中项
+    // 默认首页只能是一级的
+    // TODO 待完善  刷新页面直接选择对应的选中项
+    [RESET]({commit}:{commit:Commit}, payload: MenuItem[]){
+      const data = payload.filter((item)=>item.is_home)
+      if(data.length > 0) {
+        const r = data[0]
+        const result = {
+          id: r.id || "",
+          title: r.title,
+          path: r.path || "",
+          parent_id: r.parent_id || "",
+          closable: false,
+        }
+        commit(RESETMU, {result, title: r.title})
+        localForage.setItem(STORELETMENUPATH, r)
+      }
+    }
+  }
 }

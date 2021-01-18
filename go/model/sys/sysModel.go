@@ -23,6 +23,8 @@ type SysMenu struct {
 	Type     int    `json:"type" binding:"required"`
 	// 排序
 	OrderNum int    `json:"order_num" binding:"required"`
+	// 是否首页
+	IsHome bool	`json:"is_home" binding: "required"`
 	// 权限标识，接口标识
 	Perms    string `json:"perms"`
 	// 菜单标识，前端路由name
