@@ -21,7 +21,14 @@
   </a-menu>
 </template>
 <script lang="ts">
-import { defineComponent, reactive, onMounted, computed, toRaw } from 'vue'
+import {
+  defineComponent,
+  reactive,
+  onMounted,
+  computed,
+  toRaw,
+  watch,
+} from 'vue'
 import SubMenu from './menu-item.vue'
 import { MenuItem, MenusInfo } from '@/types/layout/menu'
 import { useRouter } from 'vue-router'
@@ -30,6 +37,9 @@ import { STORELETMENUPATH } from '@/utils/constant'
 import { MenuType } from '@/types/sys'
 import { localForage } from '@/utils/localforage'
 import { SETCRUMBSLIST } from '@/store/mutation-types'
+import { MenuFormatBrumb } from './menu-common'
+import { PanesType } from '@/store/sys/sys-crumbs'
+import Login from '@/views/login/login.vue'
 
 export default defineComponent({
   name: 'common-menu',
@@ -46,27 +56,40 @@ export default defineComponent({
       menusInfo.list = []
       localForage.getItem<MenuType>(STORELETMENUPATH).then((res: any) => {
         if (res) {
-          menusInfo.selectedKeys = [res.key || '']
-          const parent_id = res.parent_id
-          const data: MenuType[] = toRaw(getUserInfoMenus.value)
-          const r = data.find((item) => item.id === parent_id)
-          if (r) {
-            menusInfo.openKeys = [r.id || '']
-          }
+          FormatSelectKey(res)
         }
       })
     })
+
+    const FormatSelectKey = (res: any) => {
+      menusInfo.selectedKeys = [res.key || res.id || '']
+      const parent_id = res.parent_id
+      const data: MenuType[] = toRaw(getUserInfoMenus.value)
+      const r = data.find((item) => item.id === parent_id)
+      if (r) {
+        menusInfo.openKeys = [r.id || '']
+      }
+    }
 
     // methods
     function jumpTo(item: MenuItem) {
       if (item.path) {
         store.commit(SETCRUMBSLIST, toRaw(item.crumbs))
-        localForage.setItem(STORELETMENUPATH, toRaw(item))
-        router.push({
-          path: item.path,
+        localForage.setItem(STORELETMENUPATH, toRaw(item)).then((res) => {
+          router.push({
+            path: item.path || '',
+          })
+          MenuFormatBrumb(item)
         })
       }
     }
+    watch(
+      () => store.state.crumbs.selectPane,
+      (newValue: PanesType) => {
+        const data = toRaw(newValue)
+        FormatSelectKey(data)
+      }
+    )
     return {
       // data
       menusInfo,
