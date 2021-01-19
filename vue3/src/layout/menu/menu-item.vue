@@ -29,7 +29,6 @@ import { STORELETMENUPATH } from '@/utils/constant'
 import { localForage } from '@/utils/localforage'
 import { SETCRUMBSLIST } from '@/store/mutation-types'
 import { MenuFormatBrumb } from './menu-common'
-import { PanesType } from '@/store/sys/sys-crumbs'
 
 export default defineComponent({
   name: 'sub-menu',
@@ -46,7 +45,7 @@ export default defineComponent({
     function jumpTo(item: MenuItem) {
       if (item.path) {
         store.commit(SETCRUMBSLIST, toRaw(item.crumbs))
-        localForage.setItem(STORELETMENUPATH, toRaw(item)).then((res) => {
+        localForage.setItem(STORELETMENUPATH, toRaw(item)).then(() => {
           MenuFormatBrumb(item)
           router.push({
             path: item.path || '',

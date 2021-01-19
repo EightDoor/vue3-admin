@@ -5,7 +5,7 @@ export interface DepartType extends CommonTreeSelect {
   name: string
   order_num: number
   id?: string
-  children?: Array<any>
+  children?: Array<MenuType>
 }
 
 export interface UserType extends CommonTableList {
@@ -60,7 +60,7 @@ export interface MenuType extends CommonTableList {
   is_home: boolean
   // 菜单标识，前端路由name
   name?: string
-  children?: Array<any>
+  children?: Array<MenuType>
   value?: string
   key?: string
   hidden?: number

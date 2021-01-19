@@ -39,8 +39,10 @@ import { localForage } from '@/utils/localforage'
 import { SETCRUMBSLIST } from '@/store/mutation-types'
 import { MenuFormatBrumb } from './menu-common'
 import { PanesType } from '@/store/sys/sys-crumbs'
-import Login from '@/views/login/login.vue'
 
+interface InitTopTabs extends MenuItem {
+  crumbs: string
+}
 export default defineComponent({
   name: 'common-menu',
   setup() {
@@ -54,7 +56,7 @@ export default defineComponent({
     const getUserInfoMenus = computed(() => store.state.sys.userInfoMenus)
     onMounted(() => {
       menusInfo.list = []
-      localForage.getItem<MenuType>(STORELETMENUPATH).then((res: any) => {
+      localForage.getItem<InitTopTabs>(STORELETMENUPATH).then((res) => {
         if (res) {
           // 初始化顶部面包屑
           store.commit(SETCRUMBSLIST, toRaw(res.crumbs))
@@ -65,7 +67,7 @@ export default defineComponent({
       })
     })
 
-    const FormatSelectKey = (res: any) => {
+    const FormatSelectKey = (res) => {
       menusInfo.selectedKeys = [res.key || res.id || '']
       const parent_id = res.parent_id
       const data: MenuType[] = toRaw(getUserInfoMenus.value)
@@ -79,7 +81,7 @@ export default defineComponent({
     function jumpTo(item: MenuItem) {
       if (item.path) {
         store.commit(SETCRUMBSLIST, toRaw(item.crumbs))
-        localForage.setItem(STORELETMENUPATH, toRaw(item)).then((res) => {
+        localForage.setItem(STORELETMENUPATH, toRaw(item)).then(() => {
           router.push({
             path: item.path || '',
           })

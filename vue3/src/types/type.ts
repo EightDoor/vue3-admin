@@ -1,3 +1,5 @@
+import { ColumnProps } from 'ant-design-vue/lib/table/interface'
+
 export interface CommonResponse<T> extends PaginType {
   list: T[]
 }
@@ -22,8 +24,14 @@ export interface CommonResponseSing<T> extends PaginType {
 // 表格
 export interface TableDataType<T> extends PaginType {
   data: T[]
-  columns: any
+  columns: AntColumn[]
   loading: boolean
+}
+interface AntColumn extends ColumnProps, AntColumnSlot {}
+interface AntColumnSlot {
+  slots?: {
+    customRender: string
+  }
 }
 
 // 通用的业务类型字段

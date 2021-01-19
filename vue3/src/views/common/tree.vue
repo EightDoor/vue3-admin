@@ -54,7 +54,7 @@ const CommonTree = defineComponent({
   components: {
     CommonDrawer,
   },
-  setup(props, { emit }: { emit: any }) {
+  setup(props, { emit }) {
     const treeData = reactive<TreeDataType>({
       spinningLoading: false,
       checkedKeys: [],
@@ -93,7 +93,7 @@ const CommonTree = defineComponent({
     onMounted(() => {
       getList()
     })
-    function onSelect(selectedKeys: string[], info: any) {
+    function onSelect(selectedKeys: string[], info) {
       console.log(selectedKeys, 'selec')
       console.log(info, 'info')
     }

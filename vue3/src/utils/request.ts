@@ -47,8 +47,8 @@ instance.interceptors.response.use(
 interface HttpCustomType {
   url: string
   method: Method
-  body?: any
-  params?: any
+  body?: unknown
+  params?: unknown
 }
 function httpCustom<T>(c: HttpCustomType): Promise<CommonResponse<T>> {
   return new Promise((resolve, reject) => {
@@ -58,8 +58,10 @@ function httpCustom<T>(c: HttpCustomType): Promise<CommonResponse<T>> {
       data: c.body,
       params: c.params,
     })
-      .then((res: any) => {
+      .then((res) => {
+        // @ts-ignore
         if (res.code !== 0) {
+          // @ts-ignore
           reject(res.code)
         } else {
           resolve(res.data)

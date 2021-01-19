@@ -64,7 +64,7 @@ const CommonDrawer = defineComponent({
       default: false,
     },
   },
-  setup(props, { emit }: { emit: any }) {
+  setup(props, { emit }) {
     const commdrawerData = reactive({
       visible: false,
     })

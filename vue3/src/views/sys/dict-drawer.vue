@@ -30,7 +30,7 @@
 </template>
 <script lang="ts">
 import CommonDrawer from '@/components/Drawer/Drawer.vue'
-import { SysDict, SysDictItem } from '@/types/sys/dict'
+import { SysDict } from '@/types/sys/dict'
 import { TableDataType } from '@/types/type'
 import { http } from '@/utils/request'
 import { defineComponent, ref, onMounted, reactive } from 'vue'
@@ -49,20 +49,18 @@ const DictDrawer = defineComponent({
         {
           title: '名称',
           dataIndex: 'label',
-          name: 'label',
         },
         {
           title: '数据值',
           dataIndex: 'value',
-          name: 'value',
         },
         {
           title: '描述',
           dataIndex: 'describe',
-          name: 'describe',
         },
         {
           title: '操作',
+          dataIndex: 'action',
           slots: { customRender: 'action' },
         },
       ],

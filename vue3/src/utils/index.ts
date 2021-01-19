@@ -1,6 +1,6 @@
-function ListToTree(jsonData: any[], id = 'id', pid = 'parent_id') {
-  const result: any = [],
-    temp: any = {}
+function ListToTree<T>(jsonData: T[], id = 'id', pid = 'parent_id'): T[] {
+  const result: T[] = [],
+    temp = {}
   for (let i = 0; i < jsonData.length; i++) {
     temp[jsonData[i][id]] = jsonData[i] // 以id作为索引存储元素，可以无需遍历直接定位元素
   }
@@ -23,8 +23,8 @@ function ListToTree(jsonData: any[], id = 'id', pid = 'parent_id') {
 }
 
 // 数组对象排序
-function ListObjCompare(property: string) {
-  return function (a: any, b: any) {
+function ListObjCompare<T>(property: string) {
+  return function (a: T, b: T): number {
     const value1 = a[property]
     const value2 = b[property]
     return value1 - value2 //升序,降序为value2 - value1
@@ -32,7 +32,7 @@ function ListObjCompare(property: string) {
 }
 
 // 清空token
-const ClearInfo = () => {
+const ClearInfo = (): void => {
   localStorage.clear()
 }
 export { ListToTree, ListObjCompare, ClearInfo }

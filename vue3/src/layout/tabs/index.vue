@@ -22,7 +22,7 @@
 </template>
 <script lang="ts">
 import { PanesType } from '@/store/sys/sys-crumbs'
-import { computed, defineComponent, ref, toRaw, watch } from 'vue'
+import { computed, defineComponent, ref, toRaw } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { localForage } from '@/utils/localforage'

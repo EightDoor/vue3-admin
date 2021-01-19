@@ -1,4 +1,11 @@
-import { SETCRUMBSLIST, MENUTABS, DELETETABS, DELETETABSACTION, RESET, RESETMU } from '@/store/mutation-types'
+import {
+  SETCRUMBSLIST,
+  MENUTABS,
+  DELETETABS,
+  DELETETABSACTION,
+  RESET,
+  RESETMU,
+} from '@/store/mutation-types'
 import { MenuItem } from '@/types/layout/menu'
 import { SysTabDel } from '@/types/sys/tab'
 import { STORELETMENUPATH } from '@/utils/constant'
@@ -21,8 +28,8 @@ export interface CrumbsStoreType {
   selectPane: PanesType | string
 }
 interface ResetType {
-  result: PanesType,
-  title: string;
+  result: PanesType
+  title: string
 }
 export default {
   namespace: true,
@@ -32,15 +39,15 @@ export default {
     selectPane: '',
   },
   mutations: {
-    [SETCRUMBSLIST](state: CrumbsStoreType, payload: string[]) {
+    [SETCRUMBSLIST](state: CrumbsStoreType, payload: string[]): void {
       state.list = payload
     },
-    [MENUTABS](state: CrumbsStoreType, payload: PanesType) {
+    [MENUTABS](state: CrumbsStoreType, payload: PanesType): void {
       const data: PanesType[] = state.panes
       data.push(toRaw(payload))
       state.panes = _.unionBy<PanesType>(data, 'title')
     },
-    [DELETETABS](state: CrumbsStoreType, payload: SysTabDel) {
+    [DELETETABS](state: CrumbsStoreType, payload: SysTabDel): void {
       state.selectPane = payload.selectData
       if (payload.delData) {
         state.panes = state.panes.filter(
@@ -49,37 +56,42 @@ export default {
       }
     },
     // 设置当前的登录默认显示的选中项
-    [RESETMU](state: CrumbsStoreType, payload: ResetType){
-       // 默认首页只能是一级的
-       state.list = [payload.title];
-       state.panes = [payload.result]
-       state.selectPane = payload.result
-    }
+    [RESETMU](state: CrumbsStoreType, payload: ResetType): void {
+      // 默认首页只能是一级的
+      state.list = [payload.title]
+      state.panes = [payload.result]
+      state.selectPane = payload.result
+    },
   },
-  actions:{
-    [DELETETABSACTION]({commit}:{commit: any},payload: SysTabDel){
+  actions: {
+    [DELETETABSACTION](
+      { commit }: { commit: Commit },
+      payload: SysTabDel
+    ): void {
       // 设置菜单选中项
-      localForage.setItem(STORELETMENUPATH, toRaw(payload.selectData)).then(res=>{
-        commit(DELETETABS, payload)
-      })
+      localForage
+        .setItem(STORELETMENUPATH, toRaw(payload.selectData))
+        .then(() => {
+          commit(DELETETABS, payload)
+        })
     },
     // 设置当前的登录默认显示的选中项
     // 默认首页只能是一级的
     // TODO 待完善  刷新页面直接选择对应的选中项
-    [RESET]({commit}:{commit:Commit}, payload: MenuItem[]){
-      const data = payload.filter((item)=>item.is_home)
-      if(data.length > 0) {
+    [RESET]({ commit }: { commit: Commit }, payload: MenuItem[]): void {
+      const data = payload.filter((item) => item.is_home)
+      if (data.length > 0) {
         const r = data[0]
         const result = {
-          id: r.id || "",
+          id: r.id || '',
           title: r.title,
-          path: r.path || "",
-          parent_id: r.parent_id || "",
+          path: r.path || '',
+          parent_id: r.parent_id || '',
           closable: false,
         }
-        commit(RESETMU, {result, title: r.title})
+        commit(RESETMU, { result, title: r.title })
         localForage.setItem(STORELETMENUPATH, r)
       }
-    }
-  }
+    },
+  },
 }

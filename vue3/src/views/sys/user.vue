@@ -151,6 +151,10 @@ import { message } from 'ant-design-vue'
 import { Method } from 'axios'
 import { AllocateType } from '@/views/sys/role.vue'
 
+interface UserAndRole {
+  user_id: string
+  role_id: string
+}
 const SysUser = defineComponent({
   name: 'sys-user',
   components: {
@@ -298,6 +302,7 @@ const SysUser = defineComponent({
           item.value = item.id
           item.key = item.id
         })
+        // @ts-ignore
         treeOptions.options = ListToTree(list)
       })
     }
@@ -363,13 +368,13 @@ const SysUser = defineComponent({
       editId.id = ''
     }
 
-    function getBase64(img: any, callback: any) {
+    function getBase64(img, callback) {
       const reader = new FileReader()
       reader.addEventListener('load', () => callback(reader.result))
       reader.readAsDataURL(img)
     }
 
-    function handleChange(info: any) {
+    function handleChange(info) {
       if (info.file.status === 'uploading') {
         uploadImageData.loading = true
         return
@@ -385,7 +390,7 @@ const SysUser = defineComponent({
         uploadImageData.loading = false
       }
     }
-    function beforeUpload(file: any) {
+    function beforeUpload(file) {
       const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png'
       if (!isJpgOrPng) {
         message.error('请上传jpg格式图片')
@@ -412,7 +417,7 @@ const SysUser = defineComponent({
       }
     }
     function Del(record: UserType) {
-      http({ url: 'user/' + record.id, method: 'delete' }).then((res) => {
+      http({ url: 'user/' + record.id, method: 'delete' }).then(() => {
         message.success('删除成功')
         getList()
       })
@@ -445,7 +450,7 @@ const SysUser = defineComponent({
       allocationTree.visible = false
     }
     function SubmitOk() {
-      const data = {
+      const data: UserAndRole = {
         user_id: allocationTree.allocateId,
         role_id: selectkeys.value.join(','),
       }

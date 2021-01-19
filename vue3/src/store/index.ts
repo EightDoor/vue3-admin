@@ -11,6 +11,7 @@ interface RootState {
 }
 export default createStore<RootState>({
   modules: {
+    // @ts-ignore
     sys,
     crumbs,
   },

@@ -9,7 +9,7 @@ export const canUserAccess = async (
   to: RouteLocationNormalized,
   from: RouteLocationNormalized,
   router: Router
-) => {
+): Promise<boolean> => {
   const status = routerWhiteList.find((item) => to.path === item)
   const token = localStorage.getItem(TOKEN)
   if (!status) {

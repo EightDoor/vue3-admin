@@ -210,7 +210,7 @@ const SysDictView = defineComponent({
       }
     }
     function Del(record: SysDict) {
-      http({ url: 'dict/' + record.id, method: 'delete' }).then((res) => {
+      http({ url: 'dict/' + record.id, method: 'delete' }).then(() => {
         message.success('删除成功')
         getList()
       })

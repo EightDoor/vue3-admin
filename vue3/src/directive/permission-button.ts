@@ -8,17 +8,14 @@ import { MenuItem } from '@/types/layout/menu'
 type ButtonPermissionType<T> = 'add' | 'editor' | 'del' | T
 
 const ButtonPermissionType = {
-  beforeMount: (el: HTMLElement) => {
+  beforeMount: (el: HTMLElement): void => {
     el.style.display = 'none'
   },
-  mounted: (
-    el: HTMLElement,
-    binding: DirectiveBinding<ButtonPermissionType<any>>
-  ) => {
+  mounted: (el: HTMLElement, binding: DirectiveBinding): void => {
     const arg = binding.arg
     const value = binding.value
     const permissions = store.state.sys.permissionButtons
-    localForage.getItem<MenuItem>(STORELETMENUPATH).then((res: any) => {
+    localForage.getItem<MenuItem>(STORELETMENUPATH).then((res) => {
       const data = permissions.filter((item) => item.name === res?.id)
       if (data.length > 0) {
         const r = data.find((item) => item.perms === arg)
@@ -36,8 +33,6 @@ const ButtonPermissionType = {
         el.style.display = 'none'
         return
       }
-      el.style.display = 'none'
-      return
     })
   },
 }

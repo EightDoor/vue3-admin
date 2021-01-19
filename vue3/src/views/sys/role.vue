@@ -209,7 +209,7 @@ const SysRole = defineComponent({
       }
     }
     function Del(record: RoleType) {
-      http({ url: 'role/' + record.id, method: 'delete' }).then((res) => {
+      http({ url: 'role/' + record.id, method: 'delete' }).then(() => {
         message.success('删除成功')
         getList()
       })

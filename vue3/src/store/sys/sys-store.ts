@@ -17,9 +17,8 @@ import { RouteRecordRaw } from 'vue-router'
 
 import { Key } from 'ant-design-vue/es/_util/type'
 import { ListObjCompare, ListToTree } from '@/utils'
-import store from '../index';
+import store from '../index'
 import { cloneDeep } from 'lodash'
-
 export interface SysStoreType {
   menus: MenuItem[]
   userInfo: UserType
@@ -27,7 +26,7 @@ export interface SysStoreType {
   permissionButtons: MenuType[]
   collapsed: boolean
 }
-type CustomMenus = RouteRecordRaw & { id: string; parent_id: string }
+export type CustomMenus = RouteRecordRaw & { id: string; parent_id: string }
 
 const getUserInfo = (): Promise<UserInfoType> => {
   return new Promise((resolve, reject) => {
@@ -35,7 +34,8 @@ const getUserInfo = (): Promise<UserInfoType> => {
       url: '/user/getWithTheMenu',
       method: 'get',
     })
-      .then((res: any) => {
+      .then((res) => {
+        // @ts-ignore
         resolve(res.list)
       })
       .catch((err) => {
@@ -69,12 +69,13 @@ const FormatMenuTree = (item: MenuType[]): RouteRecordRaw[] => {
       parent_id: item.parent_id,
     })
   })
+  // @ts-ignore
   result = ListToTree(result)
   return result
 }
-function ListToTreeMenus(jsonData: any[], id = 'id', pid = 'parent_id') {
-  const result: any = [],
-    temp: any = {}
+function ListToTreeMenus(jsonData, id = 'id', pid = 'parent_id'): MenuItem[] {
+  const result: MenuItem[] = [],
+    temp = {}
   for (let i = 0; i < jsonData.length; i++) {
     temp[jsonData[i][id]] = jsonData[i] // 以id作为索引存储元素，可以无需遍历直接定位元素
   }
@@ -111,10 +112,10 @@ export default {
     collapsed: false,
   },
   mutations: {
-    [COLLAPSED](state: SysStoreType) {
+    [COLLAPSED](state: SysStoreType): void {
       state.collapsed = !state.collapsed
     },
-    [SET_MENUS_MUTATION](state: SysStoreType, payload: UserInfoType) {
+    [SET_MENUS_MUTATION](state: SysStoreType, payload: UserInfoType): void {
       const menus = formatMenus(payload.menu)
       let result: MenuItem[] = []
       const list = cloneDeep(menus.sort(ListObjCompare('order_num')))
@@ -135,13 +136,13 @@ export default {
       state.menus = result
       store.dispatch(RESET, payload.menu)
     },
-    [SETUSERINFO](state: SysStoreType, payload: UserInfoType) {
+    [SETUSERINFO](state: SysStoreType, payload: UserInfoType): void {
       state.userInfo = payload.user_info
     },
-    [USERINFOMENUS](state: SysStoreType, payload: UserInfoType) {
+    [USERINFOMENUS](state: SysStoreType, payload: UserInfoType): void {
       state.userInfoMenus = payload.menu
     },
-    [PERMISSIONBUTTONS](state: SysStoreType, payload: UserInfoType) {
+    [PERMISSIONBUTTONS](state: SysStoreType, payload: UserInfoType): void {
       const menus = cloneDeep(payload.menu)
       const data = formatMenus(menus, true)
       data.map((item) => {
@@ -152,7 +153,7 @@ export default {
       })
       state.permissionButtons = data
     },
-    [LOGINRESET](state: SysStoreType) {
+    [LOGINRESET](state: SysStoreType): void {
       state.permissionButtons = []
       state.userInfoMenus = []
       state.menus = []
@@ -189,14 +190,7 @@ export default {
           })
       })
     },
-    [LOGIN](
-      {
-        commit,
-      }: {
-        commit: Commit
-      },
-      payload: LoginType
-    ): Promise<Key> {
+    [LOGIN](s: unknown, payload: LoginType): Promise<Key> {
       return new Promise<string>((resolve, reject) => {
         const body = {
           account: payload.account,
@@ -207,8 +201,10 @@ export default {
           method: 'post',
           body,
         })
-          .then(async (res: any) => {
+          .then(async (res) => {
+            // @ts-ignore
             localStorage.setItem(TOKEN, res)
+            // @ts-ignore
             resolve(res)
           })
           .catch((err) => {
