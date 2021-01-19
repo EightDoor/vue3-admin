@@ -33,5 +33,10 @@ func LoadSys(e *gin.RouterGroup)  {
 		e.POST("/menu", ControllerSys.MenuCreate)
 		e.PUT("/menu/:id", ControllerSys.MenuUpdate)
 		e.DELETE("/menu/:id", ControllerSys.MenuDel)
+		// 字典
+		e.POST("/dict", ControllerSys.DictCreate)
+		e.GET("/dict", ControllerSys.DictList)
+		e.PUT("/dict/:id", ControllerSys.DictEdit)
+		e.DELETE("/dict/:id", ControllerSys.DictDel)
 	}
 }

@@ -13,6 +13,28 @@ type SysDept struct {
 	Name     string `json:"name"`
 	OrderNum int16    `json:"order_num"`
 }
+// 字典
+type SysDict struct {
+	model.CommonCreate
+	// 名称
+	Name   string `json:"name" binding:"required"`
+	// 编号
+	SerialNumber  string `json:"serial_number"`
+	// 描述
+	Describe	string `json:"describe"`
+ }
+// 字典项
+type SysDictItem struct {
+	model.CommonCreate
+	// 数据值
+	Value	string `json:"value"`
+	// 名称
+	Label	string `json:"label"`
+	// 描述
+	Describe string `json:"describe"`
+	// 关联的子项item
+	DictItem	string `json:"dict_item"`
+}
 
 type SysMenu struct {
 	model.CommonCreate
