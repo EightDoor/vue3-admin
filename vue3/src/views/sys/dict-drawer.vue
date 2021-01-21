@@ -5,6 +5,7 @@
     :visible="visible"
     @on-close="Close()"
   >
+    <a-button type="primary" @click="Add()">添加</a-button>
     <a-table
       :columns="tableData.columns"
       :pagination="{
@@ -26,6 +27,24 @@
         </a-popconfirm>
       </template>
     </a-table>
+    <a-modal
+      :title="modalForm.title"
+      v-model:visible="modalForm.visible"
+      :confirm-loading="modalForm.loading"
+      @ok="handleOk"
+    >
+      <a-form :label-col="labelCol" :wrapper-col="wrapperCol">
+        <a-form-item label="字典名称" v-bind="validateInfos.label">
+          <a-input v-model:value="modalForm.label" />
+        </a-form-item>
+        <a-form-item label="字典值" v-bind="validateInfos.value">
+          <a-input v-model:value="modalForm.value" />
+        </a-form-item>
+        <a-form-item label="描述">
+          <a-textarea allow-clear v-model:value="modalForm.describe" />
+        </a-form-item>
+      </a-form>
+    </a-modal>
   </common-drawer>
 </template>
 <script lang="ts">
@@ -34,11 +53,33 @@ import { SysDict } from '@/types/sys/dict'
 import { TableDataType } from '@/types/type'
 import { http } from '@/utils/request'
 import { defineComponent, ref, onMounted, reactive } from 'vue'
+import { useForm } from '@ant-design-vue/use'
+
 const DictDrawer = defineComponent({
   components: {
     CommonDrawer,
   },
   setup() {
+    const modalForm = reactive({
+      title: '添加',
+      visible: false,
+      loading: false,
+    })
+    const ruleRef = reactive({
+      value: [
+        {
+          required: true,
+          message: '请输入字典项',
+        },
+      ],
+      label: [
+        {
+          required: true,
+          message: '请输入名称',
+        },
+      ],
+    })
+    const { resetFields, validate, validateInfos } = useForm(modalForm, ruleRef)
     const tableData = reactive<TableDataType<SysDict>>({
       data: [],
       page: 1,
@@ -85,14 +126,34 @@ const DictDrawer = defineComponent({
     const Edit = (record: SysDict) => {
       console.log(record, 'record')
     }
+    const Add = () => {
+      modalForm.visible = true
+    }
+    const handleOk = () => {
+      validate()
+        .then((res) => {
+          console.log(res, 'res')
+        })
+        .catch((err) => {
+          console.error(err)
+        })
+    }
     return {
       // data
       visible,
       tableData,
+      modalForm,
+      labelCol: { span: 4 },
+      wrapperCol: { span: 14 },
+
       // methods
       Close,
       IsShow,
       Edit,
+      Add,
+      resetFields,
+      validateInfos,
+      handleOk,
     }
   },
 })
