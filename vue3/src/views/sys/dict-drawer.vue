@@ -1,7 +1,7 @@
 <template>
   <common-drawer
     title="字典配置"
-    cancelText="取消"
+    cancel-text="取消"
     :visible="visible"
     @on-close="Close()"
   >

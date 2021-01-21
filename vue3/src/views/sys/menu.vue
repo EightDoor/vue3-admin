@@ -10,7 +10,7 @@
   <a-table
     :scroll="{ x: 500 }"
     :columns="tableCont.columns"
-    rowKey="id"
+    row-key="id"
     :data-source="tableCont.data"
     :pagination="{
       total: tableCont.total,
@@ -123,7 +123,7 @@ import { ListObjCompare, ListToTree } from '@/utils'
 
 const SysMenu = defineComponent({
   components: { CommonButton, CommonDrawer },
-  name: 'sys-menu',
+  name: 'SysMenu',
   setup() {
     const optionsType = ref([
       {

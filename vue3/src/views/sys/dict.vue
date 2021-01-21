@@ -5,7 +5,7 @@
     :columns="tableData.columns"
     :data-source="tableData.data"
     :loading="tableData.loading"
-    rowKey="id"
+    row-key="id"
     :pagination="{
       total: tableData.total,
     }"
@@ -90,7 +90,7 @@ export interface AllocateType {
   allocateId: string
 }
 const SysDictView = defineComponent({
-  name: 'sys-dict',
+  name: 'SysDict',
   components: {
     CommonButton,
     CommonDrawer,

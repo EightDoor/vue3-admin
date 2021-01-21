@@ -31,7 +31,7 @@ import { SETCRUMBSLIST } from '@/store/mutation-types'
 import { MenuFormatBrumb } from './menu-common'
 
 export default defineComponent({
-  name: 'sub-menu',
+  name: 'SubMenu',
   props: {
     menuInfo: {
       type: Object,

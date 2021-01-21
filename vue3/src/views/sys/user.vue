@@ -10,7 +10,7 @@
     :columns="tableData.columns"
     :data-source="tableData.data"
     :loading="tableData.loading"
-    rowKey="id"
+    row-key="id"
     :pagination="{
       total: tableData.total,
     }"
@@ -156,7 +156,7 @@ interface UserAndRole {
   role_id: string
 }
 const SysUser = defineComponent({
-  name: 'sys-user',
+  name: 'SysUser',
   components: {
     CommonButton,
     CommonDrawer,

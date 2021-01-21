@@ -44,7 +44,7 @@ interface InitTopTabs extends MenuItem {
   crumbs: string
 }
 export default defineComponent({
-  name: 'common-menu',
+  name: 'CommonMenu',
   setup() {
     const router = useRouter()
     const store = useStore()

@@ -9,7 +9,7 @@
   </div>
   <a-table
     :columns="tableCont.columns"
-    rowKey="id"
+    row-key="id"
     :data-source="tableCont.data"
     :pagination="{
       total: tableCont.total,
@@ -79,7 +79,7 @@ import { ListObjCompare, ListToTree } from '@/utils'
 
 const SysDepart = defineComponent({
   components: { CommonButton, CommonDrawer },
-  name: 'sys-depart',
+  name: 'SysDepart',
   setup() {
     const tableCont = reactive<TableDataType<DepartType>>({
       page: 1,

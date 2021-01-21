@@ -47,7 +47,7 @@ import { useStore } from 'vuex'
 import { COLLAPSED } from '@/store/mutation-types'
 
 export default defineComponent({
-  name: 'common-header',
+  name: 'CommonHeader',
   components: { UserOutlined, MenuUnfoldOutlined, MenuFoldOutlined },
   setup() {
     const data = ref<string[]>(['个人中心', '退出'])

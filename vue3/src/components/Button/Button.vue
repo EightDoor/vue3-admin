@@ -14,7 +14,7 @@ const CommonButton = defineComponent({
   components: {
     PlusOutlined,
   },
-  name: 'common-button',
+  name: 'CommonButton',
   props: {
     title: {
       type: String,

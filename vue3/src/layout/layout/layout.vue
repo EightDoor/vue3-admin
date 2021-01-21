@@ -26,7 +26,7 @@ import CommonHeader from '@/layout/header/header.vue'
 import CommonTabs from '@/layout/tabs/index.vue'
 
 export default defineComponent({
-  name: 'layout',
+  name: 'Layout',
   setup() {
     const selectedKeys: string[] = ['4']
     return {

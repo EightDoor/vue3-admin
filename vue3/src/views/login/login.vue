@@ -39,7 +39,7 @@ interface LoginType {
   password: string
 }
 const Login = defineComponent({
-  name: 'login',
+  name: 'Login',
   setup() {
     const router = useRouter()
     const submitData = reactive({ loading: false })

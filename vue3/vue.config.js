@@ -7,5 +7,10 @@ module.exports = {
         pathRewrite: { '^/api': '' },
       },
     },
+    host: 'localhost',
+    hotOnly: true,
+  },
+  css: {
+    requireModuleExtension: true,
   },
 }

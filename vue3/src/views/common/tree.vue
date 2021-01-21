@@ -12,8 +12,8 @@
       <a-tree
         v-model:checkedKeys="treeData.checkedKeys"
         checkable
-        checkStrictly
-        defaultExpandAll
+        check-strictly
+        default-expand-all
         :selected-keys="treeData.selectedKeys"
         :tree-data="treeData.data"
         @select="onSelect"
@@ -37,7 +37,7 @@ interface TreeDataType {
   data: MenuType[]
 }
 const CommonTree = defineComponent({
-  name: 'common-tree',
+  name: 'CommonTree',
   props: {
     visible: {
       type: Boolean,

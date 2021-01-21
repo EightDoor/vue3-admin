@@ -5,7 +5,7 @@
     :columns="tableData.columns"
     :data-source="tableData.data"
     :loading="tableData.loading"
-    rowKey="id"
+    row-key="id"
     :pagination="{
       total: tableData.total,
     }"
@@ -91,7 +91,7 @@ export interface AllocateType {
   allocateId: string
 }
 const SysRole = defineComponent({
-  name: 'sys-role',
+  name: 'SysRole',
   components: {
     CommonButton,
     CommonDrawer,
