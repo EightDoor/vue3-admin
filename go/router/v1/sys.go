@@ -38,5 +38,10 @@ func LoadSys(e *gin.RouterGroup)  {
 		e.GET("/dict", ControllerSys.DictList)
 		e.PUT("/dict/:id", ControllerSys.DictEdit)
 		e.DELETE("/dict/:id", ControllerSys.DictDel)
+		// 字典项
+		e.POST("/dict-item", ControllerSys.DictItemCreate)
+		e.GET("/dict-item/:id", ControllerSys.DictItemList)
+		e.PUT("/dict-item/:id", ControllerSys.DictItemEdit)
+		e.DELETE("/dict-item/:id", ControllerSys.DictItemDel)
 	}
 }

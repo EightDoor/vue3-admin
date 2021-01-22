@@ -12,6 +12,7 @@
         total: tableData.total,
       }"
       :data-source="tableData.data"
+      :loading="tableData.loading"
     >
       <template #action="{ record }">
         <a-button type="primary" class="button-right" @click="Edit(record)">
@@ -35,13 +36,13 @@
     >
       <a-form :label-col="labelCol" :wrapper-col="wrapperCol">
         <a-form-item label="字典名称" v-bind="validateInfos.label">
-          <a-input v-model:value="modalForm.label" />
+          <a-input v-model:value="modalRef.label" />
         </a-form-item>
         <a-form-item label="字典值" v-bind="validateInfos.value">
-          <a-input v-model:value="modalForm.value" />
+          <a-input v-model:value="modalRef.value" />
         </a-form-item>
         <a-form-item label="描述">
-          <a-textarea allow-clear v-model:value="modalForm.describe" />
+          <a-textarea allow-clear v-model:value="modalRef.describe" />
         </a-form-item>
       </a-form>
     </a-modal>
@@ -49,21 +50,31 @@
 </template>
 <script lang="ts">
 import CommonDrawer from '@/components/Drawer/Drawer.vue'
-import { SysDict } from '@/types/sys/dict'
+import { SysDict, SysDictItem } from '@/types/sys/dict'
 import { TableDataType } from '@/types/type'
 import { http } from '@/utils/request'
-import { defineComponent, ref, onMounted, reactive } from 'vue'
+import { defineComponent, ref, onMounted, reactive, toRaw } from 'vue'
 import { useForm } from '@ant-design-vue/use'
+import { message } from 'ant-design-vue'
+import { Method } from 'axios'
 
 const DictDrawer = defineComponent({
   components: {
     CommonDrawer,
   },
   setup() {
+    const editParentId = ref('')
+    const editId = ref('')
     const modalForm = reactive({
       title: '添加',
       visible: false,
       loading: false,
+    })
+    const modalRef = reactive<SysDictItem>({
+      value: '',
+      label: '',
+      describe: '',
+      dict_id: '',
     })
     const ruleRef = reactive({
       value: [
@@ -79,8 +90,8 @@ const DictDrawer = defineComponent({
         },
       ],
     })
-    const { resetFields, validate, validateInfos } = useForm(modalForm, ruleRef)
-    const tableData = reactive<TableDataType<SysDict>>({
+    const { resetFields, validate, validateInfos } = useForm(modalRef, ruleRef)
+    const tableData = reactive<TableDataType<SysDictItem>>({
       data: [],
       page: 1,
       page_size: 10,
@@ -107,12 +118,18 @@ const DictDrawer = defineComponent({
       ],
     })
     const visible = ref(false)
-    onMounted(() => {
-      http({ url: '/dict', method: 'GET' }).then((res) => {
+    const GetList = () => {
+      tableData.loading = true
+      http<SysDictItem>({
+        url: '/dict-item/' + editParentId.value,
+        method: 'GET',
+      }).then((res) => {
+        tableData.data = res.list
+        tableData.total = res.total
         console.log('🚀 ~ file: dict-drawer.vue ~ line 42 ~ http ~ res', res)
+        tableData.loading = false
       })
-      console.log(123)
-    })
+    }
     const Close = () => {
       visible.value = false
     }
@@ -121,22 +138,65 @@ const DictDrawer = defineComponent({
         '🚀 ~ file: dict-drawer.vue ~ line 26 ~ IsShow ~ record',
         record
       )
+      editParentId.value = toRaw(record.id) || ''
       visible.value = true
+      GetList()
     }
-    const Edit = (record: SysDict) => {
-      console.log(record, 'record')
+    const Edit = (record: SysDictItem) => {
+      const editData = toRaw(record)
+      delete editData.dict_id
+      modalRef.value = editData.value
+      modalRef.label = editData.label
+      modalRef.describe = editData.describe
+      console.log(
+        '🚀 ~ file: dict-drawer.vue ~ line 139 ~ Edit ~ record',
+        record
+      )
+      editId.value = editData.id || ''
+      modalForm.visible = true
     }
     const Add = () => {
       modalForm.visible = true
+      resetFields()
     }
     const handleOk = () => {
+      modalForm.loading = true
       validate()
-        .then((res) => {
-          console.log(res, 'res')
+        .then(() => {
+          const data = toRaw(modalRef)
+          data.dict_id = editParentId.value
+          let method: Method = 'POST'
+          let url = 'dict-item'
+          if (editId.value) {
+            method = 'PUT'
+            url = `${url}/${editId.value}`
+          }
+          http({
+            url,
+            method,
+            body: data,
+          }).then((res) => {
+            console.log(res)
+            message.success(modalForm.title + '成功')
+            modalForm.loading = false
+            modalForm.visible = false
+            GetList()
+          })
         })
         .catch((err) => {
           console.error(err)
+          modalForm.loading = false
         })
+    }
+    const Del = (record: SysDictItem) => {
+      http({
+        url: 'dict-item/' + record.id,
+        method: 'DELETE',
+      }).then((res) => {
+        console.log(res)
+        message.success('删除成功')
+        GetList()
+      })
     }
     return {
       // data
@@ -145,12 +205,14 @@ const DictDrawer = defineComponent({
       modalForm,
       labelCol: { span: 4 },
       wrapperCol: { span: 14 },
+      modalRef,
 
       // methods
       Close,
       IsShow,
       Edit,
       Add,
+      Del,
       resetFields,
       validateInfos,
       handleOk,

@@ -14,4 +14,6 @@ export interface SysDictItem extends CommonTableList {
   value: string
   // 描述
   describe: string
+  // 字典值id
+  dict_id?: string
 }

@@ -32,8 +32,8 @@ type SysDictItem struct {
 	Label	string `json:"label"`
 	// 描述
 	Describe string `json:"describe"`
-	// 关联的子项item
-	DictItem	string `json:"dict_item"`
+	// item
+	DictId string `json:"dict_id"`
 }
 
 type SysMenu struct {
