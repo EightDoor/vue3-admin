@@ -36,7 +36,7 @@
     "@vue/eslint-config-typescript": "^7.0.0",
     "eslint": "^7.17.0",
     "eslint-plugin-prettier": "^3.3.0",
-    "eslint-plugin-vue": "^7.4.0",
+    "eslint-plugin-vue": "7.5.0",
     "less": "^4.0.0",
     "less-loader": "^7.2.1",
     "prettier": "^2.2.1",
@@ -60,7 +60,13 @@
     "rules": {
       "@typescript-eslint/camelcase": "off",
       "@typescript-eslint/ban-ts-comment": "off",
-      "@typescript-eslint/ban-ts-ignore": "off"
+      "@typescript-eslint/ban-ts-ignore": "off",
+      "vue/no-parsing-error": [
+        "error",
+        {
+          "invalid-first-character-of-tag-name": false
+        }
+      ]
     }
   },
   "browserslist": [
