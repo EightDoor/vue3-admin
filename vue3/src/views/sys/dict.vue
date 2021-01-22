@@ -59,7 +59,7 @@
   >
     <a-form :label-col="{ span: 4 }" :wrapper-col="{ span: 20 }">
       <a-form-item label="字典名称" v-bind="validateInfos.name">
-        <a-input v-model:value="modelRef.name"></a-input>
+        <a-input v-model="modelRef.name"></a-input>
       </a-form-item>
       <a-form-item label="字典编号">
         <a-input v-model:value="modelRef.serial_number"></a-input>

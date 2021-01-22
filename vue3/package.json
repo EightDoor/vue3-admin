@@ -48,9 +48,11 @@
       "node": true
     },
     "extends": [
-      "plugin:vue/essential",
+      "plugin:vue/vue3-essential",
       "eslint:recommended",
       "@vue/typescript/recommended",
+      "plugin:vue/vue3-strongly-recommended",
+      "plugin:vue/vue3-recommended",
       "@vue/prettier",
       "@vue/prettier/@typescript-eslint"
     ],
@@ -60,13 +62,7 @@
     "rules": {
       "@typescript-eslint/camelcase": "off",
       "@typescript-eslint/ban-ts-comment": "off",
-      "@typescript-eslint/ban-ts-ignore": "off",
-      "vue/no-parsing-error": [
-        "error",
-        {
-          "invalid-first-character-of-tag-name": false
-        }
-      ]
+      "@typescript-eslint/ban-ts-ignore": "off"
     }
   },
   "browserslist": [

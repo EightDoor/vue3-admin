@@ -64,6 +64,8 @@
 
 - 运行 `npm run dev`
 
+# 资料
+- [eslint-vue-plugin](https://eslint.vuejs.org/rules/valid-v-model.html)
 # 使用
 
 ## 按钮权限使用
