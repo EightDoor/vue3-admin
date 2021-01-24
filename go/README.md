@@ -62,3 +62,4 @@
 - air 运行 `air -c air.toml -d or air` 启动端口为8081
 - swagger访问路径 http://localhost:8081/swagger/index.html
 - 交叉编译工具 gox
+    - `打包 gox -output="bin" -osarch="linux/amd64"`

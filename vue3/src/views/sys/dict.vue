@@ -19,22 +19,22 @@
     </template>
     <template #action="{ record }">
       <a-button
+        v-bt-auth:power
         type="primary"
         style="margin-right: 15px"
         @click="PowerAllocation(record)"
-        v-bt-auth:power
       />
 
       <a-button
+        v-bt-auth:edit
         type="primary"
         style="margin-right: 15px"
-        v-bt-auth:edit
         @click="Editor(record)"
       />
       <a-button
+        v-bt-auth:setting
         type="primary"
         style="margin-right: 15px"
-        v-bt-auth:setting
         @click="Setting(record)"
       />
       <a-popconfirm
@@ -43,7 +43,7 @@
         cancel-text="取消"
         @confirm="Del(record)"
       >
-        <a-button type="danger" v-bt-auth:del />
+        <a-button v-bt-auth:del type="danger" />
       </a-popconfirm>
     </template>
   </a-table>
@@ -59,7 +59,7 @@
   >
     <a-form :label-col="{ span: 4 }" :wrapper-col="{ span: 20 }">
       <a-form-item label="字典名称" v-bind="validateInfos.name">
-        <a-input v-model="modelRef.name"></a-input>
+        <a-input v-model:value="modelRef.name"></a-input>
       </a-form-item>
       <a-form-item label="字典编号">
         <a-input v-model:value="modelRef.serial_number"></a-input>
