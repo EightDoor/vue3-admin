@@ -1,30 +1,80 @@
-# vue3+gin 构建的后台管理系统
+# 文件结构
+> public 静态资源不打包
 
-# 介绍
+> src
+>
+> > assets 静态资源(打包)
+> >
+> > components 公共组件
+> >
+> > layout 布局
+> >
+> > router 路由
+> >
+> > store vuex状态管理
+> >
+> > types typescript类型文件定义
+> >
+> > utils 工具类
+> >
+> > views 页面
+>
+> App router-view渲染
+>
+> authority 权限校验
+>
+> main 主入口
+>
+> shims-vue.d 全局vue类型定义
 
-- 前端使用vue3,后端使用gin构建
-- 使用最新技术栈构建，保持更新
-- 在线预览地址: [地址](http://vue3.start6.cn)
-  - 账号: test 密码: test
+> .env 公共配置
+>
+> .env.development 开发配置
+>
+> .env.production 生产配置
+>
+> .gitignore git提交忽略文件或者文件夹
+>
+> .prettierrc prettierrc格式化配置
+>
+> vue.config vue-cli自定义配置
 
-## 完成
+# 技术栈
+- typescript + vue3 + composition-api + ant-design-vue2.x + vue-router@4.x + vuex@4.x
+
+# 完成功能
+
 - 用户管理  <> 关联角色
 - 角色管理  <> 关联菜单
 - 菜单管理  
 - 部门管理
-- 动态路由 - 按钮权限
-- 面包屑-顶部导航栏
-- 打开路由tab选项卡
+- 登录、权限校验
+- 动态路由生成 - 按钮权限
+- 菜单栏切换面包屑
+- tab展示历史导航路由
 - 字典管理
-## 待办
 
-- 部门 <> 关联角色
-- 表格组件封装
+# 待办
 
-# 未来计划
+- 首页样式调整美化
 
-- nodejs版本 后台
+  # 运行
 
-# 其他
+- 安装依赖 `npm install or yarn install`
 
-- 微信: zzkk851708184
+- 运行 `npm run dev`
+
+# 资料
+- [eslint-vue-plugin](https://eslint.vuejs.org/rules/valid-v-model.html)
+# 使用
+
+## 按钮权限使用
+
+- ```vue
+  // 使用的是按钮权限的名字
+  <a-button type="danger" v-bt-auth:del></a-button>
+  // 或者
+  // 使用的是自定义的名称  '删除 - 1'
+  <a-button type="danger" v-bt-auth:del="{title:true}">删除 - 1</a-button>
+  ```
+

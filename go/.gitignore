@@ -1,6 +1,0 @@
-/conf/config.local.ini
-/log/**
-/tmp/**
-/zhoukai_darwin_amd64
-zhoukai_linux_amd64
-/bin/**
