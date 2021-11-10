@@ -14,24 +14,24 @@
         </a-menu-item>
       </template>
       <template v-else>
-        <sub-menu :menu-info="item" :key="item.key" />
+        <sub-menu :key="item.key" :menu-info="item" />
       </template>
     </template>
   </a-sub-menu>
 </template>
 
 <script lang="ts">
-import { defineComponent, toRaw } from 'vue'
-import { useRouter } from 'vue-router'
-import { useStore } from 'vuex'
-import { MenuItem } from '@/types/layout/menu'
-import { STORELETMENUPATH } from '@/utils/constant'
-import { localForage } from '@/utils/localforage'
-import { SETCRUMBSLIST } from '@/store/mutation-types'
-import { MenuFormatBrumb } from './menu-common'
+import { defineComponent, toRaw } from "vue";
+import { useRouter } from "vue-router";
+import { useStore } from "vuex";
+import { MenuItem } from "@/types/layout/menu";
+import { STORELETMENUPATH } from "@/utils/constant";
+import localStorefrom from "@/utils/store";
+import { SETCRUMBSLIST } from "@/store/mutation-types";
+import { MenuFormatBrumb } from "./menu-common";
 
 export default defineComponent({
-  name: 'SubMenu',
+  name: "SubMenu",
   props: {
     menuInfo: {
       type: Object,
@@ -39,24 +39,24 @@ export default defineComponent({
     },
   },
   setup: function () {
-    const router = useRouter()
-    const store = useStore()
+    const router = useRouter();
+    const store = useStore();
     // methods
     function jumpTo(item: MenuItem) {
       if (item.path) {
-        store.commit(SETCRUMBSLIST, toRaw(item.crumbs))
-        localForage.setItem(STORELETMENUPATH, toRaw(item)).then(() => {
-          MenuFormatBrumb(item)
+        store.commit(SETCRUMBSLIST, toRaw(item.crumbs));
+        localStorefrom.set(STORELETMENUPATH, toRaw(item)).then(() => {
+          MenuFormatBrumb(item);
           router.push({
-            path: item.path || '',
-          })
-        })
+            path: item.path || "",
+          });
+        });
       }
     }
     return {
       //methods
       jumpTo,
-    }
+    };
   },
-})
+});
 </script>

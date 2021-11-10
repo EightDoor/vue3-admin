@@ -22,22 +22,25 @@
   </common-drawer>
 </template>
 <script lang="ts">
-import { defineComponent, reactive, onMounted, watch, toRaw } from 'vue'
-import CommonDrawer from '@/components/Drawer/Drawer.vue'
-import { http } from '@/utils/request'
-import { MenuType } from '@/types/sys'
-import { ListObjCompare, ListToTree } from '@/utils'
+import { defineComponent, onMounted, reactive, toRaw, watch } from "vue";
+import CommonDrawer from "@/components/Drawer/Drawer.vue";
+import { http } from "@/utils/request";
+import { MenuType } from "@/types/sys";
+import { ListObjCompare, ListToTree } from "@/utils";
 
 interface TreeDataType {
-  spinningLoading: boolean
-  checkedKeys: string[]
-  expandedKeys?: string[]
-  autoExpandParent: boolean
-  selectedKeys?: string[]
-  data: MenuType[]
+  spinningLoading: boolean;
+  checkedKeys: string[];
+  expandedKeys?: string[];
+  autoExpandParent: boolean;
+  selectedKeys?: string[];
+  data: MenuType[];
 }
 const CommonTree = defineComponent({
-  name: 'CommonTree',
+  name: "CommonTree",
+  components: {
+    CommonDrawer,
+  },
   props: {
     visible: {
       type: Boolean,
@@ -49,59 +52,59 @@ const CommonTree = defineComponent({
     },
     data: {
       type: Array,
+      default: () => {
+        return [];
+      },
     },
   },
-  components: {
-    CommonDrawer,
-  },
+  emits: ["on-close", "on-submit"],
   setup(props, { emit }) {
     const treeData = reactive<TreeDataType>({
       spinningLoading: false,
       checkedKeys: [],
       autoExpandParent: true,
       data: [],
-    })
+    });
     watch(
       // @ts-ignore
       () => props.data,
       (newValue: string[]) => {
-        treeData.checkedKeys = toRaw<string[]>(newValue)
+        treeData.checkedKeys = toRaw<string[]>(newValue);
       },
       {
         deep: false,
       }
-    )
+    );
     function getList() {
-      treeData.spinningLoading = true
+      treeData.spinningLoading = true;
       http<MenuType>({
-        url: '/menu',
-        method: 'GET',
+        url: "/menu",
+        method: "GET",
         params: {
           page: 1,
           page_size: 1000,
         },
       }).then((res) => {
         res.list.map((item: MenuType) => {
-          item.key = item.id
-        })
-        const list = res.list.sort(ListObjCompare('order_num'))
-        treeData.spinningLoading = false
-        const result = ListToTree(list)
-        treeData.data = result
-      })
+          item.key = item.id;
+        });
+        const list = res.list.sort(ListObjCompare("order_num"));
+        treeData.spinningLoading = false;
+        treeData.data = ListToTree(list);
+      });
     }
     onMounted(() => {
-      getList()
-    })
+      getList();
+    });
     function onSelect(selectedKeys: string[], info) {
-      console.log(selectedKeys, 'selec')
-      console.log(info, 'info')
+      console.log(selectedKeys, "selec");
+      console.log(info, "info");
     }
     function DClose() {
-      emit('on-close')
+      emit("on-close");
     }
     function DSubmit() {
-      emit('on-submit', toRaw(treeData.checkedKeys))
+      emit("on-submit", toRaw(treeData.checkedKeys));
     }
 
     return {
@@ -112,8 +115,8 @@ const CommonTree = defineComponent({
       onSelect,
       DClose,
       DSubmit,
-    }
+    };
   },
-})
-export default CommonTree
+});
+export default CommonTree;
 </script>

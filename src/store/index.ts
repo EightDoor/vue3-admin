@@ -1,13 +1,13 @@
-import { createStore, createLogger } from 'vuex'
+import { createStore, createLogger } from "vuex";
 
-import sys, { SysStoreType } from './sys/sys-store'
-import crumbs, { CrumbsStoreType } from './sys/sys-crumbs'
+import sys, { SysStoreType } from "./sys/sys-store";
+import crumbs, { CrumbsStoreType } from "./sys/sys-crumbs";
 
-const debug = process.env.NODE_ENV !== 'production'
+const debug = process.env.NODE_ENV !== "production";
 
 interface RootState {
-  sys: SysStoreType
-  crumbs: CrumbsStoreType
+  sys: SysStoreType;
+  crumbs: CrumbsStoreType;
 }
 export default createStore<RootState>({
   modules: {
@@ -17,4 +17,4 @@ export default createStore<RootState>({
   },
   strict: debug,
   plugins: debug ? [createLogger()] : [],
-})
+});

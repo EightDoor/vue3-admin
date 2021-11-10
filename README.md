@@ -57,16 +57,21 @@
 # 待办
 
 - 首页样式调整美化
+- 主要是维护nodejs版本后台
 
-  # 运行
+# 运行
 
 - 安装依赖 `npm install or yarn install`
 
 - 运行 `npm run dev`
+# 其他
+- 配套后台goland
+  - [go-admin](https://github.com/EightDoor/go-admin)
+- 配套后台 nodejs
+  - [vue3-admin-nest](https://github.com/EightDoor/vue3-admin-nest)
 
 # 资料
 - [eslint-vue-plugin](https://eslint.vuejs.org/rules/valid-v-model.html)
-# 使用
 
 ## 按钮权限使用
 

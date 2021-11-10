@@ -1,24 +1,24 @@
 <template>
   <a-drawer
+    v-model:visible="commdrawerData.visible"
     :title="title"
     :placement="placement"
-    v-model:visible="commdrawerData.visible"
     :width="width"
     @close="onClose"
   >
     <div class="drawerContainer">
       <slot></slot>
     </div>
-    <div class="drawerBottom" v-if="okText || cancelText">
+    <div v-if="okText || cancelText" class="drawerBottom">
       <a-button
-        :loading="loading"
         v-if="cancelText"
+        :loading="loading"
         style="margin-right: 20px"
         @click="onCancel"
       >
         {{ cancelText }}
       </a-button>
-      <a-button :loading="loading" v-if="okText" type="primary" @click="onOk">
+      <a-button v-if="okText" :loading="loading" type="primary" @click="onOk">
         {{ okText }}
       </a-button>
     </div>
@@ -26,15 +26,15 @@
 </template>
 <script lang="ts">
 export interface DrawerProps {
-  visible: boolean
-  title: string
-  placement?: string
-  loading?: boolean
+  visible: boolean;
+  title: string;
+  placement?: string;
+  loading?: boolean;
 }
-import { defineComponent, reactive, watch } from 'vue'
+import { defineComponent, reactive, watch } from "vue";
 
 const CommonDrawer = defineComponent({
-  name: 'ComponentDrawer',
+  name: "ComponentDrawer",
   props: {
     title: {
       type: String,
@@ -42,18 +42,19 @@ const CommonDrawer = defineComponent({
     },
     placement: {
       type: String,
-      default: 'right',
+      default: "right",
     },
     okText: {
       type: String,
+      default: "",
     },
     cancelText: {
       type: String,
-      default: '',
+      default: "",
     },
     width: {
       type: String,
-      default: '45%',
+      default: "45%",
     },
     visible: {
       type: Boolean,
@@ -64,38 +65,39 @@ const CommonDrawer = defineComponent({
       default: false,
     },
   },
+  emits: ["on-close", "on-ok"],
   setup(props, { emit }) {
     const commdrawerData = reactive({
       visible: false,
-    })
+    });
     function onCancel() {
-      emit('on-close')
-      commdrawerData.visible = false
+      emit("on-close");
+      commdrawerData.visible = false;
     }
     function onOk() {
-      emit('on-ok')
+      emit("on-ok");
     }
     function onClose() {
-      emit('on-close')
-      commdrawerData.visible = false
+      emit("on-close");
+      commdrawerData.visible = false;
     }
     watch(
       () => props.visible,
       (data) => {
-        commdrawerData.visible = data
+        commdrawerData.visible = data;
       }
-    )
+    );
     return {
       commdrawerData,
       onCancel,
       onOk,
       onClose,
-    }
+    };
   },
-})
+});
 
-export default CommonDrawer
+export default CommonDrawer;
 </script>
 <style lang="less" scoped>
-@import './Drawer.less';
+@import "./Drawer.less";
 </style>

@@ -15,7 +15,7 @@
         </a-menu-item>
       </template>
       <template v-else>
-        <sub-menu :menu-info="item" :key="item.key" />
+        <sub-menu :key="item.key" :menu-info="item" />
       </template>
     </template>
   </a-menu>
@@ -28,74 +28,77 @@ import {
   computed,
   toRaw,
   watch,
-} from 'vue'
-import SubMenu from './menu-item.vue'
-import { MenuItem, MenusInfo } from '@/types/layout/menu'
-import { useRouter } from 'vue-router'
-import { useStore } from 'vuex'
-import { STORELETMENUPATH } from '@/utils/constant'
-import { MenuType } from '@/types/sys'
-import { localForage } from '@/utils/localforage'
-import { SETCRUMBSLIST } from '@/store/mutation-types'
-import { MenuFormatBrumb } from './menu-common'
-import { PanesType } from '@/store/sys/sys-crumbs'
+} from "vue";
+import SubMenu from "./menu-item.vue";
+import { MenuItem, MenusInfo } from "@/types/layout/menu";
+import { useRouter } from "vue-router";
+import { useStore } from "vuex";
+import { STORELETMENUPATH } from "@/utils/constant";
+import { MenuType } from "@/types/sys";
+import localStore from "@/utils/store";
+import { SETCRUMBSLIST } from "@/store/mutation-types";
+import { MenuFormatBrumb } from "./menu-common";
+import { PanesType } from "@/store/sys/sys-crumbs";
 
 interface InitTopTabs extends MenuItem {
-  crumbs: string
+  crumbs: string;
 }
 export default defineComponent({
-  name: 'CommonMenu',
+  name: "CommonMenu",
+  components: {
+    SubMenu,
+  },
   setup() {
-    const router = useRouter()
-    const store = useStore()
+    const router = useRouter();
+    const store = useStore();
     const menusInfo = reactive<MenusInfo>({
       selectedKeys: [],
       list: [],
       openKeys: [],
-    })
-    const getUserInfoMenus = computed(() => store.state.sys.userInfoMenus)
+    });
+    const getUserInfoMenus = computed(() => store.state.sys.userInfoMenus);
     onMounted(() => {
-      menusInfo.list = []
-      localForage.getItem<InitTopTabs>(STORELETMENUPATH).then((res) => {
+      menusInfo.list = [];
+      localStore.get<InitTopTabs>(STORELETMENUPATH).then((res) => {
         if (res) {
           // 初始化顶部面包屑
-          store.commit(SETCRUMBSLIST, toRaw(res.crumbs))
+          store.commit(SETCRUMBSLIST, toRaw(res.crumbs));
           // 初始化顶部tabs
-          MenuFormatBrumb(res)
-          FormatSelectKey(res)
+          MenuFormatBrumb(res);
+          FormatSelectKey(res);
         }
-      })
-    })
+      });
+    });
 
     const FormatSelectKey = (res) => {
-      menusInfo.selectedKeys = [res.key || res.id || '']
-      const parent_id = res.parent_id
-      const data: MenuType[] = toRaw(getUserInfoMenus.value)
-      const r = data.find((item) => item.id === parent_id)
+      menusInfo.selectedKeys = [res.key || res.id || ""];
+      const parent_id = res.parent_id;
+      const data: MenuType[] = toRaw(getUserInfoMenus.value);
+      const r = data.find((item) => item.id === parent_id);
       if (r) {
-        menusInfo.openKeys = [r.id || '']
+        menusInfo.openKeys = [r.id || ""];
       }
-    }
+    };
 
     // methods
     function jumpTo(item: MenuItem) {
       if (item.path) {
-        store.commit(SETCRUMBSLIST, toRaw(item.crumbs))
-        localForage.setItem(STORELETMENUPATH, toRaw(item)).then(() => {
+        store.commit(SETCRUMBSLIST, toRaw(item.crumbs));
+        localStore.set(STORELETMENUPATH, toRaw(item)).then(() => {
           router.push({
-            path: item.path || '',
-          })
-          MenuFormatBrumb(item)
-        })
+            path: item.path || "",
+          });
+          MenuFormatBrumb(item);
+        });
       }
     }
     watch(
       () => store.state.crumbs.selectPane,
       (newValue: PanesType) => {
-        const data = toRaw(newValue)
-        FormatSelectKey(data)
+        const data = toRaw(newValue);
+        FormatSelectKey(data);
       }
-    )
+    );
     return {
       // data
       menusInfo,
@@ -103,13 +106,10 @@ export default defineComponent({
       collapsed: computed(() => store.state.sys.collapsed),
       //methods
       jumpTo,
-    }
+    };
   },
-  components: {
-    SubMenu,
-  },
-})
+});
 </script>
 <style scoped lang="less">
-@import './menu.less';
+@import "./menu.less";
 </style>

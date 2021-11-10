@@ -21,73 +21,77 @@
   </div>
 </template>
 <script lang="ts">
-import { PanesType } from '@/store/sys/sys-crumbs'
-import { computed, defineComponent, ref, toRaw } from 'vue'
-import { useStore } from 'vuex'
-import { useRouter } from 'vue-router'
-import { localForage } from '@/utils/localforage'
-import { STORELETMENUPATH } from '@/utils/constant'
-import { SysTab, SysTabDel } from '@/types/sys/tab'
-import { DELETETABS, DELETETABSACTION } from '@/store/mutation-types'
-import _ from 'lodash'
+import { PanesType } from "@/store/sys/sys-crumbs";
+import { defineComponent, ref, toRaw, watch } from "vue";
+import { useStore } from "vuex";
+import { useRouter } from "vue-router";
+import localStore from "@/utils/store";
+import { STORELETMENUPATH } from "@/utils/constant";
+import { SysTab, SysTabDel } from "@/types/sys/tab";
+import { DELETETABS, DELETETABSACTION } from "@/store/mutation-types";
+import _ from "lodash";
 
 export default defineComponent({
   setup() {
-    const store = useStore()
-    const router = useRouter()
-    const activeKey = ref(0)
+    const store = useStore();
+    const router = useRouter();
+    const activeKey = ref(0);
 
-    const panes = computed(() => {
-      const data = store.state.crumbs.panes
-      localForage.getItem<SysTab>(STORELETMENUPATH).then((res) => {
-        if (data && data.length > 0) {
-          if (res) {
-            const result = data.findIndex((item) => item.id === res.id)
-            // 设置当前被选择项
-            if (result !== -1) {
-              activeKey.value = result
+    const panes = ref([]);
+
+    watch(
+      () => store.state.crumbs.panes,
+      (newVal) => {
+        localStore.get<SysTab>(STORELETMENUPATH).then((res) => {
+          if (newVal && newVal.length > 0) {
+            if (res) {
+              const result = newVal.findIndex((item) => item.id === res.id);
+              // 设置当前被选择项
+              if (result !== -1) {
+                activeKey.value = result;
+              }
             }
+            panes.value = newVal;
           }
-        }
-      })
-      return data
-    })
+        });
+      }
+    );
     const OnChange = (val: number) => {
-      const result = FormatData()[val]
-      activeKey.value = val
-      router.push(result.path)
-      store.commit(DELETETABS, { selectData: toRaw(result) })
-    }
+      const result = FormatData()[val];
+      activeKey.value = val;
+      router.push(result.path);
+      store.commit(DELETETABS, { selectData: toRaw(result) });
+    };
     const FormatData = () => {
-      const data = toRaw(store.state.crumbs.panes)
-      const list: PanesType[] = []
+      const data = toRaw(store.state.crumbs.panes);
+      const list: PanesType[] = [];
       data.forEach((item: PanesType) => {
-        list.push(toRaw(item))
-      })
-      return list
-    }
+        list.push(toRaw(item));
+      });
+      return list;
+    };
     const OnEdit = (val: number) => {
-      const value = _.cloneDeep(toRaw(activeKey.value))
+      const value = _.cloneDeep(toRaw(activeKey.value));
       const result: SysTabDel = {
         delData: FormatData()[val],
-        selectData: '',
-      }
+        selectData: "",
+      };
       if (FormatData().length > 1) {
-        const index = value >= val ? value - 1 : value
+        const index = value >= val ? value - 1 : value;
 
-        result.selectData = FormatData()[index]
+        result.selectData = FormatData()[index];
       }
-      store.dispatch(DELETETABSACTION, toRaw(result))
-    }
+      store.dispatch(DELETETABSACTION, toRaw(result));
+    };
     return {
       activeKey,
       OnChange,
       panes,
       OnEdit,
-    }
+    };
   },
-})
+});
 </script>
 <style lang="less" scoped>
-@import 'index.less';
+@import "index.less";
 </style>

@@ -1,16 +1,16 @@
 module.exports = {
   devServer: {
     proxy: {
-      '/api': {
-        target: 'http://localhost:8081/api/v1',
+      "/api": {
+        target: "http://localhost:8081/api/v1",
         changeOrigin: true,
-        pathRewrite: { '^/api': '' },
+        pathRewrite: { "^/api": "" },
       },
     },
-    host: 'localhost',
+    host: "localhost",
     hotOnly: true,
   },
   css: {
     requireModuleExtension: true,
   },
-}
+};

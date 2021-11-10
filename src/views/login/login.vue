@@ -8,8 +8,8 @@
         </a-form-item>
         <a-form-item label="密码" v-bind="validateInfos.password">
           <a-input-password
-            @pressEnter="onSubmit"
             v-model:value="modelRef.password"
+            @pressEnter="onSubmit"
           />
         </a-form-item>
         <a-form-item :wrapper-col="{ span: 18, offset: 6 }">
@@ -25,74 +25,74 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, reactive, toRaw } from 'vue'
-import { useForm } from '@ant-design-vue/use'
-import { message } from 'ant-design-vue'
-import { useRouter } from 'vue-router'
-import { useStore } from 'vuex'
-import { LOGIN, LOGINRESET } from '@/store/mutation-types'
-import { localForage } from '@/utils/localforage'
-import { STORELETMENUPATH } from '@/utils/constant'
+import { defineComponent, reactive, toRaw } from "vue";
+import { useForm } from "@ant-design-vue/use";
+import { message } from "ant-design-vue";
+import { useRouter } from "vue-router";
+import { useStore } from "vuex";
+import { LOGIN, LOGINRESET } from "@/store/mutation-types";
+import localStore from "@/utils/store";
+import { STORELETMENUPATH } from "@/utils/constant";
 
 interface LoginType {
-  name: string
-  password: string
+  name: string;
+  password: string;
 }
 const Login = defineComponent({
-  name: 'Login',
+  name: "Login",
   setup() {
-    const router = useRouter()
-    const submitData = reactive({ loading: false })
-    const wrapperCol = { span: 14 }
-    const labelCol = { span: 4 }
-    const store = useStore()
+    const router = useRouter();
+    const submitData = reactive({ loading: false });
+    const wrapperCol = { span: 14 };
+    const labelCol = { span: 4 };
+    const store = useStore();
     const modelRef = reactive<LoginType>({
-      name: '',
-      password: '',
-    })
+      name: "",
+      password: "",
+    });
     const rulesRef = reactive({
       name: [
         {
           required: true,
-          message: '请输入姓名',
+          message: "请输入姓名",
         },
       ],
       password: [
         {
           required: true,
-          message: '请输入密码',
+          message: "请输入密码",
         },
       ],
-    })
+    });
 
-    const { validateInfos, validate } = useForm(modelRef, rulesRef)
+    const { validateInfos, validate } = useForm(modelRef, rulesRef);
 
     const onSubmit = (e: { preventDefault: () => void }) => {
-      e.preventDefault()
+      e.preventDefault();
       validate()
         .then(() => {
-          const data = toRaw(modelRef)
-          submitData.loading = true
+          const data = toRaw(modelRef);
+          submitData.loading = true;
           store
             .dispatch(LOGIN, {
               account: data.name,
               pass_word: data.password,
             })
             .then(() => {
-              submitData.loading = false
-              message.success('登录成功!')
-              localForage.setItem(STORELETMENUPATH, {})
-              store.commit(`${LOGINRESET}`)
-              router.push('/home')
+              submitData.loading = false;
+              message.success("登录成功!");
+              localStore.set(STORELETMENUPATH, {});
+              store.commit(`${LOGINRESET}`);
+              router.push("/home");
             })
             .catch(() => {
-              submitData.loading = false
-            })
+              submitData.loading = false;
+            });
         })
         .catch((err) => {
-          console.log('error', err)
-        })
-    }
+          console.log("error", err);
+        });
+    };
     return {
       modelRef,
       wrapperCol,
@@ -100,11 +100,11 @@ const Login = defineComponent({
       validateInfos,
       submitData,
       onSubmit,
-    }
+    };
   },
-})
-export default Login
+});
+export default Login;
 </script>
 <style lang="less" scoped>
-@import 'login.less';
+@import "login.less";
 </style>

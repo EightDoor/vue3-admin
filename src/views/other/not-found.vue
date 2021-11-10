@@ -6,27 +6,27 @@
   </a-result>
 </template>
 <script lang="ts">
-import { defineComponent, toRaw } from 'vue'
-import { useRouter } from 'vue-router'
-import { useStore } from 'vuex'
+import { defineComponent, toRaw } from "vue";
+import { useRouter } from "vue-router";
+import { useStore } from "vuex";
 
 const NotFound = defineComponent({
   setup() {
-    const router = useRouter()
-    const store = useStore()
+    const router = useRouter();
+    const store = useStore();
     function GoHome() {
-      const data = toRaw(store.state.sys.menus)
+      const data = toRaw(store.state.sys.menus);
       if (data && data.length > 0) {
-        router.replace('/')
+        router.replace("/");
       } else {
-        router.replace('/login')
+        router.replace("/login");
       }
     }
     return {
       // methods
       GoHome,
-    }
+    };
   },
-})
-export default NotFound
+});
+export default NotFound;
 </script>

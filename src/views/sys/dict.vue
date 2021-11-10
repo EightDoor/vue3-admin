@@ -72,25 +72,25 @@
   <dict-drawer ref="RefDictDrawer" />
 </template>
 <script lang="ts">
-import { defineComponent, onMounted, reactive, toRaw, ref } from 'vue'
-import { useForm } from '@ant-design-vue/use'
-import { TableDataType, TablePaginType } from '@/types/type'
-import { SysDict } from '@/types/sys/dict'
-import { http } from '@/utils/request'
-import CommonDrawer, { DrawerProps } from '@/components/Drawer/Drawer.vue'
-import CommonButton from '@/components/Button/Button.vue'
-import DictDrawer from './dict-drawer.vue'
-import { message } from 'ant-design-vue'
-import { Method } from 'axios'
+import { defineComponent, onMounted, reactive, toRaw, ref } from "vue";
+import { useForm } from "@ant-design-vue/use";
+import { TableDataType, TablePaginType } from "@/types/type";
+import { SysDict } from "@/types/sys/dict";
+import { http } from "@/utils/request";
+import CommonDrawer, { DrawerProps } from "@/components/Drawer/Drawer.vue";
+import CommonButton from "@/components/Button/Button.vue";
+import DictDrawer from "./dict-drawer.vue";
+import { message } from "ant-design-vue";
+import { Method } from "axios";
 
 export interface AllocateType {
-  visible: boolean
-  loading: boolean
-  data?: string[]
-  allocateId: string
+  visible: boolean;
+  loading: boolean;
+  data?: string[];
+  allocateId: string;
 }
 const SysDictView = defineComponent({
-  name: 'SysDict',
+  name: "SysDict",
   components: {
     CommonButton,
     CommonDrawer,
@@ -98,25 +98,25 @@ const SysDictView = defineComponent({
   },
   setup() {
     const modelRef = reactive<SysDict>({
-      name: '',
-      serial_number: '',
-      describe: '',
-    })
-    const RefDictDrawer = ref()
-    const editId = reactive<{ id: string | undefined }>({ id: '' })
+      name: "",
+      serial_number: "",
+      describe: "",
+    });
+    const RefDictDrawer = ref();
+    const editId = reactive<{ id: string | undefined }>({ id: "" });
     const commonDrawerData = reactive<DrawerProps>({
-      title: '添加',
+      title: "添加",
       loading: false,
       visible: false,
-    })
+    });
     const rulesRef = reactive({
       name: [
         {
           required: true,
-          message: '请输入名称',
+          message: "请输入名称",
         },
       ],
-    })
+    });
     const tableData = reactive<TableDataType<SysDict>>({
       data: [],
       page: 1,
@@ -125,104 +125,107 @@ const SysDictView = defineComponent({
       loading: false,
       columns: [
         {
-          title: '字典名称',
-          key: 'name',
-          dataIndex: 'name',
+          title: "字典名称",
+          key: "name",
+          dataIndex: "name",
         },
         {
-          title: '字典编号',
-          key: 'serial_number',
-          dataIndex: 'serial_number',
+          title: "字典编号",
+          key: "serial_number",
+          dataIndex: "serial_number",
         },
         {
-          title: '描述',
-          key: 'describe',
-          dataIndex: 'describe',
+          title: "描述",
+          key: "describe",
+          dataIndex: "describe",
         },
         {
-          title: '操作',
-          key: 'action',
+          title: "操作",
+          key: "action",
           slots: {
-            customRender: 'action',
+            customRender: "action",
           },
         },
       ],
-    })
+    });
 
     function getList() {
-      tableData.loading = true
+      tableData.loading = true;
       http<SysDict>({
-        url: 'dict',
-        method: 'GET',
+        url: "dict",
+        method: "GET",
         params: {
           page: tableData.page,
           page_size: tableData.page_size,
         },
       }).then((res) => {
-        tableData.loading = false
-        tableData.page = res.page
-        tableData.page_size = res.page_size
-        tableData.total = res.total
-        tableData.data = res.list
-      })
+        tableData.loading = false;
+        tableData.page = res.page;
+        tableData.page_size = res.page_size;
+        tableData.total = res.total;
+        tableData.data = res.list;
+      });
     }
     onMounted(() => {
-      getList()
-    })
+      getList();
+    });
 
-    const { resetFields, validate, validateInfos } = useForm(modelRef, rulesRef)
+    const { resetFields, validate, validateInfos } = useForm(
+      modelRef,
+      rulesRef
+    );
     function Submit() {
       validate().then(() => {
-        let url = 'dict'
-        let method: Method = 'POST'
-        const body = toRaw(modelRef)
-        commonDrawerData.loading = true
+        let url = "dict";
+        let method: Method = "POST";
+        const body = toRaw(modelRef);
+        commonDrawerData.loading = true;
         if (editId.id) {
-          url = `dict/${editId.id}`
-          method = 'PUT'
+          url = `dict/${editId.id}`;
+          method = "PUT";
         }
         http({
           url,
           method,
           body,
         }).then(() => {
-          message.success(`${commonDrawerData.title}成功`)
-          commonDrawerData.loading = false
-          commonDrawerData.visible = false
-          getList()
-        })
-      })
+          message.success(`${commonDrawerData.title}成功`);
+          commonDrawerData.loading = false;
+          commonDrawerData.visible = false;
+          getList();
+        });
+      });
     }
     function ChangAdd() {
-      resetFields()
-      commonDrawerData.visible = true
-      editId.id = ''
+      resetFields();
+      commonDrawerData.visible = true;
+      editId.id = "";
     }
 
     function Editor(record: SysDict) {
       if (record.id) {
-        editId.id = record.id
-        commonDrawerData.title = '修改'
-        commonDrawerData.visible = true
-        modelRef.name = record.name
-        modelRef.serial_number = record.serial_number
-        modelRef.describe = record.describe
+        editId.id = record.id;
+        commonDrawerData.title = "修改";
+        commonDrawerData.visible = true;
+        modelRef.name = record.name;
+        modelRef.serial_number = record.serial_number;
+        modelRef.describe = record.describe;
       }
     }
     function Del(record: SysDict) {
-      http({ url: 'dict/' + record.id, method: 'delete' }).then(() => {
-        message.success('删除成功')
-        getList()
-      })
+      http({ url: "dict/" + record.id, method: "delete" }).then(() => {
+        message.success("删除成功");
+        getList();
+      });
     }
     function Change(pagin: TablePaginType) {
-      tableData.page = pagin.current
-      getList()
+      tableData.page = pagin.current;
+      getList();
     }
 
     const Setting = (record: SysDict) => {
-      RefDictDrawer.value.IsShow(record)
-    }
+      RefDictDrawer.value.IsShow(record);
+    };
 
     return {
       //data
@@ -240,9 +243,9 @@ const SysDictView = defineComponent({
 
       // form
       validateInfos,
-    }
+    };
   },
-})
+});
 
-export default SysDictView
+export default SysDictView;
 </script>
