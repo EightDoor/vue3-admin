@@ -1,9 +1,9 @@
 // 按钮权限自定义指令
 import store from "@/store/index";
-import { DirectiveBinding } from "@vue/runtime-core";
 import localStore from "@/utils/store";
 import { STORELETMENUPATH } from "@/utils/constant";
 import { MenuItem } from "@/types/layout/menu";
+import { DirectiveBinding } from "vue";
 
 type ButtonPermissionType<T> = "add" | "editor" | "del" | T;
 
