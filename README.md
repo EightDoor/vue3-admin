@@ -70,9 +70,6 @@
 - 配套后台 nodejs
   - [vue3-admin-nest](https://github.com/EightDoor/vue3-admin-nest)
 
-# 资料
-- [eslint-vue-plugin](https://eslint.vuejs.org/rules/valid-v-model.html)
-
 ## 按钮权限使用
 
 - ```vue
