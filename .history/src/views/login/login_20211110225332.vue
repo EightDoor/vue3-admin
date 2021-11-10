@@ -3,12 +3,12 @@
     <div class="container">
       <h1>后台登录</h1>
       <a-form
-        ref="formRef"
         :model="formState"
         :labe-col="labelCol"
         :wrapper-col="wrapperCol"
         :rules="rules"
         class="form"
+        ref="formRef"
       >
         <a-form-item label="账户">
           <a-input v-model:value="formState.name" />

@@ -31,7 +31,7 @@ export type CustomMenus = RouteRecordRaw & { id: string; parent_id: string };
 const getUserInfo = (): Promise<UserInfoType> => {
   return new Promise((resolve, reject) => {
     http({
-      url: "userInfo",
+      url: "/user/getWithTheMenu",
       method: "get",
     })
       .then((res) => {
