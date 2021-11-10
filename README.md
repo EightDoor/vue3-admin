@@ -61,12 +61,10 @@
 
 # 运行
 
-- 安装依赖 `npm install or yarn install`
+- 安装依赖 `pnpm install`
 
 - 运行 `npm run dev`
 # 其他
-- 配套后台goland
-  - [go-admin](https://github.com/EightDoor/go-admin)
 - 配套后台 nodejs
   - [vue3-admin-nest](https://github.com/EightDoor/vue3-admin-nest)
 

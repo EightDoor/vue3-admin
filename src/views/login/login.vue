@@ -2,13 +2,20 @@
   <div class="login">
     <div class="container">
       <h1>后台登录</h1>
-      <a-form :labe-col="labelCol" :wrapper-col="wrapperCol" class="form">
-        <a-form-item label="账户" v-bind="validateInfos.name">
-          <a-input v-model:value="modelRef.name" />
+      <a-form
+        :model="formState"
+        :labe-col="labelCol"
+        :wrapper-col="wrapperCol"
+        :rules="rules"
+        class="form"
+        ref="formRef"
+      >
+        <a-form-item label="账户">
+          <a-input v-model:value="formState.name" />
         </a-form-item>
-        <a-form-item label="密码" v-bind="validateInfos.password">
+        <a-form-item label="密码">
           <a-input-password
-            v-model:value="modelRef.password"
+            v-model:value="formState.password"
             @pressEnter="onSubmit"
           />
         </a-form-item>
@@ -25,8 +32,7 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, reactive, toRaw } from "vue";
-import { useForm } from "@ant-design-vue/use";
+import { defineComponent, reactive, ref, toRaw } from "vue";
 import { message } from "ant-design-vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
@@ -46,11 +52,13 @@ const Login = defineComponent({
     const wrapperCol = { span: 14 };
     const labelCol = { span: 4 };
     const store = useStore();
-    const modelRef = reactive<LoginType>({
+
+    const formRef = ref();
+    const formState = reactive<LoginType>({
       name: "",
       password: "",
     });
-    const rulesRef = reactive({
+    const rules = {
       name: [
         {
           required: true,
@@ -63,15 +71,14 @@ const Login = defineComponent({
           message: "请输入密码",
         },
       ],
-    });
-
-    const { validateInfos, validate } = useForm(modelRef, rulesRef);
+    };
 
     const onSubmit = (e: { preventDefault: () => void }) => {
       e.preventDefault();
-      validate()
+      formRef.value
+        .validate()
         .then(() => {
-          const data = toRaw(modelRef);
+          const data = toRaw(formState);
           submitData.loading = true;
           store
             .dispatch(LOGIN, {
@@ -94,12 +101,13 @@ const Login = defineComponent({
         });
     };
     return {
-      modelRef,
+      formState,
       wrapperCol,
       labelCol,
-      validateInfos,
+      rules,
       submitData,
       onSubmit,
+      formRef,
     };
   },
 });

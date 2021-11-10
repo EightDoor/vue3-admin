@@ -193,11 +193,11 @@ export default {
     [LOGIN](s: unknown, payload: LoginType): Promise<Key> {
       return new Promise<string>((resolve, reject) => {
         const body = {
-          account: payload.account,
-          pass_word: payload.pass_word,
+          username: payload.account,
+          password: payload.pass_word,
         };
         http({
-          url: "/other/login",
+          url: "auth/login",
           method: "post",
           body,
         })
