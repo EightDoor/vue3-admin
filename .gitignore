@@ -1,7 +1,3 @@
-node_modules
-.idea
-dist
-.history
-.DS_Store
-dist-ssr
-*.local
+/go/log
+/go/tmp
+/go/conf/config.local.ini

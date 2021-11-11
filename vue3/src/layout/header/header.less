@@ -1,0 +1,34 @@
+@import "../layout/layout.less";
+
+.container {
+  padding-right: 15px;
+  padding-left: @slider-width;
+  background: #ffffff;
+  .content {
+    display: flex;
+    height: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+.button-icon-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  .button-breadcrumb {
+    vertical-align: middle;
+  }
+  &>div:nth-child(1) {
+    margin-right: 15px;
+  }
+  .button-icon {
+    vertical-align: middle;
+    font-size: 22px;
+    padding-left: 10px;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
+

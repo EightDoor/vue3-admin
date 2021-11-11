@@ -1,0 +1,30 @@
+@height: 100vh;
+@slider-width: 200px;
+@space-width: 16px;
+.height {
+  font-size: 30px;
+}
+.logo {
+  height: 50px;
+  font-size: 20px;
+  color: white;
+  text-align: center;
+  line-height: 50px;
+  //background: red;
+}
+
+.sider-height {
+  height: @height;
+  overflow: auto;
+  position: fixed;
+  left: 0;
+  width: @slider-width;
+}
+.layout-content {
+  margin: 0 0 0 @slider-width;
+  overflow: initial;
+  min-height: 83vh;
+  background: white;
+  // padding: @space-width;
+  border-radius: 5px;
+}
