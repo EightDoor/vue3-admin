@@ -22,7 +22,7 @@
       </div>
     </template>
     <template #depart="{ record }">
-      {{ record.depart_info.name }}
+      {{ record.deptId }}
     </template>
     <template #action="{ record }">
       <a-button
@@ -107,10 +107,10 @@
         <a-input v-model:value="modelRef.email"></a-input>
       </a-form-item>
       <a-form-item label="手机号码">
-        <a-input v-model:value="modelRef.phone_num"></a-input>
+        <a-input v-model:value="modelRef.phoneNum"></a-input>
       </a-form-item>
       <a-form-item label="密码">
-        <a-input v-model:value="modelRef.pass_word"></a-input>
+        <a-input v-model:value="modelRef.passWord"></a-input>
       </a-form-item>
     </a-form>
   </common-drawer>
@@ -152,6 +152,8 @@ import CommonDrawer, { DrawerProps } from '@/components/Drawer/Drawer.vue';
 import CommonButton from '@/components/Button/Button.vue';
 import { ListObjCompare, ListToTree } from '@/utils';
 import { AllocateType } from '@/views/sys/role.vue';
+import { searchParam } from '@/utils/search_param';
+import log from '@/utils/log';
 
 interface UserAndRole {
   user_id: string;
@@ -176,13 +178,12 @@ const SysUser = defineComponent({
     });
     const modelRef = reactive<UserType>({
       account: '',
-      pass_word: '',
-      nick_name: '',
+      nickName: '',
       email: '',
       status: 1,
       avatar: '',
-      dept_id: '',
-      phone_num: '',
+      deptId: '',
+      phoneNum: '',
     });
     const treeOptions = reactive<{ options: DepartType[] }>({ options: [] });
     const editId = reactive<{ id: number | undefined }>({ id: 0 });
@@ -220,7 +221,7 @@ const SysUser = defineComponent({
     const tableData = reactive<TableDataType<UserType>>({
       data: [],
       page: 1,
-      page_size: 10,
+      pageSize: 10,
       total: 0,
       loading: false,
       columns: [
@@ -231,8 +232,8 @@ const SysUser = defineComponent({
         },
         {
           title: '名称',
-          key: 'nick_name',
-          dataIndex: 'nick_name',
+          key: 'nickName',
+          dataIndex: 'nickName',
         },
         {
           title: '头像',
@@ -244,8 +245,8 @@ const SysUser = defineComponent({
         },
         {
           title: '部门',
-          key: 'dept_id',
-          dataIndex: 'dept_id',
+          key: 'deptId',
+          dataIndex: 'deptId',
           slots: {
             customRender: 'depart',
           },
@@ -276,18 +277,18 @@ const SysUser = defineComponent({
     function getList() {
       tableData.loading = true;
       http<UserType>({
-        url: 'user',
+        url: `user${searchParam({
+          limit: 10,
+          page: 1,
+        })}`,
         method: 'GET',
-        params: {
-          page: tableData.page,
-          page_size: tableData.page_size,
-        },
       }).then((res) => {
         tableData.loading = false;
-        tableData.page = res.page;
-        tableData.page_size = res.page_size;
-        tableData.total = res.total;
-        tableData.data = res.list;
+        tableData.page = res.list?.page;
+        tableData.pageSize = res.list?.pageSize;
+        tableData.total = res.list?.total;
+        tableData.data = res.list?.data || [];
+        log.i(tableData, 'table');
       });
     }
     function getDepartList() {
@@ -299,14 +300,15 @@ const SysUser = defineComponent({
           page_size: 1000,
         },
       }).then((res) => {
-        const list = res.list.sort(ListObjCompare('order_num'));
-        list.forEach((item) => {
-          item.title = item.name;
-          item.value = item.id;
-          item.key = item.id;
-        });
-        // @ts-ignore
-        treeOptions.options = ListToTree(list);
+        const list = res.list?.data.sort(ListObjCompare('order_num'));
+        if (list) {
+          list.forEach((item) => {
+            item.title = item.name;
+            item.value = item.id;
+            item.key = item.id;
+          });
+          treeOptions.options = ListToTree(list);
+        }
       });
     }
     function getRoleList() {
@@ -318,7 +320,7 @@ const SysUser = defineComponent({
           page_size: 1000,
         },
       }).then((res) => {
-        roleList.value = res.list;
+        roleList.value = res.list?.data || [];
       });
     }
     onMounted(() => {
@@ -414,12 +416,12 @@ const SysUser = defineComponent({
         commonDrawerData.title = '修改';
         commonDrawerData.visible = true;
         modelRef.account = record.account;
-        modelRef.nick_name = record.nick_name;
+        modelRef.nickName = record.nickName;
         modelRef.email = record.email;
         modelRef.status = record.status;
         modelRef.avatar = record.avatar;
-        modelRef.dept_id = record.dept_id;
-        modelRef.phone_num = record.phone_num;
+        modelRef.deptId = record.deptId;
+        modelRef.phoneNum = record.phoneNum;
       }
     }
     function Del(record: UserType) {
@@ -443,7 +445,7 @@ const SysUser = defineComponent({
         method: 'get',
       }).then((res) => {
         const list: string[] = [];
-        res.list.forEach((item) => {
+        res.list?.data.forEach((item) => {
           if (item.id != null) {
             list.push(String(item.id));
           }

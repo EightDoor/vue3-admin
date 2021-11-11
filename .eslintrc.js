@@ -29,5 +29,6 @@ module.exports = {
     'guard-for-in': 'off',
     'no-useless-return': 'off',
     'no-restricted-syntax': 'off',
+    'no-unused-vars': 'off',
   },
 };

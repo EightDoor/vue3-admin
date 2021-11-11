@@ -15,7 +15,7 @@ import {
   USERINFOMENUS,
 } from '@/store/mutation-types';
 import {
-  LoginType, MenuType, UserInfo, UserInformation,
+  LoginType, MenuType, UserInformation, UserType,
 } from '@/types/sys';
 import http from '@/utils/request';
 import { PERMISSIONBUTTONS, TOKEN } from '@/utils/constant';
@@ -23,6 +23,7 @@ import { MenuItem } from '@/types/layout/menu';
 
 import { ListObjCompare, ListToTree } from '@/utils';
 import store from '../index';
+import log from '@/utils/log';
 
 interface GetToken {
     accessToken: string;
@@ -31,7 +32,7 @@ interface GetToken {
 }
 export interface SysStoreType {
   menus: MenuType[];
-  userInfo: Partial<UserInfo>;
+  userInfo: Partial<UserType>;
   userInfoMenus: MenuType[];
   permissionButtons: MenuType[];
   collapsed: boolean;
@@ -115,7 +116,7 @@ const FormatMenuTree = async (menuData: MenuType[]): Promise<RouteRecordRaw[]> =
   const modules = await import.meta.globEager('../../views/**/*.vue');
   const childModules = await import.meta.globEager('../../views/**.vue');
 
-  // TODO 待验证是否必须要，    if (!file.isRouter) return;
+  // TODO 待验证是否必须要,     if (!file.isRouter) return;
   menuData.forEach((menuItem) => {
     const fileKey = Object.keys(modules).find((key) => modules[key].default && modules[key].default.name === menuItem.name);
     if (fileKey) {
@@ -150,7 +151,7 @@ const FormatMenuTree = async (menuData: MenuType[]): Promise<RouteRecordRaw[]> =
   const l = await baseLayout();
   const [layout] = l;
   layout.children = ListToTree(result);
-  console.log(layout, 'layout');
+  log.d(layout, '加载的路由');
 
   return [layout];
 };
@@ -229,7 +230,7 @@ export default {
       data.forEach((item) => {
         const r = menus.find((v) => v.id === item.parentId);
         if (r) {
-          item.name = String(r.id);
+          item.name = r.id;
         }
       });
       state.permissionButtons = data;
@@ -251,7 +252,7 @@ export default {
       commit,
     }: {
       commit: Commit;
-    }): Promise<{ userInfo: UserInfo | null; menus: RouteRecordRaw[] }> {
+    }): Promise<{ userInfo: UserType | null; menus: RouteRecordRaw[] }> {
       return new Promise((resolve, reject) => {
         // 获取数据然后直接存储
         getUserInfo()

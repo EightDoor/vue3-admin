@@ -56,15 +56,15 @@ function httpCustom<T = any>(c: HttpCustomType): Promise<CommonResponse<T>> {
       .then((res: any) => {
         if (res.code !== 0) {
           reject(res.data);
+        } else if (res.data.total) {
+          resolve({
+            list: res.data,
+            data: null,
+          });
         } else if (res.data) {
           resolve({
             data: res.data,
-            list: [],
-          });
-        } else if (res.data.list) {
-          resolve({
-            list: res.data.list,
-            data: null,
+            list: null,
           });
         }
       })

@@ -3,12 +3,15 @@ import { ColumnProps } from 'ant-design-vue/lib/table/interface';
 // 请求接口分页
 export interface PaginType {
     page?: number;
-    page_size?: number;
+    pageSize?: number;
     total?: number;
 }
 
-export interface CommonResponse<T> extends PaginType {
-  list: T[];
+interface CommReqList<T> extends PaginType{
+    data: T[]
+}
+export interface CommonResponse<T>{
+  list: CommReqList<T> | null;
   data: T | null
 }
 
@@ -46,8 +49,8 @@ export interface TableDataType<T> extends PaginType {
 // 通用的业务类型字段
 export interface CommonTableList {
   id?: number;
-  created_at?: string;
-  updated_at?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 // 树形tree-select

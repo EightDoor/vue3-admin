@@ -23,7 +23,6 @@ export const canUserAccess = async (
         menus.forEach((item: RouteRecordRaw) => {
           router.addRoute(item);
         });
-        console.log(menus, 'menus');
         // console.log(router.getRoutes())
         // TODO 待验证
         await router.push({ path: to.path, replace: true });

@@ -7,8 +7,11 @@
   </a-button>
 </template>
 <script lang="ts">
-import { defineComponent } from 'vue';
+
+import { defineComponent, PropType } from 'vue';
 import { PlusOutlined } from '@ant-design/icons-vue';
+
+type buttonType = 'default' | 'primary' | 'ghost' | 'dashed' | 'link' | 'text';
 
 const CommonButton = defineComponent({
   name: 'CommonButton',
@@ -26,8 +29,7 @@ const CommonButton = defineComponent({
       default: '',
     },
     type: {
-      type: String,
-      required: false,
+      type: String as PropType<buttonType>,
       default: 'primary',
     },
   },

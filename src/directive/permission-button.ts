@@ -1,5 +1,5 @@
 // 按钮权限自定义指令
-import { DirectiveBinding } from 'vue';
+import { DirectiveBinding, markRaw } from 'vue';
 import store from '@/store/index';
 import localStore from '@/utils/store';
 import { STORELETMENUPATH } from '@/utils/constant';
@@ -12,7 +12,7 @@ const ButtonPermissionType = {
   mounted: (el: HTMLElement, binding: DirectiveBinding): void => {
     const { arg } = binding;
     const { value } = binding;
-    const permissions = store.state.sys.permissionButtons;
+    const permissions = markRaw(store.state.sys.permissionButtons);
     localStore.get<MenuItem>(STORELETMENUPATH).then((res) => {
       const data = permissions.filter((item) => item.name === res?.id);
       if (data.length > 0) {

@@ -3,6 +3,7 @@ lockfileVersion: 5.3
 specifiers:
   '@ant-design-vue/use': ^0.0.1-alpha.10
   '@ant-design/icons-vue': ^6.0.1
+  '@nestjsx/crud-request': ^5.0.0-alpha.3
   '@types/node': ^16.11.7
   '@types/nprogress': ^0.2.0
   '@typescript-eslint/eslint-plugin': ^5.3.1
@@ -32,6 +33,7 @@ specifiers:
 dependencies:
   '@ant-design-vue/use': 0.0.1-alpha.10
   '@ant-design/icons-vue': 6.0.1_vue@3.2.21
+  '@nestjsx/crud-request': 5.0.0-alpha.3
   ant-design-vue: 3.0.0-alpha.11_076477a87ad5f7673ec470dd8ffa7935
   axios: 0.24.0
   core-js: 3.19.1
@@ -191,6 +193,17 @@ packages:
   /@humanwhocodes/object-schema/1.2.1:
     resolution: {integrity: sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==}
     dev: true
+
+  /@nestjsx/crud-request/5.0.0-alpha.3:
+    resolution: {integrity: sha512-EFeGgh/sSHhD3px9aj4hyjvOqBepMcRFAi5lrYuSUDmnj/eQOa4dg4orehU8gKrSAmgKNe9r0dx0kel7Zgivzg==}
+    dependencies:
+      '@nestjsx/util': 5.0.0-alpha.3
+      qs: 6.10.1
+    dev: false
+
+  /@nestjsx/util/5.0.0-alpha.3:
+    resolution: {integrity: sha512-UTYIxtyx80M42gOZ0VIInSiOLn78P6k1BCziiN8gE3FglzivQ1RGvPpmsRwioYEWG27gOgnMwOQnXv8Zbq8dzQ==}
+    dev: false
 
   /@nodelib/fs.scandir/2.1.5:
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
@@ -697,7 +710,6 @@ packages:
     dependencies:
       function-bind: 1.1.1
       get-intrinsic: 1.1.1
-    dev: true
 
   /callsites/3.1.0:
     resolution: {integrity: sha512-P8BjAsXvZS+VIDUI11hHCQEv74YT67YUi5JJFNWIqL235sBmjX4+qx9Muvls5ivyNENctx46xQLQ3aTuE7ssaQ==}
@@ -1442,7 +1454,6 @@ packages:
 
   /function-bind/1.1.1:
     resolution: {integrity: sha512-yIovAzMX49sF8Yl58fSCWJ5svSLuaibPxXQJFLmBObTuCr0Mf1KiPopGM9NiFjiYBCbfaa2Fh6breQ6ANVTI0A==}
-    dev: true
 
   /functional-red-black-tree/1.0.1:
     resolution: {integrity: sha1-GwqzvVU7Kg1jmdKcDj6gslIHgyc=}
@@ -1454,7 +1465,6 @@ packages:
       function-bind: 1.1.1
       has: 1.0.3
       has-symbols: 1.0.2
-    dev: true
 
   /get-symbol-description/1.0.0:
     resolution: {integrity: sha512-2EmdH1YvIQiZpltCNgkuiUnyukzxM/R6NDJX31Ke3BG1Nq5b0S2PhX59UKi9vZpPDQVdqn+1IcaAwnzTT5vCjw==}
@@ -1523,7 +1533,6 @@ packages:
   /has-symbols/1.0.2:
     resolution: {integrity: sha512-chXa79rL/UC2KlX17jo3vRGz0azaWEx5tGqZg5pO3NUyEJVB17dMruQlzCCOfUvElghKcm5194+BCRvi2Rv/Gw==}
     engines: {node: '>= 0.4'}
-    dev: true
 
   /has-tostringtag/1.0.0:
     resolution: {integrity: sha512-kFjcSNhnlGV1kyoGk7OXKSawH5JOb/LzUc5w9B02hOTO0dfFRjbHQKvg1d6cf3HbeUmtU9VbbV3qzZ2Teh97WQ==}
@@ -1537,7 +1546,6 @@ packages:
     engines: {node: '>= 0.4.0'}
     dependencies:
       function-bind: 1.1.1
-    dev: true
 
   /htmlparser2/7.1.2:
     resolution: {integrity: sha512-d6cqsbJba2nRdg8WW2okyD4ceonFHn9jLFxhwlNcLhQWcFPdxXeJulgOLjLKtAK9T6ahd+GQNZwG9fjmGW7lyg==}
@@ -1984,7 +1992,6 @@ packages:
 
   /object-inspect/1.11.0:
     resolution: {integrity: sha512-jp7ikS6Sd3GxQfZJPyH3cjcbJF6GZPClgdV+EFygjFLQ5FmW/dRUnTd9PQ9k0JhoNDabWFbpF1yCdSWCC6gexg==}
-    dev: true
 
   /object-keys/1.1.1:
     resolution: {integrity: sha512-NuAESUOUMrlIXOfHKzD6bpPu3tYt3xvjNdRIQ+FeT0lNb4K8WR70CaDxhuNguS2XG+GjkyMwOzsN5ZktImfhLA==}
@@ -2238,6 +2245,13 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
+  /qs/6.10.1:
+    resolution: {integrity: sha512-M528Hph6wsSVOBiYUnGf+K/7w0hNshs/duGsNXPUCLH5XAqjEtiPGwNONLV0tBH8NoGb0mvD5JubnUTrujKDTg==}
+    engines: {node: '>=0.6'}
+    dependencies:
+      side-channel: 1.0.4
+    dev: false
+
   /queue-microtask/1.2.3:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}
     dev: true
@@ -2367,7 +2381,6 @@ packages:
       call-bind: 1.0.2
       get-intrinsic: 1.1.1
       object-inspect: 1.11.0
-    dev: true
 
   /slash/3.0.0:
     resolution: {integrity: sha512-g9Q1haeby36OSStwb4ntCGGGaKsaVSjQ68fBxoQcutl5fS1vuY18H3wSt3jFyFtrkx+Kz0V1G85A4MyAdDMi2Q==}

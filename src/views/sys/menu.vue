@@ -44,10 +44,10 @@
     @onClose="drawerData.visible = false"
     @onOk="onSubmit"
   >
-    <a-form :label-col="{ span: 4 }" :wrapper-col="{ span: 20 }">
-      <a-form-item label="父级id" v-bind="validateInfos.parent_id">
+    <a-form :rules="rules" ref="formRef" :label-col="{ span: 4 }" :wrapper-col="{ span: 20 }">
+      <a-form-item label="父级id" >
         <a-tree-select
-          v-model:value="modelRef.parent_id"
+          v-model:value="validateInfos.parentId"
           style="width: 100%"
           :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
           :tree-data="treeOptions.options"
@@ -56,11 +56,11 @@
         >
         </a-tree-select>
       </a-form-item>
-      <a-form-item label="名称" v-bind="validateInfos.title">
-        <a-input v-model:value="modelRef.title"></a-input>
+      <a-form-item label="名称" >
+        <a-input v-model:value="validateInfos.title"></a-input>
       </a-form-item>
-      <a-form-item label="菜单类型" v-bind="validateInfos.type">
-        <a-select v-model:value="modelRef.type">
+      <a-form-item label="菜单类型" >
+        <a-select v-model:value="validateInfos.type">
           <a-select-option
             v-for="(item, index) in optionsType"
             :key="index"
@@ -70,40 +70,34 @@
           </a-select-option>
         </a-select>
       </a-form-item>
-      <a-form-item v-if="modelRef.type === 3" label="权限标识">
-        <a-input v-model:value="modelRef.perms"></a-input>
+      <a-form-item v-if="validateInfos.type === 3" label="权限标识">
+        <a-input v-model:value="validateInfos.perms"></a-input>
       </a-form-item>
-      <div v-if="modelRef.type !== 3">
+      <div v-if="validateInfos.type !== 3">
         <a-form-item label="菜单name">
-          <a-input v-model:value="modelRef.name"></a-input>
-        </a-form-item>
-        <a-form-item label="路径">
-          <a-input v-model:value="modelRef.path"></a-input>
+          <a-input v-model:value="validateInfos.name"></a-input>
         </a-form-item>
         <a-form-item label="是否首页">
-          <a-radio-group v-model:value="modelRef.isHome">
+          <a-radio-group v-model:value="validateInfos.isHome">
             <a-radio :value="true"> 是 </a-radio>
             <a-radio :value="false"> 否 </a-radio>
           </a-radio-group>
         </a-form-item>
-        <a-form-item label="组件地址">
-          <a-input v-model:value="modelRef.component"></a-input>
-        </a-form-item>
         <a-form-item label="重定向地址">
-          <a-input v-model:value="modelRef.redirect"></a-input>
+          <a-input v-model:value="validateInfos.redirect"></a-input>
         </a-form-item>
         <a-form-item label="图标">
-          <a-input v-model:value="modelRef.icon"></a-input>
+          <a-input v-model:value="validateInfos.icon"></a-input>
         </a-form-item>
         <a-form-item label="是否隐藏">
-          <a-radio-group v-model:value="modelRef.hidden" name="radioGroup">
+          <a-radio-group v-model:value="validateInfos.hidden" name="radioGroup">
             <a-radio :value="0"> 否 </a-radio>
             <a-radio :value="1"> 是 </a-radio>
           </a-radio-group>
         </a-form-item>
       </div>
-      <a-form-item label="排序" v-bind="validateInfos.order_num">
-        <a-input-number v-model:value="modelRef.order_num"></a-input-number>
+      <a-form-item label="排序" >
+        <a-input-number v-model:value="validateInfos.orderNum"></a-input-number>
       </a-form-item>
     </a-form>
   </common-drawer>
@@ -122,6 +116,7 @@ import http from '@/utils/request';
 import { MenuType } from '@/types/sys';
 import { TableDataType, TablePaginType } from '@/types/type';
 import { ListObjCompare, ListToTree } from '@/utils';
+import { searchParam } from '@/utils/search_param';
 
 const SysMenu = defineComponent({
   name: 'SysMenu',
@@ -145,7 +140,7 @@ const SysMenu = defineComponent({
     const width = 150;
     const tableCont = reactive<TableDataType<MenuType>>({
       page: 1,
-      page_size: 1000,
+      pageSize: 1000,
       total: 0,
       loading: false,
       columns: [
@@ -161,16 +156,6 @@ const SysMenu = defineComponent({
           width: width / 2,
         },
         {
-          title: '路径',
-          dataIndex: 'path',
-          width,
-        },
-        {
-          title: '组件地址',
-          dataIndex: 'component',
-          width,
-        },
-        {
           title: '重定向地址',
           dataIndex: 'redirect',
           width,
@@ -182,7 +167,7 @@ const SysMenu = defineComponent({
         },
         {
           title: '父级节点',
-          dataIndex: 'parent_id',
+          dataIndex: 'parentId',
           width,
         },
         {
@@ -197,7 +182,7 @@ const SysMenu = defineComponent({
         },
         {
           title: '排序',
-          dataIndex: 'order_num',
+          dataIndex: 'orderNum',
           width: width / 2,
         },
         {
@@ -218,7 +203,8 @@ const SysMenu = defineComponent({
       visible: false,
       loading: false,
     });
-    let modelRef = reactive<MenuType>({
+    const formRef = ref();
+    let validateInfos = reactive<MenuType>({
       parentId: 0,
       path: '',
       component: '',
@@ -233,7 +219,7 @@ const SysMenu = defineComponent({
       hidden: 0,
       isHome: false,
     });
-    const ruleRef = reactive({
+    const rules = reactive({
       parent_id: [
         {
           required: true,
@@ -259,22 +245,20 @@ const SysMenu = defineComponent({
         },
       ],
     });
-    const { resetFields, validate, validateInfos } = useForm(modelRef, ruleRef);
     function getList() {
       tableCont.loading = true;
       http<MenuType>({
-        url: '/menu',
-        method: 'GET',
-        params: {
+        url: `/menu${searchParam({
           page: tableCont.page,
-          page_size: tableCont.page_size,
-        },
+          limit: tableCont.pageSize,
+        })}`,
+        method: 'GET',
       }).then((res) => {
-        const list = cloneDeep(res.list.sort(ListObjCompare('order_num')));
+        const list = cloneDeep(res.list?.data.sort(ListObjCompare('order_num'))) || [];
         tableCont.loading = false;
         tableCont.data = ListToTree(list);
-        tableCont.total = res.total;
-        const treeMenus = cloneDeep(res.list);
+        tableCont.total = res.list?.total;
+        const treeMenus = cloneDeep(res.list?.data || []);
         treeMenus.forEach((item) => {
           item.value = String(item.id);
         });
@@ -285,19 +269,19 @@ const SysMenu = defineComponent({
       getList();
     });
     const onSubmit = () => {
-      validate<MenuType>()
+      formRef.value.validate()
         .then(() => {
           drawerData.loading = true;
-          const data = cloneDeep(toRaw(modelRef));
+          const data = cloneDeep(toRaw(validateInfos));
 
           // @ts-ignore
           delete data.id;
           let method: Method = 'POST';
-          if (modelRef.id) {
+          if (validateInfos.id) {
             method = 'PUT';
           }
           http<MenuType>({
-            url: modelRef.id ? `menu/${modelRef.id}` : 'menu',
+            url: validateInfos.id ? `menu/${validateInfos.id}` : 'menu',
             method,
             body: data,
           }).then(() => {
@@ -314,13 +298,13 @@ const SysMenu = defineComponent({
     function ChangeClick() {
       drawerData.title = '添加';
       drawerData.visible = true;
-      resetFields();
-      modelRef.parentId = 0;
+      formRef.value.resetFields();
+      validateInfos.parentId = 0;
     }
     function Editor(record: MenuType) {
       drawerData.title = '修改';
       drawerData.visible = true;
-      modelRef = Object.assign(modelRef, record);
+      validateInfos = Object.assign(validateInfos, record);
     }
     function Del(record: MenuType) {
       const data = toRaw(record);
@@ -348,8 +332,8 @@ const SysMenu = defineComponent({
 
       // form
       validateInfos,
-      resetFields,
-      modelRef,
+      formRef,
+      rules,
       onSubmit,
     };
   },

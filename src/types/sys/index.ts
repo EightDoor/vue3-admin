@@ -12,7 +12,7 @@ export interface MenuType extends CommonTableList {
     type?: number;
     orderNum?: number;
     perms?: any;
-    name?: string;
+    name?: string | number;
     path?: string;
     component?: string;
     redirect?: any;
@@ -32,23 +32,15 @@ export interface DepartType extends CommonTreeSelect {
 }
 
 export interface UserType extends CommonTableList {
-  // 用户登录密码
-  pass_word: string;
-  // 用户登录账号
-  account: string;
-  // 用户显示昵称
-  nick_name: string;
-  // 邮箱地址
-  email?: string;
-  // 所属状态是否有效  1是有效 0是失效
-  status: 0 | 1;
-  // 头像地址
-  avatar?: string;
-  // 部门id
-  dept_id: string;
-  // 用户手机号码
-  phone_num?: string;
-  depart_info?: DepartType;
+    deletedAt?: any;
+    account: string;
+    nickName: string;
+    email?: any;
+    status: number;
+    avatar?: any;
+    deptId: string;
+    phoneNum?: any;
+    passWord?: string
 }
 
 export interface RoleType extends CommonTableList {
@@ -78,22 +70,8 @@ interface Role {
     roleName: string;
 }
 
-export interface UserInfo {
-    id: number;
-    createdAt?: any;
-    updatedAt?: any;
-    deletedAt?: any;
-    account: string;
-    nickName: string;
-    email?: any;
-    status: number;
-    avatar?: any;
-    deptId: string;
-    phoneNum?: any;
-}
-
 export interface UserInformation {
-    userInfo: UserInfo;
+    userInfo: UserType;
     menus: MenuType[];
     roles: Role[];
 }
