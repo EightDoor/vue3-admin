@@ -49,44 +49,46 @@
   </common-drawer>
 </template>
 <script lang="ts">
-import CommonDrawer from "@/components/Drawer/Drawer.vue";
-import { SysDict, SysDictItem } from "@/types/sys/dict";
-import { TableDataType } from "@/types/type";
-import { http } from "@/utils/request";
-import { defineComponent, ref, reactive, toRaw } from "vue";
-import { useForm } from "@ant-design-vue/use";
-import { message } from "ant-design-vue";
-import { Method } from "axios";
+import {
+  defineComponent, ref, reactive, toRaw,
+} from 'vue';
+import { useForm } from '@ant-design-vue/use';
+import { message } from 'ant-design-vue';
+import { Method } from 'axios';
+import CommonDrawer from '@/components/Drawer/Drawer.vue';
+import { SysDict, SysDictItem } from '@/types/sys/dict';
+import { TableDataType } from '@/types/type';
+import http from '@/utils/request';
 
 const DictDrawer = defineComponent({
   components: {
     CommonDrawer,
   },
   setup() {
-    const editParentId = ref("");
-    const editId = ref("");
+    const editParentId = ref('');
+    const editId = ref('');
     const modalForm = reactive({
-      title: "添加",
+      title: '添加',
       visible: false,
       loading: false,
     });
     const modalRef = reactive<SysDictItem>({
-      value: "",
-      label: "",
-      describe: "",
-      dict_id: "",
+      value: '',
+      label: '',
+      describe: '',
+      dict_id: '',
     });
     const ruleRef = reactive({
       value: [
         {
           required: true,
-          message: "请输入字典项",
+          message: '请输入字典项',
         },
       ],
       label: [
         {
           required: true,
-          message: "请输入名称",
+          message: '请输入名称',
         },
       ],
     });
@@ -99,21 +101,21 @@ const DictDrawer = defineComponent({
       loading: false,
       columns: [
         {
-          title: "名称",
-          dataIndex: "label",
+          title: '名称',
+          dataIndex: 'label',
         },
         {
-          title: "数据值",
-          dataIndex: "value",
+          title: '数据值',
+          dataIndex: 'value',
         },
         {
-          title: "描述",
-          dataIndex: "describe",
+          title: '描述',
+          dataIndex: 'describe',
         },
         {
-          title: "操作",
-          dataIndex: "action",
-          slots: { customRender: "action" },
+          title: '操作',
+          dataIndex: 'action',
+          slots: { customRender: 'action' },
         },
       ],
     });
@@ -121,12 +123,12 @@ const DictDrawer = defineComponent({
     const GetList = () => {
       tableData.loading = true;
       http<SysDictItem>({
-        url: "/dict-item/" + editParentId.value,
-        method: "GET",
+        url: `/dict-item/${editParentId.value}`,
+        method: 'GET',
       }).then((res) => {
         tableData.data = res.list;
         tableData.total = res.total;
-        console.log("🚀 ~ file: dict-drawer.vue ~ line 42 ~ http ~ res", res);
+        console.log('🚀 ~ file: dict-drawer.vue ~ line 42 ~ http ~ res', res);
         tableData.loading = false;
       });
     };
@@ -135,10 +137,10 @@ const DictDrawer = defineComponent({
     };
     const IsShow = (record: SysDict) => {
       console.log(
-        "🚀 ~ file: dict-drawer.vue ~ line 26 ~ IsShow ~ record",
-        record
+        '🚀 ~ file: dict-drawer.vue ~ line 26 ~ IsShow ~ record',
+        record,
       );
-      editParentId.value = toRaw(record.id) || "";
+      editParentId.value = toRaw(record.id) || '';
       visible.value = true;
       GetList();
     };
@@ -149,10 +151,10 @@ const DictDrawer = defineComponent({
       modalRef.label = editData.label;
       modalRef.describe = editData.describe;
       console.log(
-        "🚀 ~ file: dict-drawer.vue ~ line 139 ~ Edit ~ record",
-        record
+        '🚀 ~ file: dict-drawer.vue ~ line 139 ~ Edit ~ record',
+        record,
       );
-      editId.value = editData.id || "";
+      editId.value = editData.id || '';
       modalForm.visible = true;
     };
     const Add = () => {
@@ -165,10 +167,10 @@ const DictDrawer = defineComponent({
         .then(() => {
           const data = toRaw(modalRef);
           data.dict_id = editParentId.value;
-          let method: Method = "POST";
-          let url = "dict-item";
+          let method: Method = 'POST';
+          let url = 'dict-item';
           if (editId.value) {
-            method = "PUT";
+            method = 'PUT';
             url = `${url}/${editId.value}`;
           }
           http({
@@ -177,7 +179,7 @@ const DictDrawer = defineComponent({
             body: data,
           }).then((res) => {
             console.log(res);
-            message.success(modalForm.title + "成功");
+            message.success(`${modalForm.title}成功`);
             modalForm.loading = false;
             modalForm.visible = false;
             GetList();
@@ -190,11 +192,11 @@ const DictDrawer = defineComponent({
     };
     const Del = (record: SysDictItem) => {
       http({
-        url: "dict-item/" + record.id,
-        method: "DELETE",
+        url: `dict-item/${record.id}`,
+        method: 'DELETE',
       }).then((res) => {
         console.log(res);
-        message.success("删除成功");
+        message.success('删除成功');
         GetList();
       });
     };

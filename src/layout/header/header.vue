@@ -40,26 +40,28 @@ import {
   UserOutlined,
   MenuUnfoldOutlined,
   MenuFoldOutlined,
-} from "@ant-design/icons-vue";
-import { defineComponent, ref, computed } from "vue";
-import { useRouter } from "vue-router";
-import { useStore } from "vuex";
-import { COLLAPSED } from "@/store/mutation-types";
+} from '@ant-design/icons-vue';
+import { defineComponent, ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
+import { COLLAPSED } from '@/store/mutation-types';
 
 export default defineComponent({
-  name: "CommonHeader",
+  name: 'CommonHeader',
   components: { UserOutlined, MenuUnfoldOutlined, MenuFoldOutlined },
   setup() {
-    const data = ref<string[]>(["个人中心", "退出"]);
+    const data = ref<string[]>(['个人中心', '退出']);
     const router = useRouter();
     const store = useStore();
     function GoTo(val: string) {
       console.log(val);
       switch (val) {
-        case "退出":
+        case '退出':
           localStorage.clear();
-          router.replace("/login");
+          router.replace('/login');
           break;
+        default:
+            //
       }
     }
     function ToggleCollapsed() {
@@ -69,9 +71,9 @@ export default defineComponent({
       get: () => {
         let r = [];
         try {
-          r = store.state.crumbs.list.split(",");
+          r = store.state.crumbs.list.split(',');
         } catch (err) {
-          console.log("err: ", err);
+          console.log('err: ', err);
         }
         return r;
       },

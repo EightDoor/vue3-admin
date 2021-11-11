@@ -1,13 +1,13 @@
 export interface MenuItem {
-  key: string;
+  key: number;
   title: string;
   icon?: string;
   path?: string;
   children?: MenuItem[];
-  id?: string;
-  parent_id?: string;
+  id: number;
+  parentId: number;
   crumbs?: string;
-  is_home?: boolean;
+  isHome?: boolean;
 }
 export interface MenusInfo {
   selectedKeys: string[];

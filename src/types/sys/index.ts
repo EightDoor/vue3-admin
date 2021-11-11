@@ -1,4 +1,27 @@
-import { CommonTableList, CommonTreeSelect } from "@/types/type";
+import { CommonTableList, CommonTreeSelect } from '@/types/type';
+
+export interface MenuType extends CommonTableList {
+    crumbs?: string;
+    key?: number;
+    id: number;
+    createdAt?: any;
+    updatedAt?: any;
+    deletedAt?: any;
+    parentId: number;
+    title: string;
+    type?: number;
+    orderNum?: number;
+    perms?: any;
+    name?: string;
+    path?: string;
+    component?: string;
+    redirect?: any;
+    icon?: any;
+    isHome?: boolean;
+    children?: Array<MenuType>;
+    value?: string;
+    hidden?: number;
+}
 
 export interface DepartType extends CommonTreeSelect {
   parent_id: string;
@@ -33,38 +56,9 @@ export interface RoleType extends CommonTableList {
   remark?: string;
   // 角色名称
   role_name: string;
-  id?: string;
+  id?: number;
 }
 
-export interface MenuType extends CommonTableList {
-  id?: string;
-  // 父级id
-  parent_id: string;
-  // 菜单名称
-  title: string;
-  // 菜单类型：1. 目录 2. 菜单  3. 按钮
-  type: number;
-  // 路径
-  path?: string;
-  // 组件地址
-  component?: string;
-  // 重定向地址
-  redirect?: string;
-  // 图标
-  icon?: string;
-  // 排序
-  order_num: number;
-  // 权限标识，接口标识
-  perms?: string;
-  // 是否首页
-  is_home: boolean;
-  // 菜单标识，前端路由name
-  name?: string;
-  children?: Array<MenuType>;
-  value?: string;
-  key?: string;
-  hidden?: number;
-}
 export interface LoginType {
   account: string;
   pass_word: string;
@@ -72,4 +66,34 @@ export interface LoginType {
 export interface UserInfoType {
   menu: MenuType[];
   user_info: UserType;
+}
+
+// 新定义的获取用户信息
+interface Role {
+    id: number;
+    createdAt?: any;
+    updatedAt?: any;
+    deletedAt?: any;
+    remark: string;
+    roleName: string;
+}
+
+export interface UserInfo {
+    id: number;
+    createdAt?: any;
+    updatedAt?: any;
+    deletedAt?: any;
+    account: string;
+    nickName: string;
+    email?: any;
+    status: number;
+    avatar?: any;
+    deptId: string;
+    phoneNum?: any;
+}
+
+export interface UserInformation {
+    userInfo: UserInfo;
+    menus: MenuType[];
+    roles: Role[];
 }

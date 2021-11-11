@@ -1,7 +1,7 @@
-import localforage from "localforage";
+import localforage from 'localforage';
 
 const localInstant = localforage.createInstance({
-  name: "vue3-gin-admin",
+  name: 'vue3-gin-admin',
 });
 
 const store = {

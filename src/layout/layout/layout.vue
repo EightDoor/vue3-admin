@@ -18,15 +18,15 @@
   </a-layout>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent } from 'vue';
 
-import CommonFooter from "@/layout/footer/footer.vue";
-import CommonMenu from "@/layout/menu/menu.vue";
-import CommonHeader from "@/layout/header/header.vue";
-import CommonTabs from "@/layout/tabs/index.vue";
+import CommonFooter from '@/layout/footer/footer.vue';
+import CommonMenu from '@/layout/menu/menu.vue';
+import CommonHeader from '@/layout/header/header.vue';
+import CommonTabs from '@/layout/tabs/index.vue';
 
 export default defineComponent({
-  name: "Layout",
+  name: 'LayoutHome',
   components: {
     CommonMenu,
     CommonFooter,
@@ -34,7 +34,7 @@ export default defineComponent({
     CommonTabs,
   },
   setup() {
-    const selectedKeys: string[] = ["4"];
+    const selectedKeys: string[] = ['4'];
     return {
       selectedKeys,
     };

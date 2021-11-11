@@ -1,4 +1,4 @@
-import { CommonTableList } from "../type";
+import { CommonTableList } from '../type';
 
 // 字典管理
 export interface SysDict extends CommonTableList {

@@ -138,25 +138,28 @@
   </common-drawer>
 </template>
 <script lang="ts">
-import { defineComponent, onMounted, reactive, toRaw, ref } from "vue";
-import { useForm } from "@ant-design-vue/use";
-import { TableDataType, TablePaginType } from "@/types/type";
-import { DepartType, RoleType, UserType } from "@/types/sys";
-import { http } from "@/utils/request";
-import CommonDrawer, { DrawerProps } from "@/components/Drawer/Drawer.vue";
-import CommonButton from "@/components/Button/Button.vue";
-import { ListObjCompare, ListToTree } from "@/utils";
-import { PlusOutlined, LoadingOutlined } from "@ant-design/icons-vue";
-import { message } from "ant-design-vue";
-import { Method } from "axios";
-import { AllocateType } from "@/views/sys/role.vue";
+import {
+  defineComponent, onMounted, reactive, toRaw, ref,
+} from 'vue';
+import { useForm } from '@ant-design-vue/use';
+import { PlusOutlined, LoadingOutlined } from '@ant-design/icons-vue';
+import { message } from 'ant-design-vue';
+import { Method } from 'axios';
+import { TableDataType, TablePaginType } from '@/types/type';
+import { DepartType, RoleType, UserType } from '@/types/sys';
+import http from '@/utils/request';
+import CommonDrawer, { DrawerProps } from '@/components/Drawer/Drawer.vue';
+import CommonButton from '@/components/Button/Button.vue';
+import { ListObjCompare, ListToTree } from '@/utils';
+import { AllocateType } from '@/views/sys/role.vue';
 
 interface UserAndRole {
   user_id: string;
   role_id: string;
 }
 const SysUser = defineComponent({
-  name: "SysUser",
+  name: 'SysUser',
+  isRouter: true,
   components: {
     CommonButton,
     CommonDrawer,
@@ -169,48 +172,48 @@ const SysUser = defineComponent({
     const allocationTree = reactive<AllocateType>({
       visible: false,
       loading: false,
-      allocateId: "",
+      allocateId: '',
     });
     const modelRef = reactive<UserType>({
-      account: "",
-      pass_word: "",
-      nick_name: "",
-      email: "",
+      account: '',
+      pass_word: '',
+      nick_name: '',
+      email: '',
       status: 1,
-      avatar: "",
-      dept_id: "",
-      phone_num: "",
+      avatar: '',
+      dept_id: '',
+      phone_num: '',
     });
     const treeOptions = reactive<{ options: DepartType[] }>({ options: [] });
-    const editId = reactive<{ id: string | undefined }>({ id: "" });
+    const editId = reactive<{ id: number | undefined }>({ id: 0 });
     const commonDrawerData = reactive<DrawerProps>({
-      title: "添加",
+      title: '添加',
       loading: false,
       visible: false,
     });
     const uploadImageData = reactive({
       fileList: [],
       loading: false,
-      imageUrl: "",
-      action: "test",
+      imageUrl: '',
+      action: 'test',
     });
     const rulesRef = reactive({
       account: [
         {
           required: true,
-          message: "请输入账号",
+          message: '请输入账号',
         },
       ],
       nick_name: [
         {
           required: true,
-          message: "请输入昵称",
+          message: '请输入昵称',
         },
       ],
       dept_id: [
         {
           required: true,
-          messgae: "请选择部门",
+          messgae: '请选择部门',
         },
       ],
     });
@@ -222,49 +225,49 @@ const SysUser = defineComponent({
       loading: false,
       columns: [
         {
-          title: "账号",
-          key: "account",
-          dataIndex: "account",
+          title: '账号',
+          key: 'account',
+          dataIndex: 'account',
         },
         {
-          title: "名称",
-          key: "nick_name",
-          dataIndex: "nick_name",
+          title: '名称',
+          key: 'nick_name',
+          dataIndex: 'nick_name',
         },
         {
-          title: "头像",
-          key: "avatar",
-          dataIndex: "avatar",
+          title: '头像',
+          key: 'avatar',
+          dataIndex: 'avatar',
           slots: {
-            customRender: "avatar",
+            customRender: 'avatar',
           },
         },
         {
-          title: "部门",
-          key: "dept_id",
-          dataIndex: "dept_id",
+          title: '部门',
+          key: 'dept_id',
+          dataIndex: 'dept_id',
           slots: {
-            customRender: "depart",
+            customRender: 'depart',
           },
         },
         {
-          title: "状态",
-          key: "status",
-          dataIndex: "status",
+          title: '状态',
+          key: 'status',
+          dataIndex: 'status',
           slots: {
-            customRender: "status",
+            customRender: 'status',
           },
         },
         {
-          title: "邮箱",
-          key: "email",
-          dataIndex: "email",
+          title: '邮箱',
+          key: 'email',
+          dataIndex: 'email',
         },
         {
-          title: "操作",
-          key: "action",
+          title: '操作',
+          key: 'action',
           slots: {
-            customRender: "action",
+            customRender: 'action',
           },
         },
       ],
@@ -273,8 +276,8 @@ const SysUser = defineComponent({
     function getList() {
       tableData.loading = true;
       http<UserType>({
-        url: "user",
-        method: "GET",
+        url: 'user',
+        method: 'GET',
         params: {
           page: tableData.page,
           page_size: tableData.page_size,
@@ -289,15 +292,15 @@ const SysUser = defineComponent({
     }
     function getDepartList() {
       http<DepartType>({
-        url: "/depart",
-        method: "GET",
+        url: '/depart',
+        method: 'GET',
         params: {
           page: 1,
           page_size: 1000,
         },
       }).then((res) => {
-        const list = res.list.sort(ListObjCompare("order_num"));
-        list.map((item) => {
+        const list = res.list.sort(ListObjCompare('order_num'));
+        list.forEach((item) => {
           item.title = item.name;
           item.value = item.id;
           item.key = item.id;
@@ -308,8 +311,8 @@ const SysUser = defineComponent({
     }
     function getRoleList() {
       http<RoleType>({
-        url: "/role",
-        method: "get",
+        url: '/role',
+        method: 'get',
         params: {
           page: 1,
           page_size: 1000,
@@ -325,33 +328,33 @@ const SysUser = defineComponent({
     });
 
     function formatStatus(text: number): string {
-      let result = "";
+      let result = '';
       switch (text) {
         case 0:
-          result = "失效";
+          result = '失效';
           break;
         case 1:
-          result = "有效";
+          result = '有效';
           break;
         default:
-          result = "未知";
+          result = '未知';
       }
       return result;
     }
 
     const { resetFields, validate, validateInfos } = useForm(
       modelRef,
-      rulesRef
+      rulesRef,
     );
     function Submit() {
       validate().then(() => {
-        let url = "user";
-        let method: Method = "POST";
+        let url = 'user';
+        let method: Method = 'POST';
         const data = toRaw(modelRef);
         commonDrawerData.loading = true;
         if (editId.id) {
           url = `user/${editId.id}`;
-          method = "PUT";
+          method = 'PUT';
         }
         http({
           url,
@@ -368,40 +371,39 @@ const SysUser = defineComponent({
     function ChangAdd() {
       resetFields();
       commonDrawerData.visible = true;
-      editId.id = "";
+      editId.id = 0;
     }
 
     function getBase64(img, callback) {
       const reader = new FileReader();
-      reader.addEventListener("load", () => callback(reader.result));
+      reader.addEventListener('load', () => callback(reader.result));
       reader.readAsDataURL(img);
     }
 
     function handleChange(info) {
-      if (info.file.status === "uploading") {
+      if (info.file.status === 'uploading') {
         uploadImageData.loading = true;
         return;
       }
-      if (info.file.status === "done") {
+      if (info.file.status === 'done') {
         // Get this url from response in real world.
         getBase64(info.file.originFileObj, (imageUrl: string) => {
           uploadImageData.imageUrl = imageUrl;
           uploadImageData.loading = false;
         });
       }
-      if (info.file.status === "error") {
+      if (info.file.status === 'error') {
         uploadImageData.loading = false;
       }
     }
     function beforeUpload(file) {
-      const isJpgOrPng =
-        file.type === "image/jpeg" || file.type === "image/png";
+      const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
       if (!isJpgOrPng) {
-        message.error("请上传jpg格式图片");
+        message.error('请上传jpg格式图片');
       }
       const isLt2M = file.size / 1024 / 1024 < 2;
       if (!isLt2M) {
-        message.error("图片上传最大为2M");
+        message.error('图片上传最大为2M');
       }
       return isJpgOrPng && isLt2M;
     }
@@ -409,7 +411,7 @@ const SysUser = defineComponent({
     function Editor(record: UserType) {
       if (record.id) {
         editId.id = record.id;
-        commonDrawerData.title = "修改";
+        commonDrawerData.title = '修改';
         commonDrawerData.visible = true;
         modelRef.account = record.account;
         modelRef.nick_name = record.nick_name;
@@ -421,8 +423,8 @@ const SysUser = defineComponent({
       }
     }
     function Del(record: UserType) {
-      http({ url: "user/" + record.id, method: "delete" }).then(() => {
-        message.success("删除成功");
+      http({ url: `user/${record.id}`, method: 'delete' }).then(() => {
+        message.success('删除成功');
         getList();
       });
     }
@@ -434,16 +436,16 @@ const SysUser = defineComponent({
       allocationTree.loading = true;
       allocationTree.visible = true;
       if (record.id != null) {
-        allocationTree.allocateId = record.id;
+        allocationTree.allocateId = String(record.id);
       }
       http<RoleType>({
-        url: "/user/permissions/" + record.id,
-        method: "get",
+        url: `/user/permissions/${record.id}`,
+        method: 'get',
       }).then((res) => {
         const list: string[] = [];
         res.list.forEach((item) => {
           if (item.id != null) {
-            list.push(item.id);
+            list.push(String(item.id));
           }
         });
         selectkeys.value = list;
@@ -456,16 +458,16 @@ const SysUser = defineComponent({
     function SubmitOk() {
       const data: UserAndRole = {
         user_id: allocationTree.allocateId,
-        role_id: selectkeys.value.join(","),
+        role_id: selectkeys.value.join(','),
       };
       allocationTree.loading = true;
       http<UserType>({
-        url: "/user/permissions",
-        method: "post",
+        url: '/user/permissions',
+        method: 'post',
         body: data,
       })
         .then(() => {
-          message.success("更新成功");
+          message.success('更新成功');
           allocationTree.loading = false;
           allocationTree.visible = false;
         })
@@ -474,7 +476,7 @@ const SysUser = defineComponent({
         });
     }
     return {
-      //data
+      // data
       tableData,
       commonDrawerData,
       modelRef,

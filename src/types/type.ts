@@ -1,15 +1,17 @@
-import { ColumnProps } from "ant-design-vue/lib/table/interface";
-
-export interface CommonResponse<T> extends PaginType {
-  list: T[];
-}
+import { ColumnProps } from 'ant-design-vue/lib/table/interface';
 
 // 请求接口分页
 export interface PaginType {
-  page?: number;
-  page_size?: number;
-  total?: number;
+    page?: number;
+    page_size?: number;
+    total?: number;
 }
+
+export interface CommonResponse<T> extends PaginType {
+  list: T[];
+  data: T | null
+}
+
 // 表格默认的分页
 export interface TablePaginType {
   current: number;
@@ -21,27 +23,29 @@ export interface CommonResponseSing<T> extends PaginType {
   list: T;
 }
 
+interface AntColumnSlot {
+    slots?: {
+        customRender: string;
+    };
+    title: string;
+    dataIndex?: string;
+    key?: string;
+    fixed?: string | boolean;
+    width?: number;
+}
+
+interface AntColumn extends ColumnProps, AntColumnSlot {}
+
 // 表格
 export interface TableDataType<T> extends PaginType {
   data: T[];
   columns: AntColumn[];
   loading: boolean;
 }
-interface AntColumn extends ColumnProps, AntColumnSlot {}
-interface AntColumnSlot {
-  slots?: {
-    customRender: string;
-  };
-  title: string;
-  dataIndex?: string;
-  key?: string;
-  fixed?: string | boolean;
-  width?: number;
-}
 
 // 通用的业务类型字段
 export interface CommonTableList {
-  id?: string;
+  id?: number;
   created_at?: string;
   updated_at?: string;
 }

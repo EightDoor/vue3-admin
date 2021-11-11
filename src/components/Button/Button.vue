@@ -7,11 +7,11 @@
   </a-button>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
-import { PlusOutlined } from "@ant-design/icons-vue";
+import { defineComponent } from 'vue';
+import { PlusOutlined } from '@ant-design/icons-vue';
 
 const CommonButton = defineComponent({
-  name: "CommonButton",
+  name: 'CommonButton',
   components: {
     PlusOutlined,
   },
@@ -19,22 +19,22 @@ const CommonButton = defineComponent({
     title: {
       type: String,
       required: true,
-      default: "默认",
+      default: '默认',
     },
     iconName: {
       type: String,
-      default: "",
+      default: '',
     },
     type: {
       type: String,
       required: false,
-      default: "primary",
+      default: 'primary',
     },
   },
-  emits: ["change"],
+  emits: ['change'],
   setup(props, { emit }) {
     function CommonClick() {
-      emit("change");
+      emit('change');
     }
     return {
       CommonClick,

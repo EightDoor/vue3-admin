@@ -1,35 +1,32 @@
-import axios, { Method } from "axios";
-import { message, notification } from "ant-design-vue";
-import { CommonResponse } from "@/types/type";
-import { RequestAuthorizedFailed, TOKEN } from "@/utils/constant";
-import { ClearInfo } from "@/utils/index";
+import axios, { Method } from 'axios';
+import { message, notification } from 'ant-design-vue';
+import { CommonResponse } from '@/types/type';
+import { RequestAuthorizedFailed, TOKEN } from '@/utils/constant';
+import { ClearInfo } from '@/utils/index';
 
 const instance = axios.create({
-  baseURL: "/api",
+  baseURL: '/api',
   timeout: 5000,
 });
-
 // 请求拦截器
 instance.interceptors.request.use(
-  function (config) {
+  (config) => {
     config.headers = {
-      Authorization: `Bearer ${localStorage.getItem(TOKEN) ?? ""}`,
+      Authorization: `Bearer ${localStorage.getItem(TOKEN) ?? ''}`,
     };
     return config;
   },
-  function (error) {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error),
 );
 
 // 相应拦截器
 instance.interceptors.response.use(
-  function (response) {
-    const data = response.data;
+  (response) => {
+    const { data } = response;
     if (response.status === 200 && data.code === 0) {
       //
     } else if (data.code === RequestAuthorizedFailed) {
-      message.info("token失效, 请重新登录");
+      message.info('token失效, 请重新登录');
       ClearInfo();
     } else {
       notification.error({
@@ -39,9 +36,7 @@ instance.interceptors.response.use(
     }
     return response.data;
   },
-  function (error) {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error),
 );
 
 interface HttpCustomType {
@@ -50,7 +45,7 @@ interface HttpCustomType {
   body?: unknown;
   params?: unknown;
 }
-function httpCustom<T>(c: HttpCustomType): Promise<CommonResponse<T>> {
+function httpCustom<T = any>(c: HttpCustomType): Promise<CommonResponse<T>> {
   return new Promise((resolve, reject) => {
     instance({
       url: c.url,
@@ -58,13 +53,19 @@ function httpCustom<T>(c: HttpCustomType): Promise<CommonResponse<T>> {
       data: c.body,
       params: c.params,
     })
-      .then((res) => {
-        // @ts-ignore
+      .then((res: any) => {
         if (res.code !== 0) {
-          // @ts-ignore
-          reject(res.data.msg);
-        } else {
-          resolve(res.data);
+          reject(res.data);
+        } else if (res.data) {
+          resolve({
+            data: res.data,
+            list: [],
+          });
+        } else if (res.data.list) {
+          resolve({
+            list: res.data.list,
+            data: null,
+          });
         }
       })
       .catch((err) => {
@@ -73,4 +74,4 @@ function httpCustom<T>(c: HttpCustomType): Promise<CommonResponse<T>> {
   });
 }
 
-export { httpCustom as http };
+export default httpCustom;

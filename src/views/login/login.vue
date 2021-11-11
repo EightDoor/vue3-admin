@@ -32,20 +32,22 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, reactive, ref, toRaw } from "vue";
-import { message } from "ant-design-vue";
-import { useRouter } from "vue-router";
-import { useStore } from "vuex";
-import { LOGIN, LOGINRESET } from "@/store/mutation-types";
-import localStore from "@/utils/store";
-import { STORELETMENUPATH } from "@/utils/constant";
+import {
+  defineComponent, reactive, ref, toRaw,
+} from 'vue';
+import { message } from 'ant-design-vue';
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
+import { LOGIN, LOGINRESET } from '@/store/mutation-types';
+import localStore from '@/utils/store';
+import { STORELETMENUPATH } from '@/utils/constant';
 
 interface LoginType {
   name: string;
   password: string;
 }
 const Login = defineComponent({
-  name: "Login",
+  name: 'ViewsLogin',
   setup() {
     const router = useRouter();
     const submitData = reactive({ loading: false });
@@ -55,20 +57,20 @@ const Login = defineComponent({
 
     const formRef = ref();
     const formState = reactive<LoginType>({
-      name: "",
-      password: "",
+      name: '',
+      password: '',
     });
     const rules = {
       name: [
         {
           required: true,
-          message: "请输入姓名",
+          message: '请输入姓名',
         },
       ],
       password: [
         {
           required: true,
-          message: "请输入密码",
+          message: '请输入密码',
         },
       ],
     };
@@ -87,17 +89,17 @@ const Login = defineComponent({
             })
             .then(() => {
               submitData.loading = false;
-              message.success("登录成功!");
+              message.success('登录成功!');
               localStore.set(STORELETMENUPATH, {});
               store.commit(`${LOGINRESET}`);
-              router.push("/home");
+              router.push('/home');
             })
             .catch(() => {
               submitData.loading = false;
             });
         })
         .catch((err) => {
-          console.log("error", err);
+          console.log('error', err);
         });
     };
     return {

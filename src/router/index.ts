@@ -1,20 +1,20 @@
-import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
-import { canUserAccess } from "@/authority";
-import nprogress from "nprogress";
-import "nprogress/nprogress.css"; // progress bar style
+import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router';
+import nprogress from 'nprogress';
+import { canUserAccess } from '@/authority';
+import 'nprogress/nprogress.css'; // progress bar style
 
-import Login from "@/views/login/login.vue";
-import NotFound from "@/views/other/not-found.vue";
+import Login from '@/views/login/login.vue';
+import NotFound from '@/views/other/not-found.vue';
 
 const staticRoutes: RouteRecordRaw[] = [
   {
-    path: "/login",
-    name: "login",
+    path: '/login',
+    name: 'login',
     component: Login,
   },
   {
-    path: "/:pathMatch(.*)*",
-    name: "NotFound",
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
     component: NotFound,
   },
 ];

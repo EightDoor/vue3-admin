@@ -6,7 +6,7 @@
         {{ menuInfo.title }}</span
       >
     </template>
-    <template v-for="item in menuInfo.children" :key="item.key">
+    <template v-for="item in menuInfo.children">
       <template v-if="!item.children">
         <a-menu-item :key="item.key" @click="jumpTo(item)">
           <!--图标-->
@@ -21,24 +21,24 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, toRaw } from "vue";
-import { useRouter } from "vue-router";
-import { useStore } from "vuex";
-import { MenuItem } from "@/types/layout/menu";
-import { STORELETMENUPATH } from "@/utils/constant";
-import localStorefrom from "@/utils/store";
-import { SETCRUMBSLIST } from "@/store/mutation-types";
-import { MenuFormatBrumb } from "./menu-common";
+import { defineComponent, toRaw } from 'vue';
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
+import { MenuItem } from '@/types/layout/menu';
+import { STORELETMENUPATH } from '@/utils/constant';
+import localStorefrom from '@/utils/store';
+import { SETCRUMBSLIST } from '@/store/mutation-types';
+import { MenuFormatBrumb } from './menu-common';
 
 export default defineComponent({
-  name: "SubMenu",
+  name: 'SubMenu',
   props: {
     menuInfo: {
       type: Object,
       default: () => ({}),
     },
   },
-  setup: function () {
+  setup() {
     const router = useRouter();
     const store = useStore();
     // methods
@@ -48,13 +48,13 @@ export default defineComponent({
         localStorefrom.set(STORELETMENUPATH, toRaw(item)).then(() => {
           MenuFormatBrumb(item);
           router.push({
-            path: item.path || "",
+            path: item.path || '',
           });
         });
       }
     }
     return {
-      //methods
+      // methods
       jumpTo,
     };
   },

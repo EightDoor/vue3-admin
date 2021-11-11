@@ -21,23 +21,29 @@
   </div>
 </template>
 <script lang="ts">
-import { PanesType } from "@/store/sys/sys-crumbs";
-import { defineComponent, ref, toRaw, watch } from "vue";
-import { useStore } from "vuex";
-import { useRouter } from "vue-router";
-import localStore from "@/utils/store";
-import { STORELETMENUPATH } from "@/utils/constant";
-import { SysTab, SysTabDel } from "@/types/sys/tab";
-import { DELETETABS, DELETETABSACTION } from "@/store/mutation-types";
-import _ from "lodash";
+import {
+  defineComponent, ref, toRaw, watch,
+} from 'vue';
+import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
+import _ from 'lodash';
+import { PanesType } from '@/store/sys/sys-crumbs';
+import localStore from '@/utils/store';
+import { STORELETMENUPATH } from '@/utils/constant';
+import { SysTab, SysTabDel } from '@/types/sys/tab';
+import { DELETETABS, DELETETABSACTION } from '@/store/mutation-types';
 
 export default defineComponent({
+  name: 'TabsHome',
   setup() {
     const store = useStore();
     const router = useRouter();
     const activeKey = ref(0);
 
-    const panes = ref([]);
+    const panes = ref<{
+      title?: string;
+      closable?: boolean;
+    }[]>([]);
 
     watch(
       () => store.state.crumbs.panes,
@@ -54,14 +60,9 @@ export default defineComponent({
             panes.value = newVal;
           }
         });
-      }
+      },
     );
-    const OnChange = (val: number) => {
-      const result = FormatData()[val];
-      activeKey.value = val;
-      router.push(result.path);
-      store.commit(DELETETABS, { selectData: toRaw(result) });
-    };
+
     const FormatData = () => {
       const data = toRaw(store.state.crumbs.panes);
       const list: PanesType[] = [];
@@ -70,11 +71,18 @@ export default defineComponent({
       });
       return list;
     };
+    const OnChange = (val: number) => {
+      const result = FormatData()[val];
+      activeKey.value = val;
+      router.push(result.path);
+      store.commit(DELETETABS, { selectData: toRaw(result) });
+    };
+
     const OnEdit = (val: number) => {
       const value = _.cloneDeep(toRaw(activeKey.value));
       const result: SysTabDel = {
         delData: FormatData()[val],
-        selectData: "",
+        selectData: '',
       };
       if (FormatData().length > 1) {
         const index = value >= val ? value - 1 : value;

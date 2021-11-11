@@ -1,4 +1,4 @@
-import { PanesType } from "@/store/sys/sys-crumbs";
+import { PanesType } from '@/store/sys/sys-crumbs';
 
 // tabs
 export interface SysTab {

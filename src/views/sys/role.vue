@@ -1,97 +1,102 @@
 <template>
-  <common-button v-bt-auth:add icon-name="add" @change="ChangAdd" />
-  <a-table
-    style="margin-top: 15px"
-    :columns="tableData.columns"
-    :data-source="tableData.data"
-    :loading="tableData.loading"
-    row-key="id"
-    :pagination="{
+  <div>
+    <common-button v-bt-auth:add icon-name="add" @change="ChangAdd" />
+    <a-table
+        style="margin-top: 15px"
+        :columns="tableData.columns"
+        :data-source="tableData.data"
+        :loading="tableData.loading"
+        row-key="id"
+        :pagination="{
       total: tableData.total,
     }"
-    @change="Change"
-  >
-    <template #status="{ text }">
-      {{ formatStatus(text) }}
-    </template>
-    <template #depart="{ record }">
-      {{ record.depart_info.name }}
-    </template>
-    <template #action="{ record }">
-      <a-button
-        v-bt-auth:power
-        type="primary"
-        style="margin-right: 15px"
-        @click="PowerAllocation(record)"
-      />
+        @change="Change"
+    >
+      <template #status="{ text }">
+        {{ text }}
+      </template>
+      <template #depart="{ record }">
+        {{ record.depart_info.name }}
+      </template>
+      <template #action="{ record }">
+        <a-button
+            v-bt-auth:power
+            type="primary"
+            style="margin-right: 15px"
+            @click="PowerAllocation(record)"
+        />
 
-      <a-button
-        v-bt-auth:edit
-        type="primary"
-        style="margin-right: 15px"
-        @click="Editor(record)"
-      />
-      <a-popconfirm
-        title="确定删除吗?"
-        ok-text="删除"
+        <a-button
+            v-bt-auth:edit
+            type="primary"
+            style="margin-right: 15px"
+            @click="Editor(record)"
+        />
+        <a-popconfirm
+            title="确定删除吗?"
+            ok-text="删除"
+            cancel-text="取消"
+            @confirm="Del(record)"
+        >
+          <a-button v-bt-auth:del type="danger" />
+        </a-popconfirm>
+      </template>
+    </a-table>
+
+    <common-drawer
+        :title="commonDrawerData.title"
+        :visible="commonDrawerData.visible"
+        :loading="commonDrawerData.loading"
+        ok-text="确定"
         cancel-text="取消"
-        @confirm="Del(record)"
-      >
-        <a-button v-bt-auth:del type="danger" />
-      </a-popconfirm>
-    </template>
-  </a-table>
-
-  <common-drawer
-    :title="commonDrawerData.title"
-    :visible="commonDrawerData.visible"
-    :loading="commonDrawerData.loading"
-    ok-text="确定"
-    cancel-text="取消"
-    @on-ok="Submit()"
-    @on-close="commonDrawerData.visible = false"
-  >
-    <a-form :label-col="{ span: 4 }" :wrapper-col="{ span: 20 }">
-      <a-form-item label="角色名称" v-bind="validateInfos.role_name">
-        <a-input v-model:value="modelRef.role_name"></a-input>
-      </a-form-item>
-      <a-form-item label="描述">
-        <a-input v-model:value="modelRef.remark"></a-input>
-      </a-form-item>
-    </a-form>
-  </common-drawer>
-  <common-tree
-    :visible="allocationTree.visible"
-    :data="allocationTree.data"
-    :loading="allocationTree.loading"
-    @on-close="Close"
-    @on-submit="SubmitOk"
-  />
+        @on-ok="Submit()"
+        @on-close="commonDrawerData.visible = false"
+    >
+      <a-form :label-col="{ span: 4 }" :wrapper-col="{ span: 20 }">
+        <a-form-item label="角色名称" v-bind="validateInfos.role_name">
+          <a-input v-model:value="modelRef.role_name"></a-input>
+        </a-form-item>
+        <a-form-item label="描述">
+          <a-input v-model:value="modelRef.remark"></a-input>
+        </a-form-item>
+      </a-form>
+    </common-drawer>
+    <common-tree
+        :visible="allocationTree.visible"
+        :data="allocationTree.data"
+        :loading="allocationTree.loading"
+        @on-close="Close"
+        @on-submit="SubmitOk"
+    />
+  </div>
 </template>
 <script lang="ts">
-import { defineComponent, onMounted, reactive, toRaw } from "vue";
-import { useForm } from "@ant-design-vue/use";
+import {
+  defineComponent, onMounted, reactive, toRaw,
+} from 'vue';
+import { useForm } from '@ant-design-vue/use';
+import { message } from 'ant-design-vue';
+import { Method } from 'axios';
 import {
   CommonTreeSelectKeys,
   TableDataType,
   TablePaginType,
-} from "@/types/type";
-import { MenuType, RoleType } from "@/types/sys";
-import { http } from "@/utils/request";
-import CommonDrawer, { DrawerProps } from "@/components/Drawer/Drawer.vue";
-import CommonButton from "@/components/Button/Button.vue";
-import CommonTree from "@/views/common/tree.vue";
-import { message } from "ant-design-vue";
-import { Method } from "axios";
+} from '@/types/type';
+import { MenuType, RoleType } from '@/types/sys';
+import http from '@/utils/request';
+import CommonDrawer, { DrawerProps } from '@/components/Drawer/Drawer.vue';
+import CommonButton from '@/components/Button/Button.vue';
+import CommonTree from '@/views/common/tree.vue';
 
 export interface AllocateType {
   visible: boolean;
   loading: boolean;
-  data?: string[];
+  data?: number[];
   allocateId: string;
 }
 const SysRole = defineComponent({
-  name: "SysRole",
+  name: 'SysRole',
+  isRouter: true,
   components: {
     CommonButton,
     CommonDrawer,
@@ -99,12 +104,12 @@ const SysRole = defineComponent({
   },
   setup() {
     const modelRef = reactive<RoleType>({
-      remark: "",
-      role_name: "",
+      remark: '',
+      role_name: '',
     });
-    const editId = reactive<{ id: string | undefined }>({ id: "" });
+    const editId = reactive<{ id: number | undefined }>({ id: 0 });
     const commonDrawerData = reactive<DrawerProps>({
-      title: "添加",
+      title: '添加',
       loading: false,
       visible: false,
     });
@@ -112,13 +117,13 @@ const SysRole = defineComponent({
       visible: false,
       loading: false,
       data: [],
-      allocateId: "",
+      allocateId: '',
     });
     const rulesRef = reactive({
       role_name: [
         {
           required: true,
-          message: "请输入角色名称",
+          message: '请输入角色名称',
         },
       ],
     });
@@ -130,20 +135,20 @@ const SysRole = defineComponent({
       loading: false,
       columns: [
         {
-          title: "描述",
-          key: "remark",
-          dataIndex: "remark",
+          title: '描述',
+          key: 'remark',
+          dataIndex: 'remark',
         },
         {
-          title: "角色名称",
-          key: "role_name",
-          dataIndex: "role_name",
+          title: '角色名称',
+          key: 'role_name',
+          dataIndex: 'role_name',
         },
         {
-          title: "操作",
-          key: "action",
+          title: '操作',
+          key: 'action',
           slots: {
-            customRender: "action",
+            customRender: 'action',
           },
         },
       ],
@@ -152,8 +157,8 @@ const SysRole = defineComponent({
     function getList() {
       tableData.loading = true;
       http<RoleType>({
-        url: "role",
-        method: "GET",
+        url: 'role',
+        method: 'GET',
         params: {
           page: tableData.page,
           page_size: tableData.page_size,
@@ -172,17 +177,17 @@ const SysRole = defineComponent({
 
     const { resetFields, validate, validateInfos } = useForm(
       modelRef,
-      rulesRef
+      rulesRef,
     );
     function Submit() {
       validate().then(() => {
-        let url = "role";
-        let method: Method = "POST";
+        let url = 'role';
+        let method: Method = 'POST';
         const body = toRaw(modelRef);
         commonDrawerData.loading = true;
         if (editId.id) {
           url = `role/${editId.id}`;
-          method = "PUT";
+          method = 'PUT';
         }
         http({
           url,
@@ -199,21 +204,21 @@ const SysRole = defineComponent({
     function ChangAdd() {
       resetFields();
       commonDrawerData.visible = true;
-      editId.id = "";
+      editId.id = 0;
     }
 
     function Editor(record: RoleType) {
       if (record.id) {
         editId.id = record.id;
-        commonDrawerData.title = "修改";
+        commonDrawerData.title = '修改';
         commonDrawerData.visible = true;
         modelRef.remark = record.remark;
         modelRef.role_name = record.role_name;
       }
     }
     function Del(record: RoleType) {
-      http({ url: "role/" + record.id, method: "delete" }).then(() => {
-        message.success("删除成功");
+      http({ url: `role/${record.id}`, method: 'delete' }).then(() => {
+        message.success('删除成功');
         getList();
       });
     }
@@ -225,16 +230,14 @@ const SysRole = defineComponent({
       allocationTree.loading = true;
       allocationTree.visible = true;
       if (record.id != null) {
-        allocationTree.allocateId = record.id;
+        allocationTree.allocateId = String(record.id);
       }
       http<MenuType>({
-        url: "/role/permissions/" + record.id,
-        method: "get",
+        url: `/role/permissions/${record.id}`,
+        method: 'get',
       }).then((res) => {
-        const list: string[] = [];
-        res.list.forEach((item) => {
-          return list.push(item.id || "");
-        });
+        const list: number[] = [];
+        res.list.forEach((item) => list.push(item.id || 0));
         allocationTree.data = list;
         allocationTree.loading = false;
       });
@@ -245,16 +248,16 @@ const SysRole = defineComponent({
     function SubmitOk(val: CommonTreeSelectKeys) {
       const data = {
         role_id: allocationTree.allocateId,
-        menu_id: val.checked.join(","),
+        menu_id: val.checked.join(','),
       };
       allocationTree.loading = true;
       http<MenuType>({
-        url: "/role/permissions",
-        method: "post",
+        url: '/role/permissions',
+        method: 'post',
         body: data,
       })
         .then(() => {
-          message.success("更新成功");
+          message.success('更新成功');
           allocationTree.loading = false;
           allocationTree.visible = false;
         })
@@ -263,7 +266,7 @@ const SysRole = defineComponent({
         });
     }
     return {
-      //data
+      // data
       tableData,
       commonDrawerData,
       modelRef,

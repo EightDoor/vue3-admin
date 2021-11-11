@@ -25,16 +25,17 @@
   </a-drawer>
 </template>
 <script lang="ts">
+import { defineComponent, reactive, watch } from 'vue';
+
 export interface DrawerProps {
   visible: boolean;
   title: string;
   placement?: string;
   loading?: boolean;
 }
-import { defineComponent, reactive, watch } from "vue";
 
 const CommonDrawer = defineComponent({
-  name: "ComponentDrawer",
+  name: 'ComponentDrawer',
   props: {
     title: {
       type: String,
@@ -42,19 +43,19 @@ const CommonDrawer = defineComponent({
     },
     placement: {
       type: String,
-      default: "right",
+      default: 'right',
     },
     okText: {
       type: String,
-      default: "",
+      default: '',
     },
     cancelText: {
       type: String,
-      default: "",
+      default: '',
     },
     width: {
       type: String,
-      default: "45%",
+      default: '45%',
     },
     visible: {
       type: Boolean,
@@ -65,27 +66,27 @@ const CommonDrawer = defineComponent({
       default: false,
     },
   },
-  emits: ["on-close", "on-ok"],
+  emits: ['on-close', 'on-ok'],
   setup(props, { emit }) {
     const commdrawerData = reactive({
       visible: false,
     });
     function onCancel() {
-      emit("on-close");
+      emit('on-close');
       commdrawerData.visible = false;
     }
     function onOk() {
-      emit("on-ok");
+      emit('on-ok');
     }
     function onClose() {
-      emit("on-close");
+      emit('on-close');
       commdrawerData.visible = false;
     }
     watch(
       () => props.visible,
       (data) => {
         commdrawerData.visible = data;
-      }
+      },
     );
     return {
       commdrawerData,

@@ -22,11 +22,13 @@
   </common-drawer>
 </template>
 <script lang="ts">
-import { defineComponent, onMounted, reactive, toRaw, watch } from "vue";
-import CommonDrawer from "@/components/Drawer/Drawer.vue";
-import { http } from "@/utils/request";
-import { MenuType } from "@/types/sys";
-import { ListObjCompare, ListToTree } from "@/utils";
+import {
+  defineComponent, onMounted, reactive, toRaw, watch,
+} from 'vue';
+import CommonDrawer from '@/components/Drawer/Drawer.vue';
+import http from '@/utils/request';
+import { MenuType } from '@/types/sys';
+import { ListObjCompare, ListToTree } from '@/utils';
 
 interface TreeDataType {
   spinningLoading: boolean;
@@ -37,7 +39,7 @@ interface TreeDataType {
   data: MenuType[];
 }
 const CommonTree = defineComponent({
-  name: "CommonTree",
+  name: 'CommonTree',
   components: {
     CommonDrawer,
   },
@@ -52,12 +54,10 @@ const CommonTree = defineComponent({
     },
     data: {
       type: Array,
-      default: () => {
-        return [];
-      },
+      default: () => [],
     },
   },
-  emits: ["on-close", "on-submit"],
+  emits: ['on-close', 'on-submit'],
   setup(props, { emit }) {
     const treeData = reactive<TreeDataType>({
       spinningLoading: false,
@@ -73,22 +73,22 @@ const CommonTree = defineComponent({
       },
       {
         deep: false,
-      }
+      },
     );
     function getList() {
       treeData.spinningLoading = true;
       http<MenuType>({
-        url: "/menu",
-        method: "GET",
+        url: '/menu',
+        method: 'GET',
         params: {
           page: 1,
           page_size: 1000,
         },
       }).then((res) => {
-        res.list.map((item: MenuType) => {
+        res.list.forEach((item: MenuType) => {
           item.key = item.id;
         });
-        const list = res.list.sort(ListObjCompare("order_num"));
+        const list = res.list.sort(ListObjCompare('order_num'));
         treeData.spinningLoading = false;
         treeData.data = ListToTree(list);
       });
@@ -97,14 +97,14 @@ const CommonTree = defineComponent({
       getList();
     });
     function onSelect(selectedKeys: string[], info) {
-      console.log(selectedKeys, "selec");
-      console.log(info, "info");
+      console.log(selectedKeys, 'selec');
+      console.log(info, 'info');
     }
     function DClose() {
-      emit("on-close");
+      emit('on-close');
     }
     function DSubmit() {
-      emit("on-submit", toRaw(treeData.checkedKeys));
+      emit('on-submit', toRaw(treeData.checkedKeys));
     }
 
     return {

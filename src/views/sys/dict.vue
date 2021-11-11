@@ -22,7 +22,7 @@
         v-bt-auth:power
         type="primary"
         style="margin-right: 15px"
-        @click="PowerAllocation(record)"
+        @click="PowerAllocation()"
       />
 
       <a-button
@@ -72,16 +72,18 @@
   <dict-drawer ref="RefDictDrawer" />
 </template>
 <script lang="ts">
-import { defineComponent, onMounted, reactive, toRaw, ref } from "vue";
-import { useForm } from "@ant-design-vue/use";
-import { TableDataType, TablePaginType } from "@/types/type";
-import { SysDict } from "@/types/sys/dict";
-import { http } from "@/utils/request";
-import CommonDrawer, { DrawerProps } from "@/components/Drawer/Drawer.vue";
-import CommonButton from "@/components/Button/Button.vue";
-import DictDrawer from "./dict-drawer.vue";
-import { message } from "ant-design-vue";
-import { Method } from "axios";
+import {
+  defineComponent, onMounted, reactive, toRaw, ref,
+} from 'vue';
+import { useForm } from '@ant-design-vue/use';
+import { message } from 'ant-design-vue';
+import { Method } from 'axios';
+import { TableDataType, TablePaginType } from '@/types/type';
+import { SysDict } from '@/types/sys/dict';
+import http from '@/utils/request';
+import CommonDrawer, { DrawerProps } from '@/components/Drawer/Drawer.vue';
+import CommonButton from '@/components/Button/Button.vue';
+import DictDrawer from './dict-drawer.vue';
 
 export interface AllocateType {
   visible: boolean;
@@ -90,7 +92,8 @@ export interface AllocateType {
   allocateId: string;
 }
 const SysDictView = defineComponent({
-  name: "SysDict",
+  name: 'SysDict',
+  isRouter: true,
   components: {
     CommonButton,
     CommonDrawer,
@@ -98,14 +101,14 @@ const SysDictView = defineComponent({
   },
   setup() {
     const modelRef = reactive<SysDict>({
-      name: "",
-      serial_number: "",
-      describe: "",
+      name: '',
+      serial_number: '',
+      describe: '',
     });
     const RefDictDrawer = ref();
-    const editId = reactive<{ id: string | undefined }>({ id: "" });
+    const editId = reactive<{ id: number | undefined }>({ id: 0 });
     const commonDrawerData = reactive<DrawerProps>({
-      title: "添加",
+      title: '添加',
       loading: false,
       visible: false,
     });
@@ -113,7 +116,7 @@ const SysDictView = defineComponent({
       name: [
         {
           required: true,
-          message: "请输入名称",
+          message: '请输入名称',
         },
       ],
     });
@@ -125,25 +128,25 @@ const SysDictView = defineComponent({
       loading: false,
       columns: [
         {
-          title: "字典名称",
-          key: "name",
-          dataIndex: "name",
+          title: '字典名称',
+          key: 'name',
+          dataIndex: 'name',
         },
         {
-          title: "字典编号",
-          key: "serial_number",
-          dataIndex: "serial_number",
+          title: '字典编号',
+          key: 'serial_number',
+          dataIndex: 'serial_number',
         },
         {
-          title: "描述",
-          key: "describe",
-          dataIndex: "describe",
+          title: '描述',
+          key: 'describe',
+          dataIndex: 'describe',
         },
         {
-          title: "操作",
-          key: "action",
+          title: '操作',
+          key: 'action',
           slots: {
-            customRender: "action",
+            customRender: 'action',
           },
         },
       ],
@@ -152,8 +155,8 @@ const SysDictView = defineComponent({
     function getList() {
       tableData.loading = true;
       http<SysDict>({
-        url: "dict",
-        method: "GET",
+        url: 'dict',
+        method: 'GET',
         params: {
           page: tableData.page,
           page_size: tableData.page_size,
@@ -172,17 +175,17 @@ const SysDictView = defineComponent({
 
     const { resetFields, validate, validateInfos } = useForm(
       modelRef,
-      rulesRef
+      rulesRef,
     );
     function Submit() {
       validate().then(() => {
-        let url = "dict";
-        let method: Method = "POST";
+        let url = 'dict';
+        let method: Method = 'POST';
         const body = toRaw(modelRef);
         commonDrawerData.loading = true;
         if (editId.id) {
           url = `dict/${editId.id}`;
-          method = "PUT";
+          method = 'PUT';
         }
         http({
           url,
@@ -199,13 +202,13 @@ const SysDictView = defineComponent({
     function ChangAdd() {
       resetFields();
       commonDrawerData.visible = true;
-      editId.id = "";
+      editId.id = '';
     }
 
     function Editor(record: SysDict) {
       if (record.id) {
         editId.id = record.id;
-        commonDrawerData.title = "修改";
+        commonDrawerData.title = '修改';
         commonDrawerData.visible = true;
         modelRef.name = record.name;
         modelRef.serial_number = record.serial_number;
@@ -213,8 +216,8 @@ const SysDictView = defineComponent({
       }
     }
     function Del(record: SysDict) {
-      http({ url: "dict/" + record.id, method: "delete" }).then(() => {
-        message.success("删除成功");
+      http({ url: `dict/${record.id}`, method: 'delete' }).then(() => {
+        message.success('删除成功');
         getList();
       });
     }
@@ -227,8 +230,16 @@ const SysDictView = defineComponent({
       RefDictDrawer.value.IsShow(record);
     };
 
+    function PowerAllocation() {
+      //
+    }
+
+    function formatStatus(text: string) {
+      return text;
+    }
+
     return {
-      //data
+      // data
       tableData,
       commonDrawerData,
       modelRef,
@@ -240,6 +251,8 @@ const SysDictView = defineComponent({
       Del,
       Change,
       Setting,
+      PowerAllocation,
+      formatStatus,
 
       // form
       validateInfos,

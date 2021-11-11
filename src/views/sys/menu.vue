@@ -81,7 +81,7 @@
           <a-input v-model:value="modelRef.path"></a-input>
         </a-form-item>
         <a-form-item label="是否首页">
-          <a-radio-group v-model:value="modelRef.is_home">
+          <a-radio-group v-model:value="modelRef.isHome">
             <a-radio :value="true"> 是 </a-radio>
             <a-radio :value="false"> 否 </a-radio>
           </a-radio-group>
@@ -109,34 +109,37 @@
   </common-drawer>
 </template>
 <script lang="ts">
-import { defineComponent, reactive, onMounted, toRaw, ref } from "vue";
-import CommonButton from "@/components/Button/Button.vue";
-import CommonDrawer, { DrawerProps } from "@/components/Drawer/Drawer.vue";
-import { http } from "@/utils/request";
-import { MenuType } from "@/types/sys";
-import { useForm } from "@ant-design-vue/use";
-import { message } from "ant-design-vue";
-import { TableDataType, TablePaginType } from "@/types/type";
-import { Method } from "axios";
-import { cloneDeep } from "lodash";
-import { ListObjCompare, ListToTree } from "@/utils";
+import {
+  defineComponent, reactive, onMounted, toRaw, ref,
+} from 'vue';
+import { useForm } from '@ant-design-vue/use';
+import { message } from 'ant-design-vue';
+import { Method } from 'axios';
+import { cloneDeep } from 'lodash';
+import CommonButton from '@/components/Button/Button.vue';
+import CommonDrawer, { DrawerProps } from '@/components/Drawer/Drawer.vue';
+import http from '@/utils/request';
+import { MenuType } from '@/types/sys';
+import { TableDataType, TablePaginType } from '@/types/type';
+import { ListObjCompare, ListToTree } from '@/utils';
 
 const SysMenu = defineComponent({
-  name: "SysMenu",
+  name: 'SysMenu',
+  isRouter: true,
   components: { CommonButton, CommonDrawer },
   setup() {
     const optionsType = ref([
       {
         value: 1,
-        label: "目录",
+        label: '目录',
       },
       {
         value: 2,
-        label: "菜单",
+        label: '菜单',
       },
       {
         value: 3,
-        label: "按钮",
+        label: '按钮',
       },
     ]);
     const width = 150;
@@ -147,63 +150,63 @@ const SysMenu = defineComponent({
       loading: false,
       columns: [
         {
-          title: "名称",
-          dataIndex: "title",
+          title: '名称',
+          dataIndex: 'title',
           width: width * 2,
           fixed: true,
         },
         {
-          title: "类型",
-          dataIndex: "type",
+          title: '类型',
+          dataIndex: 'type',
           width: width / 2,
         },
         {
-          title: "路径",
-          dataIndex: "path",
+          title: '路径',
+          dataIndex: 'path',
           width,
         },
         {
-          title: "组件地址",
-          dataIndex: "component",
+          title: '组件地址',
+          dataIndex: 'component',
           width,
         },
         {
-          title: "重定向地址",
-          dataIndex: "redirect",
+          title: '重定向地址',
+          dataIndex: 'redirect',
           width,
         },
         {
-          title: "图标",
-          dataIndex: "icon",
+          title: '图标',
+          dataIndex: 'icon',
           width,
         },
         {
-          title: "父级节点",
-          dataIndex: "parent_id",
+          title: '父级节点',
+          dataIndex: 'parent_id',
           width,
         },
         {
-          title: "权限标识",
-          dataIndex: "perms",
+          title: '权限标识',
+          dataIndex: 'perms',
           width: width / 2,
         },
         {
-          title: "菜单标识",
-          dataIndex: "name",
+          title: '菜单标识',
+          dataIndex: 'name',
           width: width / 2,
         },
         {
-          title: "排序",
-          dataIndex: "order_num",
+          title: '排序',
+          dataIndex: 'order_num',
           width: width / 2,
         },
         {
-          title: "操作",
-          key: "action",
-          fixed: "right",
+          title: '操作',
+          key: 'action',
+          fixed: 'right',
           width: 200,
           slots: {
-            customRender: "action",
+            customRender: 'action',
           },
         },
       ],
@@ -211,48 +214,48 @@ const SysMenu = defineComponent({
     });
     const treeOptions = reactive<{ options: MenuType[] }>({ options: [] });
     const drawerData = reactive<DrawerProps>({
-      title: "添加",
+      title: '添加',
       visible: false,
       loading: false,
     });
     let modelRef = reactive<MenuType>({
-      parent_id: "",
-      path: "",
-      component: "",
-      redirect: "",
-      icon: "",
-      title: "",
-      perms: "",
-      name: "",
+      parentId: 0,
+      path: '',
+      component: '',
+      redirect: '',
+      icon: '',
+      title: '',
+      perms: '',
+      name: '',
       type: 1,
-      order_num: 1,
-      id: "",
+      orderNum: 1,
+      id: 0,
       hidden: 0,
-      is_home: false,
+      isHome: false,
     });
     const ruleRef = reactive({
       parent_id: [
         {
           required: true,
-          message: "请选择父级",
+          message: '请选择父级',
         },
       ],
       title: [
         {
           required: true,
-          message: "请输入名称",
+          message: '请输入名称',
         },
       ],
       type: [
         {
           required: true,
-          message: "请选择类型",
+          message: '请选择类型',
         },
       ],
       order_num: [
         {
           required: true,
-          message: "请输入排序",
+          message: '请输入排序',
         },
       ],
     });
@@ -260,20 +263,20 @@ const SysMenu = defineComponent({
     function getList() {
       tableCont.loading = true;
       http<MenuType>({
-        url: "/menu",
-        method: "GET",
+        url: '/menu',
+        method: 'GET',
         params: {
           page: tableCont.page,
           page_size: tableCont.page_size,
         },
       }).then((res) => {
-        const list = cloneDeep(res.list.sort(ListObjCompare("order_num")));
+        const list = cloneDeep(res.list.sort(ListObjCompare('order_num')));
         tableCont.loading = false;
         tableCont.data = ListToTree(list);
         tableCont.total = res.total;
         const treeMenus = cloneDeep(res.list);
-        treeMenus.map((item) => {
-          item.value = item.id;
+        treeMenus.forEach((item) => {
+          item.value = String(item.id);
         });
         treeOptions.options = ListToTree(treeMenus);
       });
@@ -286,14 +289,15 @@ const SysMenu = defineComponent({
         .then(() => {
           drawerData.loading = true;
           const data = cloneDeep(toRaw(modelRef));
-          // @ts-gnore
+
+          // @ts-ignore
           delete data.id;
-          let method: Method = "POST";
+          let method: Method = 'POST';
           if (modelRef.id) {
-            method = "PUT";
+            method = 'PUT';
           }
           http<MenuType>({
-            url: modelRef.id ? `menu/${modelRef.id}` : "menu",
+            url: modelRef.id ? `menu/${modelRef.id}` : 'menu',
             method,
             body: data,
           }).then(() => {
@@ -304,24 +308,24 @@ const SysMenu = defineComponent({
           });
         })
         .catch((err) => {
-          console.log("error", err);
+          console.log('error', err);
         });
     };
     function ChangeClick() {
-      drawerData.title = "添加";
+      drawerData.title = '添加';
       drawerData.visible = true;
       resetFields();
-      modelRef.parent_id = "0";
+      modelRef.parentId = 0;
     }
     function Editor(record: MenuType) {
-      drawerData.title = "修改";
+      drawerData.title = '修改';
       drawerData.visible = true;
       modelRef = Object.assign(modelRef, record);
     }
     function Del(record: MenuType) {
       const data = toRaw(record);
-      http({ url: `menu/${data.id}`, method: "delete" }).then(() => {
-        message.success("删除成功");
+      http({ url: `menu/${data.id}`, method: 'delete' }).then(() => {
+        message.success('删除成功');
         getList();
       });
     }
@@ -342,7 +346,7 @@ const SysMenu = defineComponent({
       Editor,
       Del,
 
-      //form
+      // form
       validateInfos,
       resetFields,
       modelRef,
