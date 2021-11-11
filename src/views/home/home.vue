@@ -1,5 +1,5 @@
 <template>
-  <div>vue3-gin-admin</div>
+  <div>vue3-admin-nest</div>
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue';

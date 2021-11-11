@@ -2,15 +2,15 @@ import { ColumnProps } from 'ant-design-vue/lib/table/interface';
 
 // 请求接口分页
 export interface PaginType {
-    page?: number;
-    pageSize?: number;
-    total?: number;
+  page?: number;
+  pageSize?: number;
+  total?: number;
 }
 
-interface CommReqList<T> extends PaginType{
-    data: T[]
+interface CommReqList<T> extends PaginType {
+  data: T[]
 }
-export interface CommonResponse<T>{
+export interface CommonResponse<T> {
   list: CommReqList<T> | null;
   data: T | null
 }
@@ -27,17 +27,17 @@ export interface CommonResponseSing<T> extends PaginType {
 }
 
 interface AntColumnSlot {
-    slots?: {
-        customRender: string;
-    };
-    title: string;
-    dataIndex?: string;
-    key?: string;
-    fixed?: string | boolean;
-    width?: number;
+  bodyCell?: {
+    customRender: string;
+  };
+  title: string;
+  dataIndex?: string;
+  key?: string;
+  fixed?: string | boolean;
+  width?: number;
 }
 
-interface AntColumn extends ColumnProps, AntColumnSlot {}
+interface AntColumn extends ColumnProps, AntColumnSlot { }
 
 // 表格
 export interface TableDataType<T> extends PaginType {

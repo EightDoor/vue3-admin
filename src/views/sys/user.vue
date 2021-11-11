@@ -1,10 +1,5 @@
 <template>
-  <common-button
-    v-bt-auth:add="{ title: true }"
-    title="添加"
-    icon-name="add"
-    @change="ChangAdd"
-  />
+  <common-button v-bt-auth:add="{ title: true }" title="添加" icon-name="add" @change="ChangAdd" />
   <a-table
     style="margin-top: 15px"
     :columns="tableData.columns"
@@ -17,13 +12,9 @@
     @change="Change"
   >
     <template #status="{ text }">
-      <div :style="text === 0 ? { color: 'red' } : { color: 'green' }">
-        {{ formatStatus(text) }}
-      </div>
+      <div :style="text === 0 ? { color: 'red' } : { color: 'green' }">{{ formatStatus(text) }}</div>
     </template>
-    <template #depart="{ record }">
-      {{ record.deptId }}
-    </template>
+    <template #depart="{ record }">{{ record.deptId }}</template>
     <template #action="{ record }">
       <a-button
         v-bt-auth:power
@@ -31,19 +22,9 @@
         style="margin-right: 15px"
         @click="Allocate(record)"
       />
-      <a-button
-        v-bt-auth:edit
-        type="primary"
-        style="margin-right: 15px"
-        @click="Editor(record)"
-      />
-      <a-popconfirm
-        title="确定删除吗?"
-        ok-text="删除"
-        cancel-text="取消"
-        @confirm="Del(record)"
-      >
-        <a-button v-bt-auth:del type="danger" />
+      <a-button v-bt-auth:edit type="primary" style="margin-right: 15px" @click="Editor(record)" />
+      <a-popconfirm title="确定删除吗?" ok-text="删除" cancel-text="取消" @confirm="Del(record)">
+        <a-button v-bt-auth:del danger />
       </a-popconfirm>
     </template>
   </a-table>
@@ -68,11 +49,7 @@
           :before-upload="beforeUpload"
           @change="handleChange"
         >
-          <img
-            v-if="uploadImageData.imageUrl"
-            :src="uploadImageData.imageUrl"
-            alt="avatar"
-          />
+          <img v-if="uploadImageData.imageUrl" :src="uploadImageData.imageUrl" alt="avatar" />
           <div v-else>
             <loading-outlined v-if="uploadImageData.loading" />
             <plus-outlined v-else />
@@ -94,13 +71,12 @@
           :tree-data="treeOptions.options"
           placeholder="请选择部门"
           tree-default-expand-all
-        >
-        </a-tree-select>
+        ></a-tree-select>
       </a-form-item>
       <a-form-item label="状态" v-bind="validateInfos.status">
         <a-radio-group v-model:value="modelRef.status" name="radioGroup">
-          <a-radio :value="0"> 失效 </a-radio>
-          <a-radio :value="1"> 有效 </a-radio>
+          <a-radio :value="0">失效</a-radio>
+          <a-radio :value="1">有效</a-radio>
         </a-radio-group>
       </a-form-item>
       <a-form-item label="邮箱">
@@ -130,7 +106,7 @@
         class="checkoutContainer"
       >
         <div v-for="(item, index) in roleList" :key="index">
-          <a-checkbox :value="item.id"> {{ item.remark }} </a-checkbox>
+          <a-checkbox :value="item.id">{{ item.remark }}</a-checkbox>
         </div>
       </a-checkbox-group>
       <a-empty v-else />
@@ -516,3 +492,10 @@ export default SysUser;
   flex-wrap: wrap;
 }
 </style>
+
+.checkoutContainer {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  flex-wrap: wrap;
+}

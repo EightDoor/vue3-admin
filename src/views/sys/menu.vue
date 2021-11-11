@@ -18,21 +18,13 @@
     :loading="tableCont.loading"
     @change="Change"
   >
-    <template #action="{ record }">
-      <a-button
-        v-bt-auth:edit
-        type="primary"
-        style="margin-right: 15px"
-        @click="Editor(record)"
-      ></a-button>
-      <a-popconfirm
-        title="确定删除吗?"
-        ok-text="删除"
-        cancel-text="取消"
-        @confirm="Del(record)"
-      >
-        <a-button v-bt-auth:del type="danger"></a-button>
-      </a-popconfirm>
+    <template #bodyCell="{ column, record }">
+      <template v-if="column.key === 'action'">
+        <a-button v-bt-auth:edit type="primary" style="margin-right: 15px" @click="Editor(record)"></a-button>
+        <a-popconfirm title="确定删除吗?" ok-text="删除" cancel-text="取消" @confirm="Del(record)">
+          <a-button v-bt-auth:del danger></a-button>
+        </a-popconfirm>
+      </template>
     </template>
   </a-table>
   <common-drawer
@@ -44,8 +36,14 @@
     @onClose="drawerData.visible = false"
     @onOk="onSubmit"
   >
-    <a-form :rules="rules" ref="formRef" :label-col="{ span: 4 }" :wrapper-col="{ span: 20 }">
-      <a-form-item label="父级id" >
+    <a-form
+      :rules="rules"
+      ref="formRef"
+      :model="validateInfos"
+      :label-col="{ span: 4 }"
+      :wrapper-col="{ span: 20 }"
+    >
+      <a-form-item label="父级id">
         <a-tree-select
           v-model:value="validateInfos.parentId"
           style="width: 100%"
@@ -53,21 +51,18 @@
           :tree-data="treeOptions.options"
           placeholder="请选择"
           tree-default-expand-all
-        >
-        </a-tree-select>
+        ></a-tree-select>
       </a-form-item>
-      <a-form-item label="名称" >
+      <a-form-item label="名称">
         <a-input v-model:value="validateInfos.title"></a-input>
       </a-form-item>
-      <a-form-item label="菜单类型" >
+      <a-form-item label="菜单类型">
         <a-select v-model:value="validateInfos.type">
           <a-select-option
             v-for="(item, index) in optionsType"
             :key="index"
             :value="item.value"
-          >
-            {{ item.label }}
-          </a-select-option>
+          >{{ item.label }}</a-select-option>
         </a-select>
       </a-form-item>
       <a-form-item v-if="validateInfos.type === 3" label="权限标识">
@@ -79,24 +74,21 @@
         </a-form-item>
         <a-form-item label="是否首页">
           <a-radio-group v-model:value="validateInfos.isHome">
-            <a-radio :value="true"> 是 </a-radio>
-            <a-radio :value="false"> 否 </a-radio>
+            <a-radio :value="true">是</a-radio>
+            <a-radio :value="false">否</a-radio>
           </a-radio-group>
-        </a-form-item>
-        <a-form-item label="重定向地址">
-          <a-input v-model:value="validateInfos.redirect"></a-input>
         </a-form-item>
         <a-form-item label="图标">
           <a-input v-model:value="validateInfos.icon"></a-input>
         </a-form-item>
         <a-form-item label="是否隐藏">
           <a-radio-group v-model:value="validateInfos.hidden" name="radioGroup">
-            <a-radio :value="0"> 否 </a-radio>
-            <a-radio :value="1"> 是 </a-radio>
+            <a-radio :value="0">否</a-radio>
+            <a-radio :value="1">是</a-radio>
           </a-radio-group>
         </a-form-item>
       </div>
-      <a-form-item label="排序" >
+      <a-form-item label="排序">
         <a-input-number v-model:value="validateInfos.orderNum"></a-input-number>
       </a-form-item>
     </a-form>
@@ -105,8 +97,10 @@
 <script lang="ts">
 import {
   defineComponent, reactive, onMounted, toRaw, ref,
+  nextTick,
 } from 'vue';
-import { useForm } from '@ant-design-vue/use';
+import type { UnwrapRef } from 'vue';
+
 import { message } from 'ant-design-vue';
 import { Method } from 'axios';
 import { cloneDeep } from 'lodash';
@@ -117,6 +111,7 @@ import { MenuType } from '@/types/sys';
 import { TableDataType, TablePaginType } from '@/types/type';
 import { ListObjCompare, ListToTree } from '@/utils';
 import { searchParam } from '@/utils/search_param';
+import log from '@/utils/log';
 
 const SysMenu = defineComponent({
   name: 'SysMenu',
@@ -156,11 +151,6 @@ const SysMenu = defineComponent({
           width: width / 2,
         },
         {
-          title: '重定向地址',
-          dataIndex: 'redirect',
-          width,
-        },
-        {
           title: '图标',
           dataIndex: 'icon',
           width,
@@ -190,9 +180,6 @@ const SysMenu = defineComponent({
           key: 'action',
           fixed: 'right',
           width: 200,
-          slots: {
-            customRender: 'action',
-          },
         },
       ],
       data: [],
@@ -204,7 +191,7 @@ const SysMenu = defineComponent({
       loading: false,
     });
     const formRef = ref();
-    let validateInfos = reactive<MenuType>({
+    let validateInfos: UnwrapRef<MenuType> = reactive({
       parentId: 0,
       path: '',
       component: '',
@@ -219,8 +206,8 @@ const SysMenu = defineComponent({
       hidden: 0,
       isHome: false,
     });
-    const rules = reactive({
-      parent_id: [
+    const rules = {
+      parentId: [
         {
           required: true,
           message: '请选择父级',
@@ -238,13 +225,13 @@ const SysMenu = defineComponent({
           message: '请选择类型',
         },
       ],
-      order_num: [
+      orderNum: [
         {
           required: true,
           message: '请输入排序',
         },
       ],
-    });
+    };
     function getList() {
       tableCont.loading = true;
       http<MenuType>({
@@ -298,7 +285,11 @@ const SysMenu = defineComponent({
     function ChangeClick() {
       drawerData.title = '添加';
       drawerData.visible = true;
-      formRef.value.resetFields();
+      nextTick(() => {
+        if (formRef.value) {
+          formRef.value.resetFields();
+        }
+      });
       validateInfos.parentId = 0;
     }
     function Editor(record: MenuType) {
@@ -308,6 +299,7 @@ const SysMenu = defineComponent({
     }
     function Del(record: MenuType) {
       const data = toRaw(record);
+      log.i(data);
       http({ url: `menu/${data.id}`, method: 'delete' }).then(() => {
         message.success('删除成功');
         getList();

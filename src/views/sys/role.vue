@@ -2,55 +2,41 @@
   <div>
     <common-button v-bt-auth:add icon-name="add" @change="ChangAdd" />
     <a-table
-        style="margin-top: 15px"
-        :columns="tableData.columns"
-        :data-source="tableData.data"
-        :loading="tableData.loading"
-        row-key="id"
-        :pagination="{
-      total: tableData.total,
-    }"
-        @change="Change"
+      style="margin-top: 15px"
+      :columns="tableData.columns"
+      :data-source="tableData.data"
+      :loading="tableData.loading"
+      row-key="id"
+      :pagination="{
+        total: tableData.total,
+      }"
+      @change="Change"
     >
-      <template #status="{ text }">
-        {{ text }}
-      </template>
-      <template #depart="{ record }">
-        {{ record.depart_info.name }}
-      </template>
+      <template #status="{ text }">{{ text }}</template>
+      <template #depart="{ record }">{{ record.depart_info.name }}</template>
       <template #action="{ record }">
         <a-button
-            v-bt-auth:power
-            type="primary"
-            style="margin-right: 15px"
-            @click="PowerAllocation(record)"
+          v-bt-auth:power
+          type="primary"
+          style="margin-right: 15px"
+          @click="PowerAllocation(record)"
         />
 
-        <a-button
-            v-bt-auth:edit
-            type="primary"
-            style="margin-right: 15px"
-            @click="Editor(record)"
-        />
-        <a-popconfirm
-            title="确定删除吗?"
-            ok-text="删除"
-            cancel-text="取消"
-            @confirm="Del(record)"
-        >
-          <a-button v-bt-auth:del type="danger" />
+        <a-button v-bt-auth:edit type="primary" style="margin-right: 15px" @click="Editor(record)" />
+        <a-popconfirm title="确定删除吗?" ok-text="删除" cancel-text="取消" @confirm="Del(record)">
+          <a-button v-bt-auth:del danger />
         </a-popconfirm>
       </template>
     </a-table>
 
     <common-drawer
-        :title="commonDrawerData.title"
-        :visible="commonDrawerData.visible"
-        :loading="commonDrawerData.loading"
-        ok-text="确定"
-        cancel-text="取消"
-        @on-ok="Submit()"
-        @on-close="commonDrawerData.visible = false"
+      :title="commonDrawerData.title"
+      :visible="commonDrawerData.visible"
+      :loading="commonDrawerData.loading"
+      ok-text="确定"
+      cancel-text="取消"
+      @on-ok="Submit()"
+      @on-close="commonDrawerData.visible = false"
     >
       <a-form :label-col="{ span: 4 }" :wrapper-col="{ span: 20 }">
         <a-form-item label="角色名称" v-bind="validateInfos.role_name">
@@ -62,11 +48,11 @@
       </a-form>
     </common-drawer>
     <common-tree
-        :visible="allocationTree.visible"
-        :data="allocationTree.data"
-        :loading="allocationTree.loading"
-        @on-close="Close"
-        @on-submit="SubmitOk"
+      :visible="allocationTree.visible"
+      :data="allocationTree.data"
+      :loading="allocationTree.loading"
+      @on-close="Close"
+      @on-submit="SubmitOk"
     />
   </div>
 </template>

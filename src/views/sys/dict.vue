@@ -11,12 +11,8 @@
     }"
     @change="Change"
   >
-    <template #status="{ text }">
-      {{ formatStatus(text) }}
-    </template>
-    <template #depart="{ record }">
-      {{ record.depart_info.name }}
-    </template>
+    <template #status="{ text }">{{ formatStatus(text) }}</template>
+    <template #depart="{ record }">{{ record.depart_info.name }}</template>
     <template #action="{ record }">
       <a-button
         v-bt-auth:power
@@ -25,25 +21,15 @@
         @click="PowerAllocation()"
       />
 
-      <a-button
-        v-bt-auth:edit
-        type="primary"
-        style="margin-right: 15px"
-        @click="Editor(record)"
-      />
+      <a-button v-bt-auth:edit type="primary" style="margin-right: 15px" @click="Editor(record)" />
       <a-button
         v-bt-auth:setting
         type="primary"
         style="margin-right: 15px"
         @click="Setting(record)"
       />
-      <a-popconfirm
-        title="确定删除吗?"
-        ok-text="删除"
-        cancel-text="取消"
-        @confirm="Del(record)"
-      >
-        <a-button v-bt-auth:del type="danger" />
+      <a-popconfirm title="确定删除吗?" ok-text="删除" cancel-text="取消" @confirm="Del(record)">
+        <a-button v-bt-auth:del danger />
       </a-popconfirm>
     </template>
   </a-table>

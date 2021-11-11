@@ -18,19 +18,9 @@
     @change="Change"
   >
     <template #action="{ record }">
-      <a-button
-        v-bt-auth:edit
-        type="primary"
-        style="margin-right: 15px"
-        @click="Editor(record)"
-      />
-      <a-popconfirm
-        title="确定删除吗?"
-        ok-text="删除"
-        cancel-text="取消"
-        @confirm="Del(record)"
-      >
-        <a-button v-bt-auth:del type="danger" />
+      <a-button v-bt-auth:edit type="primary" style="margin-right: 15px" @click="Editor(record)" />
+      <a-popconfirm title="确定删除吗?" ok-text="删除" cancel-text="取消" @confirm="Del(record)">
+        <a-button v-bt-auth:del danger />
       </a-popconfirm>
     </template>
   </a-table>
@@ -52,8 +42,7 @@
           :tree-data="treeOptions.options"
           placeholder="请选择"
           tree-default-expand-all
-        >
-        </a-tree-select>
+        ></a-tree-select>
       </a-form-item>
       <a-form-item label="名称" v-bind="validateInfos.name">
         <a-input v-model:value="modelRef.name"></a-input>
