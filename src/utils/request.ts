@@ -62,7 +62,7 @@ function httpCustom<T>(c: HttpCustomType): Promise<CommonResponse<T>> {
         // @ts-ignore
         if (res.code !== 0) {
           // @ts-ignore
-          reject(res.code);
+          reject(res.data.msg);
         } else {
           resolve(res.data);
         }
