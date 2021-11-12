@@ -21,11 +21,11 @@ export interface MenuType extends CommonTableList {
     orderNum?: number;
     perms?: any;
     name?: string | number;
-    path?: string;
+    path?: string | number;
     component?: string;
     redirect?: any;
     icon?: any;
-    isHome?: boolean;
+    isHome?: number;
     children?: Array<MenuType>;
     value?: string;
     hidden?: number;

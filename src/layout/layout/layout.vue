@@ -7,9 +7,10 @@
     <a-layout>
       <common-header />
       <a-layout-content class="layout-content">
-        <common-tabs>
+        <common-tabs></common-tabs>
+        <div class="content">
           <router-view />
-        </common-tabs>
+        </div>
       </a-layout-content>
       <a-layout-footer :style="{ textAlign: 'center' }">
         <common-footer />

@@ -37,7 +37,7 @@ export interface SysStoreType {
   permissionButtons: MenuType[];
   collapsed: boolean;
 }
-export type CustomMenus = RouteRecordRaw & { id: number; parentId: number, children?: any[] };
+export type CustomMenus = RouteRecordRaw & { id: number; parentId: number, children?: any[], orderNum?: number, isHome?: number};
 
 const getUserInfo = (): Promise<UserInformation | null> => new Promise((resolve, reject) => {
   http<UserInformation>({
@@ -65,12 +65,17 @@ async function findModName(modules: any, keyName?: string) {
   return list;
 }
 
-async function baseLayout(): Promise<RouteRecordRaw[]> {
+async function baseLayout(item: CustomMenus[]): Promise<RouteRecordRaw[]> {
   const modules = await import.meta.globEager('../../layout/layout/**.vue');
   // 加载基础页面结构 layout
   const list:CustomMenus[] = [];
   const result: any[] = await findModName(modules, 'LayoutHome');
   if (result.length > 0) {
+    const data = item.filter((v) => v.isHome);
+    let redirect = '';
+    if (data.length > 0) {
+      redirect = String(data[0].path);
+    }
     list.push(
       {
         path: '/',
@@ -79,6 +84,8 @@ async function baseLayout(): Promise<RouteRecordRaw[]> {
         id: Date.now(),
         parentId: 0,
         children: [],
+        // 重定向地址
+        redirect,
       },
     );
   } else {
@@ -124,7 +131,7 @@ const FormatMenuTree = async (menuData: MenuType[]): Promise<RouteRecordRaw[]> =
       const file = modules[fileKey].default;
       const obj:CustomMenus = {
         path: `${allPath}/${file.name}`,
-        name: menuItem.name,
+        name: String(menuItem.name),
         component: file,
         redirect: menuItem.redirect,
         meta: {
@@ -133,6 +140,8 @@ const FormatMenuTree = async (menuData: MenuType[]): Promise<RouteRecordRaw[]> =
         },
         id: menuItem.id,
         parentId: menuItem.parentId,
+        orderNum: menuItem.orderNum,
+        isHome: menuItem.isHome,
       };
       if (menuItem.name === file.name) {
         result.push(obj);
@@ -148,7 +157,7 @@ const FormatMenuTree = async (menuData: MenuType[]): Promise<RouteRecordRaw[]> =
     }
   });
 
-  const l = await baseLayout();
+  const l = await baseLayout(result);
   const [layout] = l;
   layout.children = ListToTree(result);
   log.d(layout, '加载的路由');
@@ -171,7 +180,7 @@ function ListToTreeMenus(jsonData, id = 'id', pid = 'parentId'): MenuItem[] {
         tempCurrentElementParent.children = []; // 设上父元素的children键
       }
       // 组合路由跳转地址
-      currentElement.path = `/${tempCurrentElementParent.path}/${currentElement.path}`;
+      currentElement.path = `${tempCurrentElementParent.path}${currentElement.path}`;
       // 组合面包屑
       currentElement.crumbs = `${tempCurrentElementParent.title},${currentElement.title}`;
       tempCurrentElementParent.children.push(currentElement); // 给父元素加上当前元素作为子元素
@@ -200,17 +209,18 @@ export default {
     [SET_MENUS_MUTATION](state: SysStoreType, payload: UserInformation): void {
       const menus = formatMenus(payload.menus);
       let result: MenuItem[] = [];
-      const list = cloneDeep(menus.sort(ListObjCompare('order_num')));
+      const list = cloneDeep(menus.sort(ListObjCompare('orderNum')));
       list.forEach((item) => {
         if (!item.hidden) {
           result.push({
             key: item.id || 0,
             title: item.title,
-            path: item.name,
+            path: `/${String(item.name)}`,
             icon: item.icon,
             id: item.id,
             parentId: item.parentId,
             crumbs: `${item.title}`,
+            closable: item.isHome ?? item.isHome === 1,
           });
         }
       });
@@ -243,7 +253,7 @@ export default {
         nickName: '',
         status: 0,
         account: '',
-        deptId: '',
+        deptId: -1,
       };
     },
   },

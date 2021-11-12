@@ -1,4 +1,4 @@
-import { toRaw } from 'vue';
+import { markRaw } from 'vue';
 import { PanesType } from '@/store/sys/sys-crumbs';
 import store from '@/store/index';
 import { MENUTABS } from '@/store/mutation-types';
@@ -11,7 +11,7 @@ const MenuFormatBrumb = (val: MenuItem): void => {
     parentId: val.parentId || 0,
     path: val.path || '',
   };
-  store.commit(MENUTABS, toRaw(data));
+  store.commit(MENUTABS, markRaw(data));
 };
 
 export { MenuFormatBrumb };

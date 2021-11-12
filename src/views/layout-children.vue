@@ -6,6 +6,6 @@ import { defineComponent } from 'vue';
 
 export default defineComponent({
   isRouter: true,
-  name: 'child',
+  name: 'layoutChildren',
 });
 </script>

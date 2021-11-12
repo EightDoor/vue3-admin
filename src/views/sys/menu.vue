@@ -14,6 +14,8 @@
     :data-source="tableCont.data"
     :pagination="{
       total: tableCont.total,
+      pageSize: 10000,
+      hideOnSinglePage: true
     }"
     :loading="tableCont.loading"
     @change="Change"
@@ -100,7 +102,6 @@
 <script lang="ts">
 import {
   defineComponent, reactive, onMounted, toRaw, ref,
-  nextTick,
 } from 'vue';
 import type { UnwrapRef } from 'vue';
 
@@ -264,6 +265,7 @@ const SysMenu = defineComponent({
       });
     }
     onMounted(() => {
+      console.log('执行了');
       getList();
     });
     const onSubmit = () => {

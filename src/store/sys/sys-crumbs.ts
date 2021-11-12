@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { toRaw } from 'vue';
+import { markRaw } from 'vue';
 import { Commit } from 'vuex';
 import {
   SETCRUMBSLIST,
@@ -44,7 +44,7 @@ export default {
     },
     [MENUTABS](state: CrumbsStoreType, payload: PanesType): void {
       const data: PanesType[] = state.panes;
-      data.push(toRaw(payload));
+      data.push(payload);
       state.panes = _.unionBy<PanesType>(data, 'title');
     },
     [DELETETABS](state: CrumbsStoreType, payload: SysTabDel): void {
@@ -69,7 +69,7 @@ export default {
       payload: SysTabDel,
     ): void {
       // 设置菜单选中项
-      localStore.set(STORELETMENUPATH, toRaw(payload.selectData)).then(() => {
+      localStore.set(STORELETMENUPATH, payload.selectData).then(() => {
         commit(DELETETABS, payload);
       });
     },

@@ -13,9 +13,7 @@
         :tab="pane.title"
         :closable="pane.closable"
       >
-        <div class="content">
-          <slot />
-        </div>
+        <slot />
       </a-tab-pane>
     </a-tabs>
   </div>
