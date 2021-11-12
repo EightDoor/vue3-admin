@@ -1,5 +1,13 @@
 import { CommonTableList, CommonTreeSelect } from '@/types/type';
 
+interface SysUserRoleType {
+    id: number;
+    createdAt?: any;
+    updatedAt?: any;
+    deletedAt?: any;
+    userId: number;
+    roleId: string;
+}
 export interface MenuType extends CommonTableList {
     crumbs?: string;
     key?: number;
@@ -21,12 +29,13 @@ export interface MenuType extends CommonTableList {
     children?: Array<MenuType>;
     value?: string;
     hidden?: number;
+    menuId?: string
 }
 
 export interface DepartType extends CommonTreeSelect {
-  parent_id: string;
+  parentId: string;
   name: string;
-  order_num: number;
+  orderNum: number;
   id?: string;
   children?: Array<MenuType>;
 }
@@ -38,7 +47,7 @@ export interface UserType extends CommonTableList {
     email?: any;
     status: number;
     avatar?: any;
-    deptId: string;
+    deptId: number;
     phoneNum?: any;
     passWord?: string
 }
@@ -47,7 +56,7 @@ export interface RoleType extends CommonTableList {
   // 描述
   remark?: string;
   // 角色名称
-  role_name: string;
+    roleName: string;
   id?: number;
 }
 

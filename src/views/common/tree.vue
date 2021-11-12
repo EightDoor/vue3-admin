@@ -29,6 +29,7 @@ import CommonDrawer from '@/components/Drawer/Drawer.vue';
 import http from '@/utils/request';
 import { MenuType } from '@/types/sys';
 import { ListObjCompare, ListToTree } from '@/utils';
+import { searchParam } from '@/utils/search_param';
 
 interface TreeDataType {
   spinningLoading: boolean;
@@ -78,19 +79,19 @@ const CommonTree = defineComponent({
     function getList() {
       treeData.spinningLoading = true;
       http<MenuType>({
-        url: '/menu',
-        method: 'GET',
-        params: {
+        url: `/menu${searchParam({
           page: 1,
-          page_size: 1000,
-        },
+          limit: 1000,
+        })}`,
+        method: 'GET',
       }).then((res) => {
-        res.list.forEach((item: MenuType) => {
+        res.list?.data.forEach((item: MenuType) => {
           item.key = item.id;
         });
-        const list = res.list.sort(ListObjCompare('order_num'));
+        const list = res.list?.data.sort(ListObjCompare('orderNum'));
         treeData.spinningLoading = false;
-        treeData.data = ListToTree(list);
+        treeData.data = ListToTree(list || []);
+        console.log(treeData.data, 'data');
       });
     }
     onMounted(() => {

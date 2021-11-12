@@ -25,6 +25,8 @@ instance.interceptors.response.use(
     const { data } = response;
     if (response.status === 200 && data.code === 0) {
       //
+    } else if (response.status === 201 && data.code === 0) {
+      //
     } else if (data.code === RequestAuthorizedFailed) {
       message.info('token失效, 请重新登录');
       ClearInfo();
@@ -56,7 +58,7 @@ function httpCustom<T = any>(c: HttpCustomType): Promise<CommonResponse<T>> {
       .then((res: any) => {
         if (res.code !== 0) {
           reject(res.data);
-        } else if (res.data.total) {
+        } else if (res.data?.total) {
           resolve({
             list: res.data,
             data: null,
@@ -66,6 +68,13 @@ function httpCustom<T = any>(c: HttpCustomType): Promise<CommonResponse<T>> {
             data: res.data,
             list: null,
           });
+        } else {
+          resolve(
+            {
+              data: null,
+              list: null,
+            },
+          );
         }
       })
       .catch((err) => {

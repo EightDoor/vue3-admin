@@ -30,5 +30,6 @@ module.exports = {
     'no-useless-return': 'off',
     'no-restricted-syntax': 'off',
     'no-unused-vars': 'off',
+    'max-len': 'off',
   },
 };

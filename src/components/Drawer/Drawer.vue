@@ -5,6 +5,7 @@
     :placement="placement"
     :width="width"
     @close="onClose"
+    destroyOnClose
   >
     <div class="drawerContainer">
       <slot></slot>
@@ -12,13 +13,13 @@
     <div v-if="okText || cancelText" class="drawerBottom">
       <a-button
         v-if="cancelText"
-        :loading="loading"
+        :loading="commdrawerData.loading"
         style="margin-right: 20px"
         @click="onCancel"
       >
         {{ cancelText }}
       </a-button>
-      <a-button v-if="okText" :loading="loading" type="primary" @click="onOk">
+      <a-button v-if="okText" :loading="commdrawerData.loading" type="primary" @click="onOk">
         {{ okText }}
       </a-button>
     </div>
@@ -70,6 +71,7 @@ const CommonDrawer = defineComponent({
   setup(props, { emit }) {
     const commdrawerData = reactive({
       visible: false,
+      loading: false,
     });
     function onCancel() {
       emit('on-close');
@@ -77,6 +79,11 @@ const CommonDrawer = defineComponent({
     }
     function onOk() {
       emit('on-ok');
+
+      // 超时自定关闭loading
+      setTimeout(() => {
+        commdrawerData.loading = false;
+      }, 5000);
     }
     function onClose() {
       emit('on-close');
@@ -86,6 +93,7 @@ const CommonDrawer = defineComponent({
       () => props.visible,
       (data) => {
         commdrawerData.visible = data;
+        commdrawerData.loading = false;
       },
     );
     return {

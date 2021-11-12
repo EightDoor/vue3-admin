@@ -17,12 +17,15 @@
     :loading="tableCont.loading"
     @change="Change"
   >
-    <template #action="{ record }">
-      <a-button v-bt-auth:edit type="primary" style="margin-right: 15px" @click="Editor(record)" />
-      <a-popconfirm title="确定删除吗?" ok-text="删除" cancel-text="取消" @confirm="Del(record)">
-        <a-button v-bt-auth:del danger />
-      </a-popconfirm>
+    <template #bodyCell="{column, record}">
+      <template v-if="column.key === 'action'">
+        <a-button v-bt-auth:edit type="primary" style="margin-right: 15px" @click="Editor(record)" />
+        <a-popconfirm title="确定删除吗?" ok-text="删除" cancel-text="取消" @confirm="Del(record)">
+          <a-button v-bt-auth:del danger />
+        </a-popconfirm>
+      </template>
     </template>
+
   </a-table>
   <common-drawer
     :title="drawerData.title"
@@ -33,10 +36,10 @@
     @onClose="drawerData.visible = false"
     @onOk="onSubmit"
   >
-    <a-form :label-col="{ span: 4 }" :wrapper-col="{ span: 20 }">
-      <a-form-item label="父级id" v-bind="validateInfos.parent_id">
+    <a-form :model="formData" :rules="rules" ref="formRef" :label-col="{ span: 4 }" :wrapper-col="{ span: 20 }">
+      <a-form-item label="父级id" name="parentId">
         <a-tree-select
-          v-model:value="modelRef.parent_id"
+          v-model:value="formData.parentId"
           style="width: 100%"
           :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
           :tree-data="treeOptions.options"
@@ -44,18 +47,18 @@
           tree-default-expand-all
         ></a-tree-select>
       </a-form-item>
-      <a-form-item label="名称" v-bind="validateInfos.name">
-        <a-input v-model:value="modelRef.name"></a-input>
+      <a-form-item label="名称" name="name">
+        <a-input v-model:value="formData.name"></a-input>
       </a-form-item>
-      <a-form-item label="排序" v-bind="validateInfos.order_num">
-        <a-input-number v-model:value="modelRef.order_num"></a-input-number>
+      <a-form-item label="排序" name="orderNum">
+        <a-input-number v-model:value="formData.orderNum"></a-input-number>
       </a-form-item>
     </a-form>
   </common-drawer>
 </template>
 <script lang="ts">
 import {
-  defineComponent, reactive, onMounted, toRaw,
+  defineComponent, reactive, onMounted, toRaw, ref,
 } from 'vue';
 import { useForm } from '@ant-design-vue/use';
 import { message } from 'ant-design-vue';
@@ -67,6 +70,7 @@ import http from '@/utils/request';
 import { DepartType } from '@/types/sys';
 import { TableDataType, TablePaginType } from '@/types/type';
 import { ListObjCompare, ListToTree } from '@/utils';
+import { searchParam } from '@/utils/search_param';
 
 const SysDepart = defineComponent({
   name: 'SysDepart',
@@ -75,7 +79,7 @@ const SysDepart = defineComponent({
   setup() {
     const tableCont = reactive<TableDataType<DepartType>>({
       page: 1,
-      page_size: 10,
+      pageSize: 10,
       total: 0,
       loading: false,
       columns: [
@@ -85,18 +89,15 @@ const SysDepart = defineComponent({
         },
         {
           title: '父级节点',
-          dataIndex: 'parent_id',
+          dataIndex: 'parentId',
         },
         {
           title: '排序',
-          dataIndex: 'order_num',
+          dataIndex: 'orderNum',
         },
         {
           title: '操作',
           key: 'action',
-          slots: {
-            customRender: 'action',
-          },
         },
       ],
       data: [],
@@ -107,13 +108,14 @@ const SysDepart = defineComponent({
       visible: false,
       loading: false,
     });
-    const modelRef = reactive<DepartType>({
-      parent_id: '',
+    const formRef = ref();
+    const formData = reactive<DepartType>({
+      parentId: '',
       name: '',
-      order_num: 0,
+      orderNum: 0,
       id: '',
     });
-    const ruleRef = reactive({
+    const rules = {
       parent_id: [
         {
           required: true,
@@ -132,22 +134,20 @@ const SysDepart = defineComponent({
           message: '请输入排序',
         },
       ],
-    });
-    const { resetFields, validate, validateInfos } = useForm(modelRef, ruleRef);
+    };
     function getList() {
       tableCont.loading = true;
       http<DepartType>({
-        url: '/depart',
-        method: 'GET',
-        params: {
+        url: `/dept${searchParam({
           page: tableCont.page,
-          page_size: tableCont.page_size,
-        },
+          limit: tableCont.pageSize,
+        })}`,
+        method: 'GET',
       }).then((res) => {
-        const list = res.list.sort(ListObjCompare('order_num'));
+        const list = res.list?.data.sort(ListObjCompare('order_num')) || [];
         tableCont.loading = false;
         tableCont.data = ListToTree(list);
-        tableCont.total = res.total;
+        tableCont.total = res.list?.total;
         list.forEach((item) => {
           item.title = item.name;
           item.value = item.id;
@@ -159,18 +159,18 @@ const SysDepart = defineComponent({
       getList();
     });
     const onSubmit = () => {
-      validate<DepartType>()
+      formRef.value.validate()
         .then(() => {
           drawerData.loading = true;
-          const data = cloneDeep(toRaw(modelRef));
+          const data = cloneDeep(toRaw(formData));
           // @ts-ignore
           delete data.id;
           let method: Method = 'POST';
-          if (modelRef.id) {
+          if (formData.id) {
             method = 'PUT';
           }
           http<DepartType>({
-            url: modelRef.id ? `depart/${modelRef.id}` : 'depart',
+            url: formData.id ? `dept/${formData.id}` : 'dept',
             method,
             body: data,
           }).then(() => {
@@ -184,24 +184,32 @@ const SysDepart = defineComponent({
           console.log('error', err);
         });
     };
+
+    function resetFields() {
+      if (formRef.value) {
+        formRef.value.resetFields();
+      }
+    }
+
     function ChangeClick() {
       drawerData.title = '添加';
       drawerData.visible = true;
       resetFields();
-      modelRef.parent_id = '0';
+      formData.parentId = '0';
     }
+
     function Editor(record: DepartType) {
       const data = toRaw(record);
       drawerData.title = '修改';
       drawerData.visible = true;
-      modelRef.name = data.name;
-      modelRef.order_num = data.order_num;
-      modelRef.parent_id = data.parent_id;
-      modelRef.id = data.id;
+      formData.name = data.name;
+      formData.orderNum = data.orderNum;
+      formData.parentId = data.parentId;
+      formData.id = data.id;
     }
     function Del(record: DepartType) {
       const data = toRaw(record);
-      http({ url: `depart/${data.id}`, method: 'delete' }).then(() => {
+      http({ url: `dept/${data.id}`, method: 'delete' }).then(() => {
         message.success('删除成功');
         getList();
       });
@@ -223,9 +231,10 @@ const SysDepart = defineComponent({
       Del,
 
       // form
-      validateInfos,
       resetFields,
-      modelRef,
+      rules,
+      formData,
+      formRef,
       onSubmit,
     };
   },

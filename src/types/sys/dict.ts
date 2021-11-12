@@ -3,7 +3,7 @@ import { CommonTableList } from '../type';
 // 字典管理
 export interface SysDict extends CommonTableList {
   name: string;
-  serial_number?: string;
+    serialNumber?: string;
   describe?: string;
 }
 // 字典项
@@ -15,5 +15,5 @@ export interface SysDictItem extends CommonTableList {
   // 描述
   describe: string;
   // 字典值id
-  dict_id?: string;
+  dictId?: number;
 }

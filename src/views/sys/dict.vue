@@ -11,26 +11,29 @@
     }"
     @change="Change"
   >
-    <template #status="{ text }">{{ formatStatus(text) }}</template>
-    <template #depart="{ record }">{{ record.depart_info.name }}</template>
-    <template #action="{ record }">
-      <a-button
-        v-bt-auth:power
-        type="primary"
-        style="margin-right: 15px"
-        @click="PowerAllocation()"
-      />
+    <template #bodyCell="{column,text, record}">
+      <template v-if="column.key === 'status'">
+        {{ formatStatus(text) }}
+      </template>
+      <template v-if="column.key === 'action'">
+        <a-button
+            v-bt-auth:power
+            type="primary"
+            style="margin-right: 15px"
+            @click="PowerAllocation()"
+        />
 
-      <a-button v-bt-auth:edit type="primary" style="margin-right: 15px" @click="Editor(record)" />
-      <a-button
-        v-bt-auth:setting
-        type="primary"
-        style="margin-right: 15px"
-        @click="Setting(record)"
-      />
-      <a-popconfirm title="确定删除吗?" ok-text="删除" cancel-text="取消" @confirm="Del(record)">
-        <a-button v-bt-auth:del danger />
-      </a-popconfirm>
+        <a-button v-bt-auth:edit type="primary" style="margin-right: 15px" @click="Editor(record)" />
+        <a-button
+            v-bt-auth:setting
+            type="primary"
+            style="margin-right: 15px"
+            @click="Setting(record)"
+        />
+        <a-popconfirm title="确定删除吗?" ok-text="删除" cancel-text="取消" @confirm="Del(record)">
+          <a-button v-bt-auth:del danger />
+        </a-popconfirm>
+      </template>
     </template>
   </a-table>
 
@@ -43,15 +46,15 @@
     @on-ok="Submit()"
     @on-close="commonDrawerData.visible = false"
   >
-    <a-form :label-col="{ span: 4 }" :wrapper-col="{ span: 20 }">
-      <a-form-item label="字典名称" v-bind="validateInfos.name">
-        <a-input v-model:value="modelRef.name"></a-input>
+    <a-form :model="formData" :rules="rules" ref="formRef" :label-col="{ span: 4 }" :wrapper-col="{ span: 20 }">
+      <a-form-item label="字典名称" name="name">
+        <a-input v-model:value="formData.name"></a-input>
       </a-form-item>
-      <a-form-item label="字典编号">
-        <a-input v-model:value="modelRef.serial_number"></a-input>
+      <a-form-item label="字典编号" name="serialNumber">
+        <a-input v-model:value="formData.serialNumber"></a-input>
       </a-form-item>
-      <a-form-item label="描述">
-        <a-input v-model:value="modelRef.describe"></a-input>
+      <a-form-item label="描述" name="describe">
+        <a-input v-model:value="formData.describe"></a-input>
       </a-form-item>
     </a-form>
   </common-drawer>
@@ -70,6 +73,7 @@ import http from '@/utils/request';
 import CommonDrawer, { DrawerProps } from '@/components/Drawer/Drawer.vue';
 import CommonButton from '@/components/Button/Button.vue';
 import DictDrawer from './dict-drawer.vue';
+import { searchParam } from '@/utils/search_param';
 
 export interface AllocateType {
   visible: boolean;
@@ -86,9 +90,10 @@ const SysDictView = defineComponent({
     DictDrawer,
   },
   setup() {
-    const modelRef = reactive<SysDict>({
+    const formRef = ref();
+    const formData = reactive<SysDict>({
       name: '',
-      serial_number: '',
+      serialNumber: '',
       describe: '',
     });
     const RefDictDrawer = ref();
@@ -98,18 +103,18 @@ const SysDictView = defineComponent({
       loading: false,
       visible: false,
     });
-    const rulesRef = reactive({
+    const rules = {
       name: [
         {
           required: true,
           message: '请输入名称',
         },
       ],
-    });
+    };
     const tableData = reactive<TableDataType<SysDict>>({
       data: [],
       page: 1,
-      page_size: 10,
+      pageSize: 10,
       total: 0,
       loading: false,
       columns: [
@@ -131,9 +136,6 @@ const SysDictView = defineComponent({
         {
           title: '操作',
           key: 'action',
-          slots: {
-            customRender: 'action',
-          },
         },
       ],
     });
@@ -141,33 +143,28 @@ const SysDictView = defineComponent({
     function getList() {
       tableData.loading = true;
       http<SysDict>({
-        url: 'dict',
-        method: 'GET',
-        params: {
+        url: `dict${searchParam({
           page: tableData.page,
-          page_size: tableData.page_size,
-        },
+          limit: tableData.pageSize,
+        })}`,
+        method: 'GET',
       }).then((res) => {
         tableData.loading = false;
-        tableData.page = res.page;
-        tableData.page_size = res.page_size;
-        tableData.total = res.total;
-        tableData.data = res.list;
+        tableData.page = res.list?.page;
+        tableData.pageSize = res.list?.pageSize;
+        tableData.total = res.list?.total;
+        tableData.data = res.list?.data || [];
       });
     }
     onMounted(() => {
       getList();
     });
 
-    const { resetFields, validate, validateInfos } = useForm(
-      modelRef,
-      rulesRef,
-    );
     function Submit() {
-      validate().then(() => {
+      formRef.value.validate().then(() => {
         let url = 'dict';
         let method: Method = 'POST';
-        const body = toRaw(modelRef);
+        const body = toRaw(formData);
         commonDrawerData.loading = true;
         if (editId.id) {
           url = `dict/${editId.id}`;
@@ -185,10 +182,17 @@ const SysDictView = defineComponent({
         });
       });
     }
+
+    function resetFields() {
+      if (formRef.value) {
+        formRef.value.resetFields();
+      }
+    }
+
     function ChangAdd() {
       resetFields();
       commonDrawerData.visible = true;
-      editId.id = '';
+      editId.id = 0;
     }
 
     function Editor(record: SysDict) {
@@ -196,9 +200,9 @@ const SysDictView = defineComponent({
         editId.id = record.id;
         commonDrawerData.title = '修改';
         commonDrawerData.visible = true;
-        modelRef.name = record.name;
-        modelRef.serial_number = record.serial_number;
-        modelRef.describe = record.describe;
+        formData.name = record.name;
+        formData.serialNumber = record.serialNumber;
+        formData.describe = record.describe;
       }
     }
     function Del(record: SysDict) {
@@ -228,7 +232,6 @@ const SysDictView = defineComponent({
       // data
       tableData,
       commonDrawerData,
-      modelRef,
       RefDictDrawer,
       // methods
       ChangAdd,
@@ -241,7 +244,9 @@ const SysDictView = defineComponent({
       formatStatus,
 
       // form
-      validateInfos,
+      formData,
+      formRef,
+      rules,
     };
   },
 });

@@ -21,7 +21,6 @@ const CommonButton = defineComponent({
   props: {
     title: {
       type: String,
-      required: true,
       default: '默认',
     },
     iconName: {

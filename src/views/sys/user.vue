@@ -11,21 +11,24 @@
     }"
     @change="Change"
   >
-    <template #status="{ text }">
-      <div :style="text === 0 ? { color: 'red' } : { color: 'green' }">{{ formatStatus(text) }}</div>
-    </template>
-    <template #depart="{ record }">{{ record.deptId }}</template>
-    <template #action="{ record }">
-      <a-button
-        v-bt-auth:power
-        type="primary"
-        style="margin-right: 15px"
-        @click="Allocate(record)"
-      />
-      <a-button v-bt-auth:edit type="primary" style="margin-right: 15px" @click="Editor(record)" />
-      <a-popconfirm title="确定删除吗?" ok-text="删除" cancel-text="取消" @confirm="Del(record)">
-        <a-button v-bt-auth:del danger />
-      </a-popconfirm>
+    <template #bodyCell="{column, text, record}">
+      <template v-if="column.key === 'status'">
+        <div :style="text === 0 ? { color: 'red' } : { color: 'green' }">{{ formatStatus(text) }}</div>
+      </template>
+      <template v-if="column.key === 'depart'">{{ record.deptId }}</template>
+
+      <template v-if="column.key === 'action'">
+        <a-button
+            v-bt-auth:power
+            type="primary"
+            style="margin-right: 15px"
+            @click="Allocate(record)"
+        />
+        <a-button v-bt-auth:edit type="primary" style="margin-right: 15px" @click="Editor(record)" />
+        <a-popconfirm title="确定删除吗?" ok-text="删除" cancel-text="取消" @confirm="Del(record)">
+          <a-button v-bt-auth:del danger />
+        </a-popconfirm>
+      </template>
     </template>
   </a-table>
   <common-drawer
@@ -37,10 +40,17 @@
     @on-ok="Submit()"
     @on-close="commonDrawerData.visible = false"
   >
-    <a-form :label-col="{ span: 4 }" :wrapper-col="{ span: 20 }">
+    <a-form
+        :model="formData"
+        ref="formRef"
+        :rules="rules"
+        :label-col="{ span: 4 }"
+        :wrapper-col="{ span: 20 }"
+        name="avatar"
+    >
       <a-form-item label="头像">
         <a-upload
-          v-model:fileList="modelRef.avatar"
+          v-model:fileList="formData.avatar"
           name="avatar"
           list-type="picture-card"
           class="avatar-uploader"
@@ -57,15 +67,15 @@
           </div>
         </a-upload>
       </a-form-item>
-      <a-form-item label="账号" v-bind="validateInfos.account">
-        <a-input v-model:value="modelRef.account"></a-input>
+      <a-form-item label="账号"  name="modelRef">
+        <a-input v-model:value="formData.account"></a-input>
       </a-form-item>
-      <a-form-item label="昵称" v-bind="validateInfos.nick_name">
-        <a-input v-model:value="modelRef.nick_name"></a-input>
+      <a-form-item label="昵称"  name="nickName">
+        <a-input v-model:value="formData.nickName"></a-input>
       </a-form-item>
-      <a-form-item label="部门" v-bind="validateInfos.dept_id">
+      <a-form-item label="部门"  name="deptId">
         <a-tree-select
-          v-model:value="modelRef.dept_id"
+          v-model:value="formData.deptId"
           style="width: 100%"
           :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
           :tree-data="treeOptions.options"
@@ -73,20 +83,20 @@
           tree-default-expand-all
         ></a-tree-select>
       </a-form-item>
-      <a-form-item label="状态" v-bind="validateInfos.status">
-        <a-radio-group v-model:value="modelRef.status" name="radioGroup">
+      <a-form-item label="状态"  name="status">
+        <a-radio-group v-model:value="formData.status" name="radioGroup">
           <a-radio :value="0">失效</a-radio>
           <a-radio :value="1">有效</a-radio>
         </a-radio-group>
       </a-form-item>
-      <a-form-item label="邮箱">
-        <a-input v-model:value="modelRef.email"></a-input>
+      <a-form-item label="邮箱" name="email">
+        <a-input v-model:value="formData.email"></a-input>
       </a-form-item>
-      <a-form-item label="手机号码">
-        <a-input v-model:value="modelRef.phoneNum"></a-input>
+      <a-form-item label="手机号码" name="phoneNum">
+        <a-input v-model:value="formData.phoneNum"></a-input>
       </a-form-item>
-      <a-form-item label="密码">
-        <a-input v-model:value="modelRef.passWord"></a-input>
+      <a-form-item v-if="!editId.id" label="密码" name="passWord">
+        <a-input v-model:value="formData.passWord"></a-input>
       </a-form-item>
     </a-form>
   </common-drawer>
@@ -117,7 +127,6 @@
 import {
   defineComponent, onMounted, reactive, toRaw, ref,
 } from 'vue';
-import { useForm } from '@ant-design-vue/use';
 import { PlusOutlined, LoadingOutlined } from '@ant-design/icons-vue';
 import { message } from 'ant-design-vue';
 import { Method } from 'axios';
@@ -131,10 +140,16 @@ import { AllocateType } from '@/views/sys/role.vue';
 import { searchParam } from '@/utils/search_param';
 import log from '@/utils/log';
 
-interface UserAndRole {
-  user_id: string;
-  role_id: string;
+interface SysUserRole {
+  userId: number;
+  roleId: number;
+  id?: number;
 }
+interface UserAndRole {
+  userId: number;
+  data: SysUserRole[],
+}
+
 const SysUser = defineComponent({
   name: 'SysUser',
   isRouter: true,
@@ -145,20 +160,21 @@ const SysUser = defineComponent({
     LoadingOutlined,
   },
   setup() {
-    const selectkeys = ref<string[]>([]);
+    const selectkeys = ref<number[]>([]);
     const roleList = ref<RoleType[]>([]);
     const allocationTree = reactive<AllocateType>({
       visible: false,
       loading: false,
       allocateId: '',
     });
-    const modelRef = reactive<UserType>({
+    const formRef = ref();
+    const formData = reactive<UserType>({
       account: '',
       nickName: '',
       email: '',
       status: 1,
       avatar: '',
-      deptId: '',
+      deptId: 0,
       phoneNum: '',
     });
     const treeOptions = reactive<{ options: DepartType[] }>({ options: [] });
@@ -174,26 +190,26 @@ const SysUser = defineComponent({
       imageUrl: '',
       action: 'test',
     });
-    const rulesRef = reactive({
+    const rules = {
       account: [
         {
           required: true,
           message: '请输入账号',
         },
       ],
-      nick_name: [
+      nickName: [
         {
           required: true,
           message: '请输入昵称',
         },
       ],
-      dept_id: [
+      deptId: [
         {
           required: true,
-          messgae: '请选择部门',
+          message: '请选择部门',
         },
       ],
-    });
+    };
     const tableData = reactive<TableDataType<UserType>>({
       data: [],
       page: 1,
@@ -215,25 +231,16 @@ const SysUser = defineComponent({
           title: '头像',
           key: 'avatar',
           dataIndex: 'avatar',
-          slots: {
-            customRender: 'avatar',
-          },
         },
         {
           title: '部门',
           key: 'deptId',
           dataIndex: 'deptId',
-          slots: {
-            customRender: 'depart',
-          },
         },
         {
           title: '状态',
           key: 'status',
           dataIndex: 'status',
-          slots: {
-            customRender: 'status',
-          },
         },
         {
           title: '邮箱',
@@ -243,9 +250,7 @@ const SysUser = defineComponent({
         {
           title: '操作',
           key: 'action',
-          slots: {
-            customRender: 'action',
-          },
+          dataIndex: 'action',
         },
       ],
     });
@@ -269,14 +274,13 @@ const SysUser = defineComponent({
     }
     function getDepartList() {
       http<DepartType>({
-        url: '/depart',
-        method: 'GET',
-        params: {
+        url: `/dept${searchParam({
           page: 1,
-          page_size: 1000,
-        },
+          limit: 1000,
+        })}`,
+        method: 'GET',
       }).then((res) => {
-        const list = res.list?.data.sort(ListObjCompare('order_num'));
+        const list = res.list?.data.sort(ListObjCompare('orderNum'));
         if (list) {
           list.forEach((item) => {
             item.title = item.name;
@@ -289,12 +293,11 @@ const SysUser = defineComponent({
     }
     function getRoleList() {
       http<RoleType>({
-        url: '/role',
-        method: 'get',
-        params: {
+        url: `/role${searchParam({
           page: 1,
-          page_size: 1000,
-        },
+          limit: 1000,
+        })}`,
+        method: 'get',
       }).then((res) => {
         roleList.value = res.list?.data || [];
       });
@@ -320,15 +323,11 @@ const SysUser = defineComponent({
       return result;
     }
 
-    const { resetFields, validate, validateInfos } = useForm(
-      modelRef,
-      rulesRef,
-    );
     function Submit() {
-      validate().then(() => {
+      formRef.value.validate().then(() => {
         let url = 'user';
         let method: Method = 'POST';
-        const data = toRaw(modelRef);
+        const data = toRaw(formData);
         commonDrawerData.loading = true;
         if (editId.id) {
           url = `user/${editId.id}`;
@@ -347,7 +346,9 @@ const SysUser = defineComponent({
       });
     }
     function ChangAdd() {
-      resetFields();
+      if (formRef.value) {
+        formRef.value.resetFields();
+      }
       commonDrawerData.visible = true;
       editId.id = 0;
     }
@@ -391,13 +392,13 @@ const SysUser = defineComponent({
         editId.id = record.id;
         commonDrawerData.title = '修改';
         commonDrawerData.visible = true;
-        modelRef.account = record.account;
-        modelRef.nickName = record.nickName;
-        modelRef.email = record.email;
-        modelRef.status = record.status;
-        modelRef.avatar = record.avatar;
-        modelRef.deptId = record.deptId;
-        modelRef.phoneNum = record.phoneNum;
+        formData.account = record.account;
+        formData.nickName = record.nickName;
+        formData.email = record.email;
+        formData.status = record.status;
+        formData.avatar = record.avatar;
+        formData.deptId = Number(record.deptId);
+        formData.phoneNum = record.phoneNum;
       }
     }
     function Del(record: UserType) {
@@ -416,14 +417,17 @@ const SysUser = defineComponent({
       if (record.id != null) {
         allocationTree.allocateId = String(record.id);
       }
-      http<RoleType>({
-        url: `/user/permissions/${record.id}`,
+      http<SysUserRole>({
+        url: `/user/roleList/${record.id}${searchParam({
+          page: 1,
+          limit: 1000,
+        })}`,
         method: 'get',
       }).then((res) => {
-        const list: string[] = [];
+        const list: number[] = [];
         res.list?.data.forEach((item) => {
           if (item.id != null) {
-            list.push(String(item.id));
+            list.push(Number(item.roleId));
           }
         });
         selectkeys.value = list;
@@ -434,13 +438,18 @@ const SysUser = defineComponent({
       allocationTree.visible = false;
     }
     function SubmitOk() {
+      const userId = Number(allocationTree.allocateId);
+      const result = selectkeys.value.map((item) => ({
+        userId,
+        roleId: Number(item),
+      }));
       const data: UserAndRole = {
-        user_id: allocationTree.allocateId,
-        role_id: selectkeys.value.join(','),
+        userId,
+        data: result,
       };
       allocationTree.loading = true;
       http<UserType>({
-        url: '/user/permissions',
+        url: '/user/userRole',
         method: 'post',
         body: data,
       })
@@ -457,12 +466,13 @@ const SysUser = defineComponent({
       // data
       tableData,
       commonDrawerData,
-      modelRef,
+      formRef,
       treeOptions,
       uploadImageData,
       allocationTree,
       selectkeys,
       roleList,
+      editId,
 
       // methods
       ChangAdd,
@@ -477,7 +487,8 @@ const SysUser = defineComponent({
       Close,
       SubmitOk,
       // form
-      validateInfos,
+      rules,
+      formData,
     };
   },
 });

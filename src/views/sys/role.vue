@@ -4,7 +4,7 @@
     <a-table
       style="margin-top: 15px"
       :columns="tableData.columns"
-      :data-source="tableData.data"
+      :dataSource="tableData.data"
       :loading="tableData.loading"
       row-key="id"
       :pagination="{
@@ -12,20 +12,20 @@
       }"
       @change="Change"
     >
-      <template #status="{ text }">{{ text }}</template>
-      <template #depart="{ record }">{{ record.depart_info.name }}</template>
-      <template #action="{ record }">
-        <a-button
-          v-bt-auth:power
-          type="primary"
-          style="margin-right: 15px"
-          @click="PowerAllocation(record)"
-        />
+      <template #bodyCell="{column, record}">
+        <template v-if="column.key === 'action'">
+          <a-button
+              v-bt-auth:power
+              type="primary"
+              style="margin-right: 15px"
+              @click="PowerAllocation(record)"
+          />
 
-        <a-button v-bt-auth:edit type="primary" style="margin-right: 15px" @click="Editor(record)" />
-        <a-popconfirm title="确定删除吗?" ok-text="删除" cancel-text="取消" @confirm="Del(record)">
-          <a-button v-bt-auth:del danger />
-        </a-popconfirm>
+          <a-button v-bt-auth:edit type="primary" style="margin-right: 15px" @click="Editor(record)" />
+          <a-popconfirm title="确定删除吗?" ok-text="删除" cancel-text="取消" @confirm="Del(record)">
+            <a-button v-bt-auth:del danger />
+          </a-popconfirm>
+        </template>
       </template>
     </a-table>
 
@@ -38,12 +38,12 @@
       @on-ok="Submit()"
       @on-close="commonDrawerData.visible = false"
     >
-      <a-form :label-col="{ span: 4 }" :wrapper-col="{ span: 20 }">
-        <a-form-item label="角色名称" v-bind="validateInfos.role_name">
-          <a-input v-model:value="modelRef.role_name"></a-input>
+      <a-form :model="formData" :rules="rules" ref="formRef" :label-col="{ span: 4 }" :wrapper-col="{ span: 20 }">
+        <a-form-item label="角色名称" name="roleName">
+          <a-input v-model:value="formData.roleName"></a-input>
         </a-form-item>
         <a-form-item label="描述">
-          <a-input v-model:value="modelRef.remark"></a-input>
+          <a-input v-model:value="formData.remark"></a-input>
         </a-form-item>
       </a-form>
     </common-drawer>
@@ -58,11 +58,12 @@
 </template>
 <script lang="ts">
 import {
-  defineComponent, onMounted, reactive, toRaw,
+  defineComponent, onMounted, reactive, ref, toRaw,
 } from 'vue';
-import { useForm } from '@ant-design-vue/use';
 import { message } from 'ant-design-vue';
 import { Method } from 'axios';
+import type { UnwrapRef } from 'vue';
+import { method } from 'lodash';
 import {
   CommonTreeSelectKeys,
   TableDataType,
@@ -73,6 +74,7 @@ import http from '@/utils/request';
 import CommonDrawer, { DrawerProps } from '@/components/Drawer/Drawer.vue';
 import CommonButton from '@/components/Button/Button.vue';
 import CommonTree from '@/views/common/tree.vue';
+import { searchParam } from '@/utils/search_param';
 
 export interface AllocateType {
   visible: boolean;
@@ -89,10 +91,11 @@ const SysRole = defineComponent({
     CommonTree,
   },
   setup() {
-    const modelRef = reactive<RoleType>({
+    const formData: UnwrapRef<RoleType> = reactive({
       remark: '',
-      role_name: '',
+      roleName: '',
     });
+    const formRef = ref();
     const editId = reactive<{ id: number | undefined }>({ id: 0 });
     const commonDrawerData = reactive<DrawerProps>({
       title: '添加',
@@ -105,37 +108,34 @@ const SysRole = defineComponent({
       data: [],
       allocateId: '',
     });
-    const rulesRef = reactive({
-      role_name: [
+    const rules = {
+      roleName: [
         {
           required: true,
           message: '请输入角色名称',
         },
       ],
-    });
+    };
     const tableData = reactive<TableDataType<RoleType>>({
       data: [],
       page: 1,
-      page_size: 10,
+      pageSize: 10,
       total: 0,
       loading: false,
       columns: [
+        {
+          title: '角色名称',
+          key: 'roleName',
+          dataIndex: 'roleName',
+        },
         {
           title: '描述',
           key: 'remark',
           dataIndex: 'remark',
         },
         {
-          title: '角色名称',
-          key: 'role_name',
-          dataIndex: 'role_name',
-        },
-        {
           title: '操作',
           key: 'action',
-          slots: {
-            customRender: 'action',
-          },
         },
       ],
     });
@@ -143,33 +143,28 @@ const SysRole = defineComponent({
     function getList() {
       tableData.loading = true;
       http<RoleType>({
-        url: 'role',
-        method: 'GET',
-        params: {
+        url: `role${searchParam({
           page: tableData.page,
-          page_size: tableData.page_size,
-        },
+          limit: tableData.pageSize,
+        })}`,
+        method: 'GET',
       }).then((res) => {
         tableData.loading = false;
-        tableData.page = res.page;
-        tableData.page_size = res.page_size;
-        tableData.total = res.total;
-        tableData.data = res.list;
+        tableData.page = res.list?.page;
+        tableData.total = res.list?.total;
+        tableData.data = res.list?.data || [];
+        console.log(tableData, 'data');
       });
     }
     onMounted(() => {
       getList();
     });
 
-    const { resetFields, validate, validateInfos } = useForm(
-      modelRef,
-      rulesRef,
-    );
     function Submit() {
-      validate().then(() => {
+      formRef.value.validate().then(() => {
         let url = 'role';
         let method: Method = 'POST';
-        const body = toRaw(modelRef);
+        const body = toRaw(formData);
         commonDrawerData.loading = true;
         if (editId.id) {
           url = `role/${editId.id}`;
@@ -187,6 +182,13 @@ const SysRole = defineComponent({
         });
       });
     }
+
+    function resetFields() {
+      if (formRef.value) {
+        formRef.value.resetFields();
+      }
+    }
+
     function ChangAdd() {
       resetFields();
       commonDrawerData.visible = true;
@@ -198,8 +200,8 @@ const SysRole = defineComponent({
         editId.id = record.id;
         commonDrawerData.title = '修改';
         commonDrawerData.visible = true;
-        modelRef.remark = record.remark;
-        modelRef.role_name = record.role_name;
+        formData.remark = record.remark;
+        formData.roleName = record.roleName;
       }
     }
     function Del(record: RoleType) {
@@ -219,12 +221,17 @@ const SysRole = defineComponent({
         allocationTree.allocateId = String(record.id);
       }
       http<MenuType>({
-        url: `/role/permissions/${record.id}`,
+        url: `/role/menus/${record.id}`,
         method: 'get',
       }).then((res) => {
-        const list: number[] = [];
-        res.list.forEach((item) => list.push(item.id || 0));
-        allocationTree.data = list;
+        if (res && res.data) {
+          const menus = res.data.menuId?.split(',').map((item) => Number(item));
+          if (menus) {
+            allocationTree.data = menus;
+          }
+        } else {
+          allocationTree.data = [];
+        }
         allocationTree.loading = false;
       });
     }
@@ -233,12 +240,12 @@ const SysRole = defineComponent({
     }
     function SubmitOk(val: CommonTreeSelectKeys) {
       const data = {
-        role_id: allocationTree.allocateId,
-        menu_id: val.checked.join(','),
+        roleId: allocationTree.allocateId,
+        menuId: val.checked.join(','),
       };
       allocationTree.loading = true;
       http<MenuType>({
-        url: '/role/permissions',
+        url: '/role/relationAndMenu',
         method: 'post',
         body: data,
       })
@@ -255,7 +262,6 @@ const SysRole = defineComponent({
       // data
       tableData,
       commonDrawerData,
-      modelRef,
       allocationTree,
 
       // methods
@@ -269,7 +275,9 @@ const SysRole = defineComponent({
       SubmitOk,
 
       // form
-      validateInfos,
+      formData,
+      formRef,
+      rules,
     };
   },
 });

@@ -14,19 +14,22 @@
       :data-source="tableData.data"
       :loading="tableData.loading"
     >
-      <template #action="{ record }">
-        <a-button type="primary" class="button-right" @click="Edit(record)">
-          编辑
-        </a-button>
-        <a-popconfirm
-          title="确定删除吗?"
-          ok-text="删除"
-          cancel-text="取消"
-          @confirm="Del(record)"
-        >
-          <a-button type="primary" class="button-right"> 删除 </a-button>
-        </a-popconfirm>
+      <template #bodyCell="{column, record}">
+        <template v-if="column.dataIndex === 'action'" >
+          <a-button type="primary" class="button-right" @click="Edit(record)">
+            编辑
+          </a-button>
+          <a-popconfirm
+              title="确定删除吗?"
+              ok-text="删除"
+              cancel-text="取消"
+              @confirm="Del(record)"
+          >
+            <a-button type="primary" class="button-right" danger> 删除 </a-button>
+          </a-popconfirm>
+        </template>
       </template>
+
     </a-table>
     <a-modal
       v-model:visible="modalForm.visible"
@@ -34,15 +37,15 @@
       :confirm-loading="modalForm.loading"
       @ok="handleOk"
     >
-      <a-form :label-col="labelCol" :wrapper-col="wrapperCol">
-        <a-form-item label="字典名称" v-bind="validateInfos.label">
-          <a-input v-model:value="modalRef.label" />
+      <a-form :model="formData" :rules="rules" ref="formRef" :label-col="labelCol" :wrapper-col="wrapperCol">
+        <a-form-item label="字典名称" name="label">
+          <a-input v-model:value="formData.label" />
         </a-form-item>
-        <a-form-item label="字典值" v-bind="validateInfos.value">
-          <a-input v-model:value="modalRef.value" />
+        <a-form-item label="字典值" name="value">
+          <a-input v-model:value="formData.value" />
         </a-form-item>
-        <a-form-item label="描述">
-          <a-textarea v-model:value="modalRef.describe" allow-clear />
+        <a-form-item label="描述" name="describe">
+          <a-textarea v-model:value="formData.describe" allow-clear />
         </a-form-item>
       </a-form>
     </a-modal>
@@ -52,33 +55,34 @@
 import {
   defineComponent, ref, reactive, toRaw,
 } from 'vue';
-import { useForm } from '@ant-design-vue/use';
 import { message } from 'ant-design-vue';
 import { Method } from 'axios';
 import CommonDrawer from '@/components/Drawer/Drawer.vue';
 import { SysDict, SysDictItem } from '@/types/sys/dict';
 import { TableDataType } from '@/types/type';
 import http from '@/utils/request';
+import { searchParam } from '@/utils/search_param';
 
 const DictDrawer = defineComponent({
   components: {
     CommonDrawer,
   },
   setup() {
-    const editParentId = ref('');
-    const editId = ref('');
+    const editParentId = ref(-1);
+    const editId = ref(-1);
     const modalForm = reactive({
       title: '添加',
       visible: false,
       loading: false,
     });
-    const modalRef = reactive<SysDictItem>({
+    const formRef = ref();
+    const formData = reactive<SysDictItem>({
       value: '',
       label: '',
       describe: '',
-      dict_id: '',
+      dictId: -1,
     });
-    const ruleRef = reactive({
+    const rules = {
       value: [
         {
           required: true,
@@ -91,12 +95,11 @@ const DictDrawer = defineComponent({
           message: '请输入名称',
         },
       ],
-    });
-    const { resetFields, validate, validateInfos } = useForm(modalRef, ruleRef);
+    };
     const tableData = reactive<TableDataType<SysDictItem>>({
       data: [],
       page: 1,
-      page_size: 10,
+      pageSize: 10,
       total: 0,
       loading: false,
       columns: [
@@ -115,20 +118,27 @@ const DictDrawer = defineComponent({
         {
           title: '操作',
           dataIndex: 'action',
-          slots: { customRender: 'action' },
         },
       ],
     });
     const visible = ref(false);
     const GetList = () => {
       tableData.loading = true;
+      const search = `/dict-item${searchParam({
+        page: tableData.page,
+        limit: tableData.pageSize,
+        search: {
+          $and: [{
+            dictId: editParentId.value,
+          }],
+        },
+      })}`;
       http<SysDictItem>({
-        url: `/dict-item/${editParentId.value}`,
+        url: search,
         method: 'GET',
       }).then((res) => {
-        tableData.data = res.list;
-        tableData.total = res.total;
-        console.log('🚀 ~ file: dict-drawer.vue ~ line 42 ~ http ~ res', res);
+        tableData.data = res.list?.data || [];
+        tableData.total = res.list?.total;
         tableData.loading = false;
       });
     };
@@ -136,40 +146,43 @@ const DictDrawer = defineComponent({
       visible.value = false;
     };
     const IsShow = (record: SysDict) => {
-      console.log(
-        '🚀 ~ file: dict-drawer.vue ~ line 26 ~ IsShow ~ record',
-        record,
-      );
-      editParentId.value = toRaw(record.id) || '';
+      editParentId.value = record.id || -1;
       visible.value = true;
       GetList();
     };
     const Edit = (record: SysDictItem) => {
       const editData = toRaw(record);
-      delete editData.dict_id;
-      modalRef.value = editData.value;
-      modalRef.label = editData.label;
-      modalRef.describe = editData.describe;
+      delete editData.dictId;
+      formData.value = editData.value;
+      formData.label = editData.label;
+      formData.describe = editData.describe;
       console.log(
         '🚀 ~ file: dict-drawer.vue ~ line 139 ~ Edit ~ record',
         record,
       );
-      editId.value = editData.id || '';
+      editId.value = editData.id || -1;
       modalForm.visible = true;
     };
+
+    function resetFields() {
+      if (formRef.value) {
+        formRef.value.resetFields();
+      }
+    }
+
     const Add = () => {
       modalForm.visible = true;
       resetFields();
     };
     const handleOk = () => {
       modalForm.loading = true;
-      validate()
+      formRef.value.validate()
         .then(() => {
-          const data = toRaw(modalRef);
-          data.dict_id = editParentId.value;
+          const data = toRaw(formData);
+          data.dictId = editParentId.value;
           let method: Method = 'POST';
           let url = 'dict-item';
-          if (editId.value) {
+          if (editId.value !== -1 && editId.value) {
             method = 'PUT';
             url = `${url}/${editId.value}`;
           }
@@ -207,7 +220,6 @@ const DictDrawer = defineComponent({
       modalForm,
       labelCol: { span: 4 },
       wrapperCol: { span: 14 },
-      modalRef,
 
       // methods
       Close,
@@ -216,8 +228,12 @@ const DictDrawer = defineComponent({
       Add,
       Del,
       resetFields,
-      validateInfos,
       handleOk,
+
+      // form
+      formData,
+      formRef,
+      rules,
     };
   },
 });

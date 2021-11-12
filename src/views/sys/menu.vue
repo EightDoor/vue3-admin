@@ -43,7 +43,7 @@
       :label-col="{ span: 4 }"
       :wrapper-col="{ span: 20 }"
     >
-      <a-form-item label="父级id">
+      <a-form-item label="父级id" name="parentId">
         <a-tree-select
           v-model:value="validateInfos.parentId"
           style="width: 100%"
@@ -53,10 +53,10 @@
           tree-default-expand-all
         ></a-tree-select>
       </a-form-item>
-      <a-form-item label="名称">
+      <a-form-item label="名称" name="title">
         <a-input v-model:value="validateInfos.title"></a-input>
       </a-form-item>
-      <a-form-item label="菜单类型">
+      <a-form-item label="菜单类型" name="type">
         <a-select v-model:value="validateInfos.type">
           <a-select-option
             v-for="(item, index) in optionsType"
@@ -65,30 +65,33 @@
           >{{ item.label }}</a-select-option>
         </a-select>
       </a-form-item>
-      <a-form-item v-if="validateInfos.type === 3" label="权限标识">
+      <a-form-item v-if="validateInfos.type === 3" label="权限标识" name="perms">
         <a-input v-model:value="validateInfos.perms"></a-input>
       </a-form-item>
       <div v-if="validateInfos.type !== 3">
-        <a-form-item label="菜单name">
+        <a-form-item label="菜单name" name="name">
           <a-input v-model:value="validateInfos.name"></a-input>
         </a-form-item>
-        <a-form-item label="是否首页">
+        <a-form-item label="是否首页" name="isHome">
           <a-radio-group v-model:value="validateInfos.isHome">
             <a-radio :value="true">是</a-radio>
             <a-radio :value="false">否</a-radio>
           </a-radio-group>
         </a-form-item>
-        <a-form-item label="图标">
+        <a-form-item label="图标" name="icon">
           <a-input v-model:value="validateInfos.icon"></a-input>
         </a-form-item>
-        <a-form-item label="是否隐藏">
+        <a-form-item label="重定向地址" name="redirect">
+          <a-input v-model:value="validateInfos.redirect"></a-input>
+        </a-form-item>
+        <a-form-item label="是否隐藏" name="hidden">
           <a-radio-group v-model:value="validateInfos.hidden" name="radioGroup">
             <a-radio :value="0">否</a-radio>
             <a-radio :value="1">是</a-radio>
           </a-radio-group>
         </a-form-item>
       </div>
-      <a-form-item label="排序">
+      <a-form-item label="排序" name="orderNum">
         <a-input-number v-model:value="validateInfos.orderNum"></a-input-number>
       </a-form-item>
     </a-form>
@@ -116,7 +119,10 @@ import log from '@/utils/log';
 const SysMenu = defineComponent({
   name: 'SysMenu',
   isRouter: true,
-  components: { CommonButton, CommonDrawer },
+  components: {
+    CommonButton,
+    CommonDrawer,
+  },
   setup() {
     const optionsType = ref([
       {
@@ -153,6 +159,11 @@ const SysMenu = defineComponent({
         {
           title: '图标',
           dataIndex: 'icon',
+          width,
+        },
+        {
+          title: '重定向地址',
+          dataIndex: 'redirect',
           width,
         },
         {
@@ -201,7 +212,7 @@ const SysMenu = defineComponent({
       perms: '',
       name: '',
       type: 1,
-      orderNum: 1,
+      orderNum: 0,
       id: 0,
       hidden: 0,
       isHome: false,
@@ -260,7 +271,9 @@ const SysMenu = defineComponent({
         .then(() => {
           drawerData.loading = true;
           const data = cloneDeep(toRaw(validateInfos));
-
+          if (!data.name) {
+            data.name = data.perms;
+          }
           // @ts-ignore
           delete data.id;
           let method: Method = 'POST';
@@ -282,16 +295,20 @@ const SysMenu = defineComponent({
           console.log('error', err);
         });
     };
+
+    function resetFields() {
+      if (formRef.value) {
+        formRef.value.resetFields();
+      }
+    }
+
     function ChangeClick() {
       drawerData.title = '添加';
       drawerData.visible = true;
-      nextTick(() => {
-        if (formRef.value) {
-          formRef.value.resetFields();
-        }
-      });
-      validateInfos.parentId = 0;
+      resetFields();
+      //      validateInfos.parentId = 0;
     }
+
     function Editor(record: MenuType) {
       drawerData.title = '修改';
       drawerData.visible = true;
@@ -327,6 +344,7 @@ const SysMenu = defineComponent({
       formRef,
       rules,
       onSubmit,
+      resetFields,
     };
   },
 });
