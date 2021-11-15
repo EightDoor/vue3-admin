@@ -73,7 +73,7 @@ export default defineComponent({
         try {
           r = store.state.crumbs.list.split(',');
         } catch (err) {
-          console.log('err: ', err);
+          //          console.log('err: ', err);
         }
         return r;
       },

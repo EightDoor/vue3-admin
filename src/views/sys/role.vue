@@ -63,7 +63,6 @@ import {
 import { message } from 'ant-design-vue';
 import { Method } from 'axios';
 import type { UnwrapRef } from 'vue';
-import { method } from 'lodash';
 import {
   CommonTreeSelectKeys,
   TableDataType,

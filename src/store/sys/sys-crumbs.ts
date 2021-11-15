@@ -77,13 +77,14 @@ export default {
     // 默认首页只能是一级的
     // TODO 待完善  刷新页面直接选择对应的选中项
     [RESET]({ commit }: { commit: Commit }, payload: MenuItem[]): void {
+      console.log(payload, 'payload');
       const data = payload.filter((item) => item.isHome);
       if (data.length > 0) {
         const r = data[0];
         const result = {
           id: r.id || '',
           title: r.title,
-          path: r.path || '',
+          path: `/${r.name}`,
           parent_id: r.parentId || '',
           closable: false,
         };

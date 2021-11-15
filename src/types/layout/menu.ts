@@ -7,7 +7,9 @@ export interface MenuItem {
   id: number;
   parentId: number;
   crumbs?: string;
-    closable?: boolean;
+  closable?: boolean;
+  isHome?: number
+  name?: string;
 }
 export interface MenusInfo {
   selectedKeys: string[];

@@ -37,7 +37,7 @@ export interface SysStoreType {
   permissionButtons: MenuType[];
   collapsed: boolean;
 }
-export type CustomMenus = RouteRecordRaw & { id: number; parentId: number, children?: any[], orderNum?: number, isHome?: number};
+export type CustomMenus = RouteRecordRaw & Partial<MenuType>;
 
 const getUserInfo = (): Promise<UserInformation | null> => new Promise((resolve, reject) => {
   http<UserInformation>({
@@ -108,7 +108,7 @@ function queryWhetherParent(parentId: number, item: MenuType[]) {
   return '';
 }
 
-const FormatMenuTree = async (menuData: MenuType[]): Promise<RouteRecordRaw[]> => {
+const formatMenuTree = async (menuData: MenuType[]): Promise<RouteRecordRaw[]> => {
   // {
   //   name: 'home',
   //     path: 'home',
@@ -129,20 +129,10 @@ const FormatMenuTree = async (menuData: MenuType[]): Promise<RouteRecordRaw[]> =
     if (fileKey) {
       const allPath = queryWhetherParent(menuItem.parentId, menuData);
       const file = modules[fileKey].default;
-      const obj:CustomMenus = {
-        path: `${allPath}/${file.name}`,
-        name: String(menuItem.name),
-        component: file,
-        redirect: menuItem.redirect,
-        meta: {
-          title: menuItem.title,
-          icon: menuItem.icon,
-        },
-        id: menuItem.id,
-        parentId: menuItem.parentId,
-        orderNum: menuItem.orderNum,
-        isHome: menuItem.isHome,
-      };
+      const obj: any = { ...menuItem };
+      obj.path = `${allPath}/${file.name}`;
+      obj.name = String(menuItem.name);
+      obj.component = file;
       if (menuItem.name === file.name) {
         result.push(obj);
       } else if (menuItem.type === 1) {
@@ -220,7 +210,7 @@ export default {
             id: item.id,
             parentId: item.parentId,
             crumbs: `${item.title}`,
-            closable: item.isHome ?? item.isHome === 1,
+            closable: item.isHome === 1,
           });
         }
       });
@@ -272,7 +262,7 @@ export default {
               commit(USERINFOMENUS, res);
               commit(SETUSERINFO, res);
               commit(SET_MENUS_MUTATION, res);
-              const menus = await FormatMenuTree(formatMenus(res.menus));
+              const menus = await formatMenuTree(formatMenus(res.menus));
               resolve({
                 userInfo: res.userInfo,
                 menus,

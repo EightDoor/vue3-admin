@@ -1,20 +1,29 @@
 <template>
-  <a-upload
-      :action="Config.qiniuUploadUrl"
-      :multiple="true"
-      :file-list="fileList"
-      @change="handleChange"
-  >
-    <a-button>
-      <upload-outlined></upload-outlined>
-      Upload
-    </a-button>
-  </a-upload>
+ <div>
+   <a-upload
+       :action="Config.qiniuUploadUrl"
+       :multiple="true"
+       :file-list="list"
+       show-file-list
+      :headers="headers"
+       @change="handleChange"
+       :on-remove="onRemove"
+       :on-success="onSuccess"
+       :on-error="onError"
+   >
+     <a-button>
+       <upload-outlined></upload-outlined>
+       上传
+     </a-button>
+   </a-upload>
+ </div>
 </template>
 <script lang="ts">
 import { UploadOutlined } from '@ant-design/icons-vue';
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, onMounted } from 'vue';
 import Config from '@/config';
+import log from '@/utils/log';
+import http from '@/utils/request';
 
 interface FileItem {
   uid: string;
@@ -34,7 +43,7 @@ export default defineComponent({
     UploadOutlined,
   },
   setup() {
-    const fileList = ref<FileItem[]>([
+    const list = ref<FileItem[]>([
       {
         uid: '-1',
         name: 'xxx.png',
@@ -42,14 +51,14 @@ export default defineComponent({
         url: 'http://www.baidu.com/xxx.png',
       },
     ]);
+    const headers: Object = {
+      token: '',
+    };
     const handleChange = (info: FileInfo) => {
       let resFileList = [...info.fileList];
 
-      // 1. Limit the number of uploaded files
-      //    Only to show two recent uploaded files, and old ones will be replaced by the new
       resFileList = resFileList.slice(-2);
 
-      // 2. read from response and show file link
       resFileList = resFileList.map((file) => {
         if (file.response) {
           // Component will show file.url as link
@@ -58,11 +67,48 @@ export default defineComponent({
         return file;
       });
 
-      fileList.value = resFileList;
+      list.value = resFileList;
     };
+
+    function onRemove(file: FileItem, fileList:FileItem[]) {
+      log.d(file);
+      log.d(fileList);
+    }
+
+    function onSuccess(response, file:FileItem, fileList:FileItem[]) {
+      log.d(response);
+      log.d(file);
+      log.d(fileList);
+    }
+
+    function onError(err, file:FileItem, fileList:FileItem[]) {
+      log.d(err);
+      log.d(file);
+      log.d(fileList);
+    }
+
+    function getFileToken() {
+      http({
+        url: '/upload/zk',
+        method: 'GET',
+      }).then((res) => {
+        log.i(res);
+      });
+    }
+    onMounted(() => {
+      getFileToken();
+    });
+
     return {
-      fileList,
+      list,
       handleChange,
+
+      Config,
+
+      onRemove,
+      onSuccess,
+      onError,
+      headers,
     };
   },
 });
