@@ -5,9 +5,10 @@
        :multiple="true"
        :file-list="list"
        show-file-list
-      :headers="headers"
-       @change="handleChange"
+       :data="extendedParam"
+       :on-change="handleChange"
        :on-remove="onRemove"
+       :limit="limit"
        :on-success="onSuccess"
        :on-error="onError"
    >
@@ -20,7 +21,10 @@
 </template>
 <script lang="ts">
 import { UploadOutlined } from '@ant-design/icons-vue';
-import { defineComponent, ref, onMounted } from 'vue';
+import {
+  defineComponent, ref, onMounted, PropType,
+  reactive,
+} from 'vue';
 import Config from '@/config';
 import log from '@/utils/log';
 import http from '@/utils/request';
@@ -42,18 +46,21 @@ export default defineComponent({
   components: {
     UploadOutlined,
   },
+  props: {
+    list: {
+      type: Array as PropType<Array<string>>,
+      required: true,
+    },
+    limit: {
+      type: Number,
+      default: 10,
+    },
+  },
   setup() {
-    const list = ref<FileItem[]>([
-      {
-        uid: '-1',
-        name: 'xxx.png',
-        status: 'done',
-        url: 'http://www.baidu.com/xxx.png',
-      },
-    ]);
-    const headers: Object = {
+    const list = ref<FileItem[]>([]);
+    const extendedParam = reactive({
       token: '',
-    };
+    });
     const handleChange = (info: FileInfo) => {
       let resFileList = [...info.fileList];
 
@@ -89,10 +96,10 @@ export default defineComponent({
 
     function getFileToken() {
       http({
-        url: '/upload/zk',
+        url: 'upload/zk',
         method: 'GET',
       }).then((res) => {
-        log.i(res);
+        extendedParam.token = res.data;
       });
     }
     onMounted(() => {
@@ -100,7 +107,6 @@ export default defineComponent({
     });
 
     return {
-      list,
       handleChange,
 
       Config,
@@ -108,7 +114,7 @@ export default defineComponent({
       onRemove,
       onSuccess,
       onError,
-      headers,
+      extendedParam,
     };
   },
 });

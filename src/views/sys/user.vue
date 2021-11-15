@@ -49,23 +49,7 @@
         name="avatar"
     >
       <a-form-item label="头像">
-        <a-upload
-          v-model:fileList="formData.avatar"
-          name="avatar"
-          list-type="picture-card"
-          class="avatar-uploader"
-          :show-upload-list="false"
-          :action="uploadImageData.action"
-          :before-upload="beforeUpload"
-          @change="handleChange"
-        >
-          <img v-if="uploadImageData.imageUrl" :src="uploadImageData.imageUrl" alt="avatar" />
-          <div v-else>
-            <loading-outlined v-if="uploadImageData.loading" />
-            <plus-outlined v-else />
-            <div class="ant-upload-text">上传</div>
-          </div>
-        </a-upload>
+        <image-upload v-model:list="formData.avatar"/>
       </a-form-item>
       <a-form-item label="账号"  name="modelRef">
         <a-input v-model:value="formData.account"></a-input>
@@ -139,6 +123,7 @@ import { ListObjCompare, ListToTree } from '@/utils';
 import { AllocateType } from '@/views/sys/role.vue';
 import { searchParam } from '@/utils/search_param';
 import log from '@/utils/log';
+import ImageUpload from '@/components/ImageUpload/index.vue';
 
 interface SysUserRole {
   userId: number;
@@ -158,6 +143,7 @@ const SysUser = defineComponent({
     CommonDrawer,
     PlusOutlined,
     LoadingOutlined,
+    ImageUpload,
   },
   setup() {
     const selectkeys = ref<number[]>([]);
@@ -173,7 +159,7 @@ const SysUser = defineComponent({
       nickName: '',
       email: '',
       status: 1,
-      avatar: '',
+      avatar: [],
       deptId: 0,
       phoneNum: '',
     });
