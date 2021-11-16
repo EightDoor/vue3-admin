@@ -16,6 +16,10 @@
         <div :style="text === 0 ? { color: 'red' } : { color: 'green' }">{{ formatStatus(text) }}</div>
       </template>
       <template v-if="column.key === 'depart'">{{ record.deptId }}</template>
+      <template v-if="column.key === 'avatar'">
+        <a-tag v-if="!record.avatar" color="red">暂无头像</a-tag>
+        <img v-else class="avatar" :src="record.avatar" :alt="record.nickName">
+      </template>
 
       <template v-if="column.key === 'action'">
         <a-button
@@ -124,6 +128,7 @@ import { AllocateType } from '@/views/sys/role.vue';
 import { searchParam } from '@/utils/search_param';
 import log from '@/utils/log';
 import ImageUpload from '@/components/ImageUpload/index.vue';
+import BusinessUtils from '@/utils/business';
 
 interface SysUserRole {
   userId: number;
@@ -141,8 +146,6 @@ const SysUser = defineComponent({
   components: {
     CommonButton,
     CommonDrawer,
-    PlusOutlined,
-    LoadingOutlined,
     ImageUpload,
   },
   setup() {
@@ -319,6 +322,9 @@ const SysUser = defineComponent({
           url = `user/${editId.id}`;
           method = 'PUT';
         }
+        if (data.avatar) {
+          data.avatar = BusinessUtils.formatUploadImg(data.avatar);
+        }
         http({
           url,
           method,
@@ -382,7 +388,7 @@ const SysUser = defineComponent({
         formData.nickName = record.nickName;
         formData.email = record.email;
         formData.status = record.status;
-        formData.avatar = record.avatar;
+        formData.avatar = BusinessUtils.formatUploadShow(record.avatar);
         formData.deptId = Number(record.deptId);
         formData.phoneNum = record.phoneNum;
       }
@@ -488,11 +494,16 @@ export default SysUser;
   flex-direction: row;
   flex-wrap: wrap;
 }
-</style>
-
 .checkoutContainer {
   display: flex;
   flex: 1;
   flex-direction: row;
   flex-wrap: wrap;
 }
+
+.avatar {
+  width:50px;
+  height: 50px;
+  border-radius: 50%;
+}
+</style>
