@@ -1,8 +1,8 @@
 Arguments: 
-  /Users/zhoukai/.nvm/versions/node/v16.13.0/bin/node /Users/zhoukai/.nvm/versions/node/v16.13.0/bin/yarn add @nestjsx/crud-request -S
+  /Users/zhoukai/.nvm/versions/node/v16.13.0/bin/node /Users/zhoukai/.nvm/versions/node/v16.13.0/bin/yarn
 
 PATH: 
-  /Library/Java/JavaVirtualMachines/jdk1.8.0_202.jdk/Contents/Home//bin:/opt/flutter/bin:/Users/zhoukai/.nvm/versions/node/v16.13.0/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin:
+  /Library/Java/JavaVirtualMachines/jdk1.8.0_202.jdk/Contents/Home//bin:/opt/flutter/bin:/Users/zhoukai/.nvm/versions/node/v16.13.0/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin::/opt/mvn/bin
 
 Yarn version: 
   1.22.17
@@ -14,7 +14,7 @@ Platform:
   darwin arm64
 
 Trace: 
-  Error: EEXIST: file already exists, mkdir '/Users/zhoukai/Desktop/my-project/vue3-admin/node_modules/eslint-module-utils/node_modules'
+  Error: ENOENT: no such file or directory, copyfile '/Users/zhoukai/Library/Caches/Yarn/v6/npm-ignore-5.1.9-9ec1a5cbe8e1446ec60d4420060d43aa6e7382fb-integrity/node_modules/ignore/LICENSE-MIT' -> '/Users/zhoukai/Desktop/my-project/vue3-admin/node_modules/@typescript-eslint/eslint-plugin/node_modules/ignore/LICENSE-MIT'
 
 npm manifest: 
   {
@@ -30,6 +30,7 @@ npm manifest:
     "dependencies": {
       "@ant-design-vue/use": "^0.0.1-alpha.10",
       "@ant-design/icons-vue": "^6.0.1",
+      "@nestjsx/crud-request": "^5.0.0-alpha.3",
       "ant-design-vue": "3.0.0-alpha.11",
       "axios": "^0.24.0",
       "core-js": "^3.19.1",
