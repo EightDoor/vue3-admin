@@ -10,10 +10,10 @@
         :rules="rules"
         class="form"
       >
-        <a-form-item label="账户">
+        <a-form-item label="账户" name="name">
           <a-input v-model:value="formState.name" />
         </a-form-item>
-        <a-form-item label="密码">
+        <a-form-item label="密码" name="password">
           <a-input-password
             v-model:value="formState.password"
             @pressEnter="onSubmit"
@@ -65,12 +65,14 @@ const Login = defineComponent({
         {
           required: true,
           message: '请输入姓名',
+          trigger: 'blur',
         },
       ],
       password: [
         {
           required: true,
           message: '请输入密码',
+          trigger: 'blur',
         },
       ],
     };

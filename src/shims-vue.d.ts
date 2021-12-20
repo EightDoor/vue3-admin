@@ -8,3 +8,5 @@ declare module '*.vue' {
 interface ImportMeta {
     readonly globEager: any
 }
+
+(window as any).global = window;
