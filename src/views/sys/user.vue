@@ -29,6 +29,7 @@
             @click="Allocate(record)"
         />
         <a-button v-bt-auth:edit type="primary" style="margin-right: 15px" @click="Editor(record)" />
+        <a-button v-bt-auth:updatePassword danger style="margin-right: 15px" @click="updatePassword(record)" />
         <a-popconfirm title="确定删除吗?" ok-text="删除" cancel-text="取消" @confirm="Del(record)">
           <a-button v-bt-auth:del danger />
         </a-popconfirm>
@@ -110,6 +111,11 @@
       <a-empty v-else />
     </a-spin>
   </common-drawer>
+
+  <!-- 修改密码 -->
+  <a-modal v-model:visible="updatePasswdVis" title="修改密码" @ok="updatePasswdHandleOk">
+    <a-input v-model:value="password" placeholder="请输入新密码" />
+  </a-modal>
 </template>
 <script lang="ts">
 import {
@@ -454,6 +460,38 @@ const SysUser = defineComponent({
           allocationTree.loading = false;
         });
     }
+
+    // 修改密码
+    const updatePasswdVis = ref(false);
+    const updateData = ref();
+    const password = ref();
+    function updatePasswdHandleOk() {
+      if (password.value) {
+        http<boolean>({
+          url: '/user/updatePasswd',
+          method: 'post',
+          body: {
+            id: updateData.value.id,
+            password: password.value,
+          },
+        }).then((res) => {
+          console.log(res.data, 'res');
+          if (res.data) {
+            message.success('修改成功');
+            updatePasswdVis.value = false;
+          } else {
+            message.error('修改失败');
+          }
+        });
+      } else {
+        message.info('请输入新密码');
+      }
+    }
+    function updatePassword(row) {
+      updatePasswdVis.value = true;
+      updateData.value = row;
+      console.log(row, 'row');
+    }
     return {
       // data
       tableData,
@@ -465,6 +503,9 @@ const SysUser = defineComponent({
       selectkeys,
       roleList,
       editId,
+      updatePasswdVis,
+      updatePassword,
+      password,
 
       // methods
       ChangAdd,
@@ -478,6 +519,7 @@ const SysUser = defineComponent({
       Allocate,
       Close,
       SubmitOk,
+      updatePasswdHandleOk,
       // form
       rules,
       formData,
