@@ -1,15 +1,19 @@
 <template>
-   <div>
-
-   </div>
+   <base-container>
+      <fs-crud ref="crudRef" v-bind="crudBinding" />
+   </base-container>
 </template>
 
 <script lang="ts">
+import BaseContainer from '@/components/BaseContainer/index.vue';
     import { defineComponent, ref, onMounted } from "vue";
     import createCrudOptions from "./crud";
     import { useExpose, useCrud } from "@fast-crud/fast-crud";
     export default defineComponent({
         name: "DemoAvue", // 实际开发中可以修改一下name
+        components: {
+          BaseContainer,
+        },
         setup() {
             // crud组件的ref
             const crudRef = ref<any>();

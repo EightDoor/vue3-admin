@@ -20,7 +20,7 @@ export function AddObj(obj) {
 export function UpdateObj(obj) {
     return request({
         url: `${apiPrefix}/${obj.id}`,
-        method: "POST",
+        method: "PUT",
         body: obj,
     });
 }

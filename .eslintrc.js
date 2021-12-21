@@ -16,6 +16,7 @@ module.exports = {
   plugins: [
     'vue',
     '@typescript-eslint',
+    'prettier',
   ],
   rules: {
     'import/no-unresolved': 'off',

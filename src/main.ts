@@ -49,7 +49,7 @@ app.use(FastCrud, {
                   return  {
                     records: res.list.data,
                     currentPage: res.list.page,
-                    pageSize: res.list.count,
+                    pageSize: 20,
                     total: res.list.total
                   }
               }
