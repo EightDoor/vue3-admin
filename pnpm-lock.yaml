@@ -3,6 +3,8 @@ lockfileVersion: 5.3
 specifiers:
   '@ant-design-vue/use': ^0.0.1-alpha.10
   '@ant-design/icons-vue': ^6.0.1
+  '@fast-crud/fast-crud': ^0.22.1
+  '@fast-crud/ui-antdv': ^0.22.1
   '@nestjsx/crud-request': ^5.0.0-alpha.3
   '@types/node': ^16.11.7
   '@types/nprogress': ^0.2.0
@@ -33,6 +35,8 @@ specifiers:
 dependencies:
   '@ant-design-vue/use': 0.0.1-alpha.10
   '@ant-design/icons-vue': 6.0.1_vue@3.2.21
+  '@fast-crud/fast-crud': 0.22.1_vue@3.2.21
+  '@fast-crud/ui-antdv': 0.22.1
   '@nestjsx/crud-request': 5.0.0-alpha.3
   ant-design-vue: 3.0.0-alpha.16_6e388bbca7e4e5ee47f682f3dd8bbf67
   axios: 0.24.0
@@ -169,6 +173,29 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
+
+  /@fast-crud/fast-crud/0.22.1_vue@3.2.21:
+    resolution: {integrity: sha512-K3KqOudtPtNHF02YU7SnMbO8ge4wM5TLIb4j6Yr0UCWQp9Sm/indOtbbZqb7SxUf32WZELyiMy5QZwOOBrDtmw==}
+    dependencies:
+      '@fast-crud/ui-interface': 0.22.1
+      dayjs: 1.10.7
+      deepdash-es: 5.3.5
+      lodash-es: 4.17.21
+      lru-cache: 6.0.0
+      vuedraggable: 4.1.0_vue@3.2.21
+    transitivePeerDependencies:
+      - vue
+    dev: false
+
+  /@fast-crud/ui-antdv/0.22.1:
+    resolution: {integrity: sha512-YjNiznv9WIACJaSjwXs8YAjk8IwHmdXFFXkjBM1S3bQLoML/nYNGCYZ7YwzYT0u+NYuxKNWAYDm6kzQbkvF78w==}
+    dependencies:
+      '@fast-crud/ui-interface': 0.22.1
+    dev: false
+
+  /@fast-crud/ui-interface/0.22.1:
+    resolution: {integrity: sha512-p996hbzANNhMYOZooLBayO0ZVQBIYKNPtBsGN0zQOik3ntn25z/3lOCjph7pc+NiHHB9+V2XIW5qYbDSS7vF9A==}
+    dev: false
 
   /@humanwhocodes/config-array/0.9.2:
     resolution: {integrity: sha512-UXOuFCGcwciWckOpmfKDq/GyhlTf9pN/BzG//x8p8zTOFEcGuA68ANXheFS0AGvy3qgZqLBUkMs7hqzqCKOVwA==}
@@ -834,6 +861,12 @@ packages:
   /deep-is/0.1.4:
     resolution: {integrity: sha512-oIPzksmTg4/MriiaYGO+okXDT7ztn/w3Eptv/+gSIdMdKsJo0u4CfYNFJPy+4SKMuCqGw2wxnA+URMg3t8a/bQ==}
     dev: true
+
+  /deepdash-es/5.3.5:
+    resolution: {integrity: sha512-bezxT+LqAu1Ly8I2LAEFle3fdEAc/bHld9cMAbgYzY+69+P9qTkGtNvC2ZQJEP4C1C2Fx9gVn/TCoQlAivWPDA==}
+    dependencies:
+      lodash-es: 4.17.21
+    dev: false
 
   /define-properties/1.1.3:
     resolution: {integrity: sha512-3MqfYKj2lLzdMSf8ZIZE/V+Zuy+BgD6f164e8K2w7dgnpKArBDerGYpM46IYYcjnkdPNMjPk9A6VFB8+3SKlXQ==}
@@ -1844,7 +1877,6 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       yallist: 4.0.0
-    dev: true
 
   /magic-string/0.25.7:
     resolution: {integrity: sha512-4CrMT5DOHTDk4HYDlzmwu4FVCcIYI8gauveasrdCu2IKIFOJ3f0v/8MDGJCDL9oD2ppz/Av1b0Nj345H9M+XIA==}
@@ -2321,6 +2353,10 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
+  /sortablejs/1.14.0:
+    resolution: {integrity: sha512-pBXvQCs5/33fdN1/39pPL0NZF20LeRbLQ5jtnheIPN9JQAaufGjKdWduZn4U7wCtVuzKhmRkI0DFYHYRbB2H1w==}
+    dev: false
+
   /source-map-js/0.6.2:
     resolution: {integrity: sha512-/3GptzWzu0+0MBQFrDKzw/DvvMTUORvgY6k6jd/VS6iCR4RDTKWH6v6WPwQoUO8667uQEf9Oe38DxAYWY5F/Ug==}
     engines: {node: '>=0.10.0'}
@@ -2664,6 +2700,15 @@ packages:
       '@vue/shared': 3.2.21
     dev: false
 
+  /vuedraggable/4.1.0_vue@3.2.21:
+    resolution: {integrity: sha512-FU5HCWBmsf20GpP3eudURW3WdWTKIbEIQxh9/8GE806hydR9qZqRRxRE3RjqX7PkuLuMQG/A7n3cfj9rCEchww==}
+    peerDependencies:
+      vue: ^3.0.1
+    dependencies:
+      sortablejs: 1.14.0
+      vue: 3.2.21
+    dev: false
+
   /vuex/4.0.2_vue@3.2.21:
     resolution: {integrity: sha512-M6r8uxELjZIK8kTKDGgZTYX/ahzblnzC4isU1tpmEuOIIKmV+TRdc+H4s8ds2NuZ7wpUTdGRzJRtoj+lI+pc0Q==}
     peerDependencies:
@@ -2718,4 +2763,3 @@ packages:
 
   /yallist/4.0.0:
     resolution: {integrity: sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==}
-    dev: true

@@ -11,6 +11,8 @@
   "dependencies": {
     "@ant-design-vue/use": "^0.0.1-alpha.10",
     "@ant-design/icons-vue": "^6.0.1",
+    "@fast-crud/fast-crud": "^0.22.1",
+    "@fast-crud/ui-antdv": "^0.22.1",
     "@nestjsx/crud-request": "^5.0.0-alpha.3",
     "ant-design-vue": "3.0.0-alpha.16",
     "axios": "^0.24.0",
