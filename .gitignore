@@ -1,7 +1,6 @@
 node_modules
 .idea
 dist
-.history
 .DS_Store
 dist-ssr
 *.local
