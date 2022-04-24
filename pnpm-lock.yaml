@@ -3,8 +3,8 @@ lockfileVersion: 5.3
 specifiers:
   '@ant-design-vue/use': ^0.0.1-alpha.10
   '@ant-design/icons-vue': ^6.1.0
-  '@fast-crud/fast-crud': ^1.0.7
-  '@fast-crud/ui-antdv': ^1.0.7
+  '@fast-crud/fast-crud': ^1.1.1
+  '@fast-crud/ui-antdv': ^1.1.1
   '@nestjsx/crud-request': ^5.0.0-alpha.3
   '@types/node': ^17.0.25
   '@types/nprogress': ^0.2.0
@@ -41,8 +41,8 @@ specifiers:
 dependencies:
   '@ant-design-vue/use': 0.0.1-alpha.10
   '@ant-design/icons-vue': 6.1.0_vue@3.2.33
-  '@fast-crud/fast-crud': 1.0.7_vue@3.2.33
-  '@fast-crud/ui-antdv': 1.0.7
+  '@fast-crud/fast-crud': 1.1.1_vue@3.2.33
+  '@fast-crud/ui-antdv': 1.1.1
   '@nestjsx/crud-request': 5.0.0-alpha.3
   ant-design-vue: 3.2.0_vue@3.2.33
   axios: 0.26.1
@@ -180,8 +180,8 @@ packages:
       - supports-color
     dev: true
 
-  /@fast-crud/fast-crud/1.0.7_vue@3.2.33:
-    resolution: {integrity: sha512-VtPwP/CGZa0ZEpuSU8elpNM4RCWEn3q/XdCeagPiE619hi6jBZ6wjZ4GvzfSqsxKThmDiBdmDAtxblQdpcRsJw==}
+  /@fast-crud/fast-crud/1.1.1_vue@3.2.33:
+    resolution: {integrity: sha512-yJTqCgqEYWTLjmlmPMCBNpWt6ZuyzcgMOI+oJAVK8R9pq/isjGiK+42LImQzA13cs42YQ6Ror+v7kK3lGKh7bQ==}
     dependencies:
       '@fast-crud/ui-interface': 1.0.2
       dayjs: 1.11.1
@@ -193,8 +193,8 @@ packages:
       - vue
     dev: false
 
-  /@fast-crud/ui-antdv/1.0.7:
-    resolution: {integrity: sha512-SCS0cLsMs9cNiwWYcq7j6NzwCpJPacU/5JGPR2Lg+E9SDAFA0m0s4DvcKTwt0slxse79FWqcr3Gea3zeAWZ55A==}
+  /@fast-crud/ui-antdv/1.1.1:
+    resolution: {integrity: sha512-NqwIhRnWNeb0NWH9o2E/m5E4wpJFOfuo8GOt9gZYjd4CRILFOmfoZq2pZ+2yDW7bHs+XE6NkHiy9Ha0BzKcgfg==}
     dependencies:
       '@fast-crud/ui-interface': 1.0.2
     dev: false
