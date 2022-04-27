@@ -25,5 +25,6 @@ module.exports = {
     'no-restricted-syntax': 'off',
     'no-unused-vars': 'off',
     'max-len': 'off',
+    'object-curly-newline': 'off',
   },
 };

@@ -1,19 +1,19 @@
 <template>
- <div>
-   <a-upload
-       :action="Config.qiniuUploadUrl"
-       :multiple="true"
-       v-model:file-list="fileList"
-       :data="extendedParam"
-       list-type="picture"
-       @change="handleChange"
-   >
-     <a-button>
-       <upload-outlined></upload-outlined>
-       上传
-     </a-button>
-   </a-upload>
- </div>
+  <div>
+    <a-upload
+      :action="Config.qiniuUploadUrl"
+      :multiple="true"
+      v-model:file-list="fileList"
+      :data="extendedParam"
+      list-type="picture"
+      @change="handleChange"
+    >
+      <a-button>
+        <upload-outlined></upload-outlined>
+        上传
+      </a-button>
+    </a-upload>
+  </div>
 </template>
 <script lang="ts">
 import { UploadOutlined } from '@ant-design/icons-vue';
@@ -22,7 +22,8 @@ import {
   ref,
   onMounted,
   PropType,
-  reactive, markRaw,
+  reactive,
+  markRaw,
   watch,
 } from 'vue';
 import { message } from 'ant-design-vue';
@@ -34,7 +35,7 @@ import { FileItem } from '@/types';
 interface FileInfo {
   file: FileItem;
   fileList: FileItem[];
-  event: any,
+  event: any;
 }
 
 export default defineComponent({
@@ -115,15 +116,19 @@ export default defineComponent({
       getFileToken();
     });
 
-    watch(() => props.list, (newVal) => {
-      if (newVal && !isFirst.value) {
-        fileList.value = markRaw(newVal);
-        isFirst.value = true;
-      }
-    }, {
-      deep: true,
-      immediate: true,
-    });
+    watch(
+      () => props.list,
+      (newVal) => {
+        if (newVal && !isFirst.value) {
+          fileList.value = markRaw(newVal);
+          isFirst.value = true;
+        }
+      },
+      {
+        deep: true,
+        immediate: true,
+      },
+    );
 
     return {
       handleChange,
@@ -135,6 +140,4 @@ export default defineComponent({
   },
 });
 </script>
-<style scoped lang="less">
-
-</style>
+<style scoped lang="less"></style>

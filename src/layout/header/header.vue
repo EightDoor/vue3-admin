@@ -11,11 +11,9 @@
             v-for="(item, index) in crumbs"
             :key="index"
             class="button-breadcrumb"
-            >{{ item }}
-            {{
-              index > 0 && index + 1 !== crumbs.length ? "/" : ""
-            }}</a-breadcrumb-item
           >
+            {{ item }} {{ index > 0 && index + 1 !== crumbs.length ? '/' : '' }}
+          </a-breadcrumb-item>
         </a-breadcrumb>
       </div>
       <a-dropdown>
@@ -34,6 +32,16 @@
       </a-dropdown>
     </div>
   </a-layout-header>
+  <CommonDrawer :visible="visible" title="个人中心" @on-close="visible = false">
+    <a-form>
+      <a-form-item label="修改密码" v-bind="validateInfos.password">
+        <a-input v-model:value="modelRef.password" />
+      </a-form-item>
+      <a-form-item>
+        <a-button type="primary" @click.prevent="onSubmit()">更改</a-button>
+      </a-form-item>
+    </a-form>
+  </CommonDrawer>
 </template>
 <script lang="ts">
 import {
@@ -41,27 +49,67 @@ import {
   MenuUnfoldOutlined,
   MenuFoldOutlined,
 } from '@ant-design/icons-vue';
-import { defineComponent, ref, computed } from 'vue';
+import { defineComponent, ref, computed, reactive, toRaw } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
+import { Form } from 'ant-design-vue';
 import { COLLAPSED } from '@/store/mutation-types';
+import log from '@/utils/log';
+import CommonDrawer from '@/components/Drawer/Drawer.vue';
 
 export default defineComponent({
   name: 'CommonHeader',
-  components: { UserOutlined, MenuUnfoldOutlined, MenuFoldOutlined },
+  components: {
+    UserOutlined,
+    MenuUnfoldOutlined,
+    MenuFoldOutlined,
+    CommonDrawer,
+  },
   setup() {
     const data = ref<string[]>(['个人中心', '退出']);
     const router = useRouter();
     const store = useStore();
+
+    // 个人中心
+    const visible = ref(false);
+    const { useForm } = Form;
+    const modelRef = reactive({
+      password: '',
+      icon: '',
+    });
+    const ruleRef = reactive({
+      password: [
+        {
+          required: true,
+          message: '请输入密码',
+        },
+      ],
+    });
+
+    const { resetFields, validate, validateInfos } = useForm(modelRef, ruleRef);
+
+    function onSubmit() {
+      validate()
+        .then(() => {
+          log.d(toRaw(modelRef), '表单值');
+        })
+        .catch((err) => {
+          log.e(err, '表单验证错误');
+        });
+    }
+
     function GoTo(val: string) {
-      console.log(val);
+      log.i(val, '选择的值');
       switch (val) {
         case '退出':
           localStorage.clear();
           router.replace('/login');
           break;
+        case '个人中心':
+          visible.value = true;
+          break;
         default:
-            //
+        //
       }
     }
     function ToggleCollapsed() {
@@ -81,6 +129,7 @@ export default defineComponent({
         // do
       },
     });
+
     return {
       // data
       data,
@@ -89,10 +138,16 @@ export default defineComponent({
       // methods
       GoTo,
       ToggleCollapsed,
+
+      visible,
+      validateInfos,
+      resetFields,
+      modelRef,
+      onSubmit,
     };
   },
 });
 </script>
 <style scoped lang="less">
-@import "header.less";
+@import 'header.less';
 </style>

@@ -3,17 +3,17 @@ import log from '@/utils/log';
 import { crudSearchParam } from '@/utils/search_param';
 // 构建crudOptions的方法
 export default function ({ expose }) {
-  const pageRequest = async (query) => {
+  const pageRequest = (query) => {
     const params = crudSearchParam(query);
-    return await api.GetList(params);
+    return api.GetList(params);
   };
   const editRequest = async ({ form, row }) => {
     form.id = row.id;
-    return await api.UpdateObj(form);
+    return api.UpdateObj(form);
   };
-  const delRequest = async (id) => await api.DelObj(id);
+  const delRequest = (id) => api.DelObj(id);
 
-  const addRequest = async ({ form }) => await api.AddObj(form);
+  const addRequest = ({ form }) => api.AddObj(form);
   return {
     crudOptions: {
     // 请求配置

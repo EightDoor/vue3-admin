@@ -3,6 +3,7 @@ import { message, notification } from 'ant-design-vue';
 import { CommonResponse } from '@/types/type';
 import { RequestAuthorizedFailed, TOKEN } from '@/utils/constant';
 import { ClearInfo } from '@/utils/index';
+import log from './log';
 
 const instance = axios.create({
   baseURL: '/api',
@@ -31,9 +32,10 @@ instance.interceptors.response.use(
       message.info('token失效, 请重新登录');
       ClearInfo();
     } else {
+      log.d(data, 'response error data');
       notification.error({
-        message: data.code,
-        description: data.message,
+        message: `错误码: ${data.code}`,
+        description: data.data.msg,
       });
     }
     return response.data;

@@ -19,7 +19,12 @@
       >
         {{ cancelText }}
       </a-button>
-      <a-button v-if="okText" :loading="commdrawerData.loading" type="primary" @click="onOk">
+      <a-button
+        v-if="okText"
+        :loading="commdrawerData.loading"
+        type="primary"
+        @click="onOk"
+      >
         {{ okText }}
       </a-button>
     </div>
@@ -108,5 +113,5 @@ const CommonDrawer = defineComponent({
 export default CommonDrawer;
 </script>
 <style lang="less" scoped>
-@import "./Drawer.less";
+@import './Drawer.less';
 </style>

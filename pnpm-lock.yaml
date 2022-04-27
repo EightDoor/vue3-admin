@@ -3,8 +3,8 @@ lockfileVersion: 5.3
 specifiers:
   '@ant-design-vue/use': ^0.0.1-alpha.10
   '@ant-design/icons-vue': ^6.1.0
-  '@fast-crud/fast-crud': ^1.1.1
-  '@fast-crud/ui-antdv': ^1.1.1
+  '@fast-crud/fast-crud': ^1.0.7
+  '@fast-crud/ui-antdv': ^1.0.7
   '@nestjsx/crud-request': ^5.0.0-alpha.3
   '@types/node': ^17.0.25
   '@types/nprogress': ^0.2.0
@@ -37,6 +37,7 @@ specifiers:
   vue-tsc: ^0.34.9
   vuex: ^4.0.2
   webpack: ^5.72.0
+  zhoukai_utils: ^1.1.0
 
 dependencies:
   '@ant-design-vue/use': 0.0.1-alpha.10
@@ -53,6 +54,7 @@ dependencies:
   vue: 3.2.33
   vue-router: 4.0.14_vue@3.2.33
   vuex: 4.0.2_vue@3.2.33
+  zhoukai_utils: 1.1.0
 
 devDependencies:
   '@types/node': 17.0.25
@@ -3242,3 +3244,10 @@ packages:
 
   /yallist/4.0.0:
     resolution: {integrity: sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==}
+
+  /zhoukai_utils/1.1.0:
+    resolution: {integrity: sha512-/yDBrvFun5XIip7DcOufFq9z0C1S0k5konS4vrGF9XtK/UJ1omIOrsr3yAcqD5gbi9k8LIH50k6dZef+CLt8kw==}
+    dependencies:
+      dayjs: 1.11.1
+      lodash-es: 4.17.21
+    dev: false
