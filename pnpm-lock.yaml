@@ -26,6 +26,7 @@ specifiers:
   less-loader: ^10.2.0
   localforage: ^1.10.0
   lodash: ^4.17.21
+  lodash-es: ^4.17.21
   nprogress: ^0.2.0
   prettier: ^2.6.2
   prettier-eslint: ^13.0.0
@@ -72,6 +73,7 @@ devDependencies:
   eslint-plugin-vue: 8.6.0_eslint@8.13.0
   less: 4.1.2
   less-loader: 10.2.0_less@4.1.2+webpack@5.72.0
+  lodash-es: 4.17.21
   prettier: 2.6.2
   prettier-eslint: 13.0.0
   regenerator-runtime: 0.13.9
@@ -2279,7 +2281,6 @@ packages:
 
   /lodash-es/4.17.21:
     resolution: {integrity: sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==}
-    dev: false
 
   /lodash.merge/4.6.2:
     resolution: {integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==}

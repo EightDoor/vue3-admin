@@ -25,7 +25,7 @@ import {
 } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
-import _ from 'lodash';
+import _ from 'lodash-es';
 import { PanesType } from '@/store/sys/sys-crumbs';
 import localStore from '@/utils/store';
 import { CURRENT_MENU, STORELETMENUPATH } from '@/utils/constant';

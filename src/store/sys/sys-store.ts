@@ -2,7 +2,7 @@ import { Commit } from 'vuex';
 import { RouteRecordRaw } from 'vue-router';
 import { Key } from 'ant-design-vue/es/_util/type';
 import { message } from 'ant-design-vue';
-import { cloneDeep } from 'lodash';
+import { cloneDeep } from 'lodash-es';
 
 import {
   COLLAPSED,

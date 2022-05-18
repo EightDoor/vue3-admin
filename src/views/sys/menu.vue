@@ -107,7 +107,7 @@ import type { UnwrapRef } from 'vue';
 
 import { message } from 'ant-design-vue';
 import { Method } from 'axios';
-import { cloneDeep } from 'lodash';
+import { cloneDeep } from 'lodash-es';
 import CommonButton from '@/components/Button/Button.vue';
 import CommonDrawer, { DrawerProps } from '@/components/Drawer/Drawer.vue';
 import http from '@/utils/request';
