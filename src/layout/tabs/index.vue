@@ -20,6 +20,7 @@
 </template>
 <script lang="ts">
 import {
+  computed,
   defineComponent, ref, toRaw, watch,
 } from 'vue';
 import { useStore } from 'vuex';
@@ -27,9 +28,10 @@ import { useRouter } from 'vue-router';
 import _ from 'lodash';
 import { PanesType } from '@/store/sys/sys-crumbs';
 import localStore from '@/utils/store';
-import { STORELETMENUPATH } from '@/utils/constant';
+import { CURRENT_MENU, STORELETMENUPATH } from '@/utils/constant';
 import { SysTab, SysTabDel } from '@/types/sys/tab';
 import { DELETETABS, DELETETABSACTION } from '@/store/mutation-types';
+import log from '@/utils/log';
 
 export default defineComponent({
   name: 'TabsHome',
@@ -43,11 +45,15 @@ export default defineComponent({
       closable?: boolean;
     }[]>([]);
 
+    const pansList = computed(() => store.state.crumbs.panes);
     watch(
-      () => store.state.crumbs.panes,
+      pansList,
       (newVal) => {
-        localStore.get<SysTab>(STORELETMENUPATH).then((res) => {
+        log.i(newVal, '更新的值');
+        localStore.get<SysTab>(CURRENT_MENU).then((res) => {
           if (newVal && newVal.length > 0) {
+            log.i(res, '获取到的菜单');
+            log.i(newVal, 'newVal');
             if (res) {
               const result = newVal.findIndex((item) => item.id === res.id);
               // 设置当前被选择项
@@ -59,10 +65,15 @@ export default defineComponent({
           }
         });
       },
+      {
+        deep: true,
+        immediate: true,
+      },
     );
 
     const FormatData = () => {
       const data = toRaw(store.state.crumbs.panes);
+      log.i(data, 'FormatData - data');
       const list: PanesType[] = [];
       data.forEach((item: PanesType) => {
         list.push(toRaw(item));

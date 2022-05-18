@@ -31,8 +31,23 @@ function ListObjCompare<T>(property: string) {
   };
 }
 
+/**
+ * 数组对象 去重
+ * @param arr
+ * @param key
+ */
+function formatArr(arr: any[], key?: string) {
+  const map = new Map();
+  for (const item of arr) {
+    if (!map.has(item[key ?? 'id'])) {
+      map.set(item[key ?? 'id'], item);
+    }
+  }
+  return [...map.values()];
+}
+
 // 清空token
 const ClearInfo = (): void => {
   localStorage.clear();
 };
-export { ListToTree, ListObjCompare, ClearInfo };
+export { ListToTree, ListObjCompare, ClearInfo, formatArr };

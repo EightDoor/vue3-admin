@@ -18,12 +18,13 @@ import {
   LoginType, MenuType, UserInformation, UserType,
 } from '@/types/sys';
 import http from '@/utils/request';
-import { PERMISSIONBUTTONS, TOKEN } from '@/utils/constant';
+import { LIST_OF_ALL_STORED_MENU_ITEMS, PERMISSIONBUTTONS, TOKEN } from '@/utils/constant';
 import { MenuItem } from '@/types/layout/menu';
 
 import { ListObjCompare, ListToTree } from '@/utils';
 import store from '../index';
 import log from '@/utils/log';
+import utilLocalStore from '@/utils/store';
 
 interface GetToken {
     accessToken: string;
@@ -210,7 +211,7 @@ export default {
             id: item.id,
             parentId: item.parentId,
             crumbs: `${item.title}`,
-            closable: item.isHome === 1,
+            closable: item.isHome !== 1,
           });
         }
       });
@@ -262,6 +263,7 @@ export default {
               commit(USERINFOMENUS, res);
               commit(SETUSERINFO, res);
               commit(SET_MENUS_MUTATION, res);
+              await utilLocalStore.set(LIST_OF_ALL_STORED_MENU_ITEMS, res.menus);
               const menus = await formatMenuTree(formatMenus(res.menus));
               resolve({
                 userInfo: res.userInfo,

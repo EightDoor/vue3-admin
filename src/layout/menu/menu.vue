@@ -27,18 +27,20 @@ import {
   onMounted,
   computed,
   toRaw,
-  watch,
+  watch, ref,
 } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import SubMenu from './menu-item.vue';
 import { MenuItem, MenusInfo } from '@/types/layout/menu';
-import { STORELETMENUPATH } from '@/utils/constant';
+import { CURRENT_MENU, STORELETMENUPATH } from '@/utils/constant';
 import { MenuType } from '@/types/sys';
 import localStore from '@/utils/store';
 import { SETCRUMBSLIST } from '@/store/mutation-types';
 import { MenuFormatBrumb } from './menu-common';
 import { PanesType } from '@/store/sys/sys-crumbs';
+import log from '@/utils/log';
+import { formatArr } from '@/utils';
 
 interface InitTopTabs extends MenuItem {
   crumbs: string;
@@ -59,18 +61,19 @@ export default defineComponent({
     const getUserInfoMenus = computed(() => store.state.sys.userInfoMenus);
 
     const FormatSelectKey = (res) => {
+      log.i(res, 'FormatSelectKey - res');
       menusInfo.selectedKeys = [res.key || res.id || ''];
-      const { parent_id } = res;
+      const { parentId } = res;
       const data: MenuType[] = toRaw(getUserInfoMenus.value);
-      const r = data.find((item) => item.id === parent_id);
+      const r = data.find((item) => item.id === parentId);
       if (r) {
-        menusInfo.openKeys = [String(r.id) || ''];
+        menusInfo.openKeys = [r.id];
       }
     };
 
     onMounted(() => {
       menusInfo.list = [];
-      localStore.get<InitTopTabs>(STORELETMENUPATH).then((res) => {
+      localStore.get<InitTopTabs>(CURRENT_MENU).then((res) => {
         if (res) {
           // 初始化顶部面包屑
           store.commit(SETCRUMBSLIST, toRaw(res.crumbs));
@@ -82,14 +85,24 @@ export default defineComponent({
     });
 
     // methods
-    function jumpTo(item: MenuItem) {
+    async function jumpTo(item: MenuItem) {
       if (item.path) {
         store.commit(SETCRUMBSLIST, toRaw(item.crumbs));
-        localStore.set(STORELETMENUPATH, toRaw(item)).then(() => {
-          router.push({
-            path: item.path || '',
+        await localStore.set(CURRENT_MENU, toRaw(item));
+        localStore.get(STORELETMENUPATH).then((res) => {
+          log.i(res, '点击一级菜单-获取的存储值');
+          let resultData: MenuItem[] = [];
+          if (res) {
+            resultData = [...res, toRaw(item)];
+          } else {
+            resultData = [toRaw(item)];
+          }
+          localStore.set(STORELETMENUPATH, formatArr(resultData)).then(() => {
+            router.push({
+              path: item.path || '',
+            });
+            MenuFormatBrumb(item);
           });
-          MenuFormatBrumb(item);
         });
       }
     }

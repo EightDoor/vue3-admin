@@ -53,9 +53,10 @@ import { defineComponent, ref, computed, reactive, toRaw } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import { Form } from 'ant-design-vue';
-import { COLLAPSED } from '@/store/mutation-types';
+import { CLEAR_CRUMBS, COLLAPSED } from '@/store/mutation-types';
 import log from '@/utils/log';
 import CommonDrawer from '@/components/Drawer/Drawer.vue';
+import utilsLocal from '@/utils/store';
 
 export default defineComponent({
   name: 'CommonHeader',
@@ -103,13 +104,14 @@ export default defineComponent({
       switch (val) {
         case '退出':
           localStorage.clear();
+          utilsLocal.clear();
+          store.commit(CLEAR_CRUMBS);
           router.replace('/login');
           break;
         case '个人中心':
           visible.value = true;
           break;
         default:
-        //
       }
     }
     function ToggleCollapsed() {

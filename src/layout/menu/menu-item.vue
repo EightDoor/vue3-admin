@@ -25,10 +25,13 @@ import { defineComponent, toRaw } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import { MenuItem } from '@/types/layout/menu';
-import { STORELETMENUPATH } from '@/utils/constant';
+import { CURRENT_MENU, STORELETMENUPATH } from '@/utils/constant';
 import localStorefrom from '@/utils/store';
 import { SETCRUMBSLIST } from '@/store/mutation-types';
 import { MenuFormatBrumb } from './menu-common';
+import log from '@/utils/log';
+import localStore from '@/utils/store';
+import { formatArr } from '@/utils';
 
 export default defineComponent({
   name: 'SubMenu',
@@ -42,13 +45,23 @@ export default defineComponent({
     const router = useRouter();
     const store = useStore();
     // methods
-    function jumpTo(item: MenuItem) {
+    async function jumpTo(item: MenuItem) {
       if (item.path) {
         store.commit(SETCRUMBSLIST, toRaw(item.crumbs));
-        localStorefrom.set(STORELETMENUPATH, toRaw(item)).then(() => {
-          MenuFormatBrumb(item);
-          router.push({
-            path: item.path || '',
+        await localStorefrom.set(CURRENT_MENU, toRaw(item));
+        localStorefrom.get(STORELETMENUPATH).then((res) => {
+          log.i(res, '点击二级菜单-获取的存储值');
+          let data: MenuItem[] = [];
+          if (res) {
+            data = [...res, toRaw(item)];
+          } else {
+            data = [toRaw(item)];
+          }
+          localStore.set(STORELETMENUPATH, formatArr(data)).then(() => {
+            router.push({
+              path: item.path || '',
+            });
+            MenuFormatBrumb(item);
           });
         });
       }

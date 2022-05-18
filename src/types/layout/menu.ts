@@ -14,5 +14,5 @@ export interface MenuItem {
 export interface MenusInfo {
   selectedKeys: string[];
   list: MenuItem[];
-  openKeys: string[];
+  openKeys: number[];
 }

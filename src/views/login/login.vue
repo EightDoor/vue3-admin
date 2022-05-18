@@ -92,7 +92,6 @@ const Login = defineComponent({
             .then(() => {
               submitData.loading = false;
               message.success('登录成功!');
-              localStore.set(STORELETMENUPATH, {});
               store.commit(`${LOGINRESET}`);
               router.push('/');
             })

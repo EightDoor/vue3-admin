@@ -1,9 +1,10 @@
 // 按钮权限自定义指令
-import { DirectiveBinding, markRaw } from 'vue';
+import { DirectiveBinding, markRaw, unref } from 'vue';
 import store from '@/store/index';
 import localStore from '@/utils/store';
-import { STORELETMENUPATH } from '@/utils/constant';
+import { CURRENT_MENU } from '@/utils/constant';
 import { MenuItem } from '@/types/layout/menu';
+import log from '@/utils/log';
 
 const ButtonPermissionType = {
   beforeMount: (el: HTMLElement): void => {
@@ -12,8 +13,8 @@ const ButtonPermissionType = {
   mounted: (el: HTMLElement, binding: DirectiveBinding): void => {
     const { arg } = binding;
     const { value } = binding;
-    const permissions = markRaw(store.state.sys.permissionButtons);
-    localStore.get<MenuItem>(STORELETMENUPATH).then((res) => {
+    const permissions = unref(store.state.sys.permissionButtons);
+    localStore.get<MenuItem>(CURRENT_MENU).then((res) => {
       const data = permissions.filter((item) => item.name === res?.id);
       if (data.length > 0) {
         const r = data.find((item) => item.perms === arg);
