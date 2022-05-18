@@ -14,7 +14,7 @@
     "@fast-crud/fast-crud": "^1.0.7",
     "@fast-crud/ui-antdv": "^1.0.7",
     "@nestjsx/crud-request": "^5.0.0-alpha.3",
-    "ant-design-vue": "^3.2.0",
+    "ant-design-vue": "^3.2.3",
     "axios": "^0.26.1",
     "core-js": "^3.22.2",
     "localforage": "^1.10.0",

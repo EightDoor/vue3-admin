@@ -13,7 +13,7 @@ specifiers:
   '@vitejs/plugin-vue': ^2.3.1
   '@vue/compiler-sfc': ^3.2.33
   '@vue/eslint-config-prettier': ^7.0.0
-  ant-design-vue: ^3.2.0
+  ant-design-vue: ^3.2.3
   axios: ^0.26.1
   core-js: ^3.22.2
   eslint: ^8.13.0
@@ -25,7 +25,6 @@ specifiers:
   less: ^4.1.2
   less-loader: ^10.2.0
   localforage: ^1.10.0
-  lodash: ^4.17.21
   lodash-es: ^4.17.21
   nprogress: ^0.2.0
   prettier: ^2.6.2
@@ -46,11 +45,11 @@ dependencies:
   '@fast-crud/fast-crud': 1.1.1_vue@3.2.33
   '@fast-crud/ui-antdv': 1.1.1
   '@nestjsx/crud-request': 5.0.0-alpha.3
-  ant-design-vue: 3.2.0_vue@3.2.33
+  ant-design-vue: 3.2.3_vue@3.2.33
   axios: 0.26.1
   core-js: 3.22.2
   localforage: 1.10.0
-  lodash: 4.17.21
+  lodash-es: 4.17.21
   nprogress: 0.2.0
   vue: 3.2.33
   vue-router: 4.0.14_vue@3.2.33
@@ -73,7 +72,6 @@ devDependencies:
   eslint-plugin-vue: 8.6.0_eslint@8.13.0
   less: 4.1.2
   less-loader: 10.2.0_less@4.1.2+webpack@5.72.0
-  lodash-es: 4.17.21
   prettier: 2.6.2
   prettier-eslint: 13.0.0
   regenerator-runtime: 0.13.9
@@ -856,8 +854,8 @@ packages:
       color-convert: 2.0.1
     dev: true
 
-  /ant-design-vue/3.2.0_vue@3.2.33:
-    resolution: {integrity: sha512-qY9f/kF9YqfzV/vJ9/GKj7s1wmpCuNwWVRyQ3qsG8P4Was/u5WTKG5hz9huUY/cNle2nBTDacvMBIOkfxPeUiQ==}
+  /ant-design-vue/3.2.3_vue@3.2.33:
+    resolution: {integrity: sha512-yjb+YKfh+61zrdY2DSLzrcGkU9ICn9NKWZJa4PzeA+xaZu/f+tjmaUFbI0K0FZgLQANoVM3FZKP/r/IaFlhlmg==}
     peerDependencies:
       vue: '>=3.2.0'
     dependencies:
@@ -2281,6 +2279,7 @@ packages:
 
   /lodash-es/4.17.21:
     resolution: {integrity: sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==}
+    dev: false
 
   /lodash.merge/4.6.2:
     resolution: {integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==}
